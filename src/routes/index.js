@@ -403,7 +403,6 @@ router.post('/monitor/:id/edit', ensureAuthenticated, async (req, res) =>{
                 monit.label = req.body.label;
                 monit.ip = req.body.domain;
                 monit.type = req.body.type;
-                monit.port = req.body.port;
                 monit.warning_threshold = req.body.warning_threshold;
                 monit.privacy = req.body.privacymonitor === "public";
                 Monitor.updateMonitor(monit, (error, monitor) => {
