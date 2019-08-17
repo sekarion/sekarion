@@ -1,0 +1,38 @@
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <a class="navtitle" href="/"><%= nameconfig%></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse">
+            <span class="navmenu oi-menu"></span> Menu
+        </button>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item "><a href="#" target="_blank" class="nav-link">Get Started</a></li>
+                <%if(user){%>
+                    <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+                    <% if(user.rank === "Admin") {%>
+                        <li class="nav-item "><a href="/users" class="nav-link">Users</a></li>
+                        <li class="nav-item "><a href="/settings" class="nav-link">Settings</a></li>
+                    <%}%>
+                    <label class="dropdown">
+                        <div class="dd-button">
+                            Welcome <%= user.username%>
+                        </div>
+                        <input type="checkbox" class="dd-input" id="test">
+                        <ul class="dd-menu">
+                            <li>
+                                <a href="/profile" class="nav-link">Profile</a>
+                            </li>
+                            <li>
+                                <a href="/dashboard" class="nav-link">Status</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="/logout" class="nav-link">Logout</a>
+                            </li>
+                        </ul>
+                    </label>
+                <%}%>
+            </ul>
+        </div>
+    </div>
+</nav>

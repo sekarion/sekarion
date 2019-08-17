@@ -1,0 +1,30 @@
+{
+  "name": "sekarion",
+  "version": "1.0.0",
+  "description": "Sekarion monitor",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "monitor"
+  ],
+  "author": "Kami-Sama(Joris Dugué)",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "chalk": "^2.4.2",
+    "compression": "^1.7.4",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.4",
+    "draftlog": "^1.0.12",
+    "ejs": "^2.6.2",
+    "express": "^4.17.1",
+    "express-session": "^1.16.2",
+    "helmet": "^3.18.0",
+    "node-libcurl": "^2.0.1",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "tcpie": "^8.0.0"
+  }
+}

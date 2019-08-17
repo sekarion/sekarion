@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="fr">
+<% include partials/head.ejs%>
+<body>
+<% include partials/header.ejs%>
+<div class="content">
+    <div class="container pt-70">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <form method="post" class="rounded boxform">
+                    <h2 class="mb-4 mt-0 text-center">Add Monitor </h2>
+                    <%if(error.length > 0){%>
+                    <div class="error-msg">
+                        <%=error%>
+                    </div>
+
+                    <%}%>
+                    <div class="form-group">
+                        <label for="label">
+                            label
+                        </label>
+                        <input type="text" id="label" name="label" class="form-control pb_height-50 reverse" placeholder="label" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="domain">
+                            Domain/IP
+                        </label>
+                        <input type="text" maxlength="255" id="domain" name="domain" class="form-control pb_height-50 reverse" placeholder="Domain/IP" required>
+                    </div>
+                    <div class="form-group">
+                        <div class="pb_select-wrap">
+                            <label for="type">
+                                Type
+                            </label>
+                            <select id="type" name="type" class="form-control pb_height-50 reverse" onchange="showHideEle(this)" required>
+                                <option value="" selected="" disabled>Select Type</option>
+                                <option value="ping">Ping</option>
+                                <option value="service">Service</option>
+                                <option value="website">Website</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group none" id="portwebsite">
+                        <label for="port">
+                            Port
+                        </label>
+                        <select id="port" name="port" class="form-control pb_height-50 reverse" required onchange="showHideEleport(this)">
+                            <option selected="" disabled="">Please select a Port</option>
+                            <option value="custom">Custom Port</option>
+                            <optgroup label="Popular Ports">
+                                <option value="80">HTTP (80)</option>
+                                <option value="443">HTTPS (443)</option>
+                                <option value="21">FTP (21)</option>
+                                <option value="25">SMTP (25)</option>
+                                <option value="465">SMTP Secure (465)</option>
+                                <option value="110">POP3 (110)</option>
+                                <option value="995">POP3 Secure (995)</option>
+                                <option value="143">IMAP (143)</option>
+                                <option value="993">IMAP over SSL (993)</option>
+                                <option value="22">SSH (22)</option>
+                                <option value="389">LDAP (389)</option>
+                                <option value="3306">MySQL (3306)</option>
+                                <option value="115">SFTP (115)</option>
+                                <option value="43">WHOIS (43)</option>
+                                <option value="53">BIND (53)</option>
+                                <option value="3389">RDP (3389)</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    <div class="form-group none" id="portcustom">
+                        <label for="customport">
+                            Custom Port
+                        </label>
+                        <input type="number" class="form-control pb_height-50 reverse" id="customport" name="customport" maxlength="5" value="443">
+                    </div>
+                    <div class="form-group">
+                        <label for="warning_threshold">
+                            warning threshold
+                        </label>
+                        <input type="number" max="50" min="1" class="form-control pb_height-50 reverse" id="warning_threshold" name="warning_threshold" placeholder="0" value="1" maxlength="5" aria-describedby="warning_threshold_help">
+                    </div>
+                    <div class="form-group">
+                        <div class="pb_select-wrap">
+                            <label for="privacymonitor">
+                                Privacy
+                            </label>
+                            <select id="privacymonitor" name="privacymonitor" class="form-control pb_height-50 reverse" required>
+                                <option value="" selected="" disabled>Select Privacy</option>
+                                <option value="public">Public</option>
+                                <option value="private">Private</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group text-center">
+                        <input type="submit" class="btn btn-primary btn-lg btn-block pb_btn-pill btn-shadow-blue" value="Create Monitor">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<% include partials/footer.ejs%>
+<script>
+    function showHideEle(selectSrc) {
+        if(selectSrc.value==="service") {
+            document.getElementById("portwebsite").style.display = "block";
+            document.getElementById("portcustom").style.display = "none";
+        } else if(selectSrc.value ==="ping") {
+            document.getElementById("portwebsite").style.display = "none";
+            document.getElementById("portcustom").style.display = "none";
+            //ignore this because no param with ping
+        }else if(selectSrc.value ==="website"){
+            document.getElementById("portwebsite").style.display = "none";
+            document.getElementById("portcustom").style.display = "none";
+        }
+    }
+    function showHideEleport(ele){
+        if(ele.value === "custom"){
+            document.getElementById("portcustom").style.display = "block";
+        }else{
+            document.getElementById("portcustom").style.display = "none";
+        }
+    }
+</script>
+</html>

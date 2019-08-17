@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<% include ../partials/head.ejs%>
+<% include ../partials/headersetup.ejs%>
+<body>
+<div class="container pt-70">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <%if (messagecode){%>
+                <pre class="code">
+                    <code><%= messagecode%></code>
+                </pre>
+            <%}%>
+            <form method="post" action="#" class="rounded boxform">
+                <h2 class="mb-4 mt-0 text-center">Installation of Sekarion : Create User</h2>
+                    <div class="form-group">
+                        <label for="username">
+                            Username
+                        </label>
+                        <input id="username" name="username" class="form-control pb_height-50 reverse" placeholder="username" required>
+                    </div>
+                <div class="form-group">
+                    <label for="email">
+                        Email
+                    </label>
+                    <input type="email" id="email" name="email" class="form-control pb_height-50 reverse" placeholder="email" required>
+                </div>
+                    <div class="form-group">
+                        <label for="passwd">Password</label>
+                        <input id="passwd" name="passwd" class="form-control pb_height-50 reverse" type="password"  placeholder="password" required>
+                    </div>
+                <div class="form-group text-center">
+                    <input type="submit" class="btn btn-primary btn-lg btn-block pb_btn-pill btn-shadow-blue" value="Create User" >
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div id="loader" class="fullscreen">
+    <svg class="circular" width="48px" height="48px">
+        <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"></circle>
+        <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#1d82ff"></circle>
+    </svg>
+    <div class="text" id="textreplace">Loading </div>
+</div>
+</body>
+<% include ../partials/footer.ejs%>
+</html>

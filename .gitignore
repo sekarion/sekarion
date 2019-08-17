@@ -1,0 +1,8 @@
+node_modules/
+package-lock.json
+*.iml
+.idea/*
+src/config/config.json
+src/public/.sass-cache/*
+src/public/scss/*
+src/public/config.rb

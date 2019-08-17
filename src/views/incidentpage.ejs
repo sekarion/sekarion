@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="fr">
+<% include partials/head.ejs%>
+<body>
+<% include partials/header.ejs%>
+<div class="content">
+    <div class="container pt-70">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div class="card">
+                    <div class="card-header text-center Bg<% if(status.impact == 0){%>None<%}else if(status.impact == 1){%>Minor<%}else if(status.impact== 2){%>Major<%}else if(status.impact== 3){%>Critical<%}%>">
+                        <h4 class="header-title text-center"><%= status.name ? status.name : "UNKNOWN"%></h4>
+                        <div class="btn-actions-pane-right">
+                            <div role="group" class="btn-group-sm btn-group">
+                                <div class="page">
+                                    <label for="status" class="left mgspe">Impact</label>
+                                    <div class="select-dropdown right">
+                                        <select id="status" onchange="changeselectImpactupdate(this)">
+                                            <option value="None" <%= status.impact  === 0? "selected" : ""%>>None</option>
+                                            <option value="Minor" <%= status.impact  === 1? "selected" : ""%>>Minor</option>
+                                            <option value="Major" <%= status.impact  === 2? "selected" : ""%>>Major</option>
+                                            <option value="Critical" <%= status.impact  === 3? "selected" : ""%>>Critical</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        Components Status : <%= status.affected%>
+                    </div>
+                </div>
+                <%for(let i=0; i < status.infosstatus.length; i++){%>
+                <div class="card mgt-10">
+                    <div class="card-header">
+                        <h4 class="header title"><%= status.infosstatus[i].status %></h4>  <small class="pdl-15">(<%= new Date(status.date)%>)</small>
+                    </div>
+                    <div class="card-body">
+                        <%= status.infosstatus[i].description%>
+                    </div>
+                </div>
+                <%}%>
+                <%if(status.curentstatus != "resolved"){%>
+                    <div class="card mgt-10">
+                        <div class="card-header">
+                            <h4 class="header title">Update Incidents</h4>
+                        </div>
+                        <div class="card-body">
+                            <form method="post" class="rounded" onsubmit="return checkMessage(this);">
+                                <div class="form-group">
+                                    <div class="pb_select-wrap">
+                                        <label for="status">
+                                            Incident status
+                                        </label>
+                                        <select id="status" name="status" class="form-control pb_height-50 reverse" onchange="showHideEle(this)" required>
+                                            <option value="investigating" <%= status.curentstatus =="investigating" ? "selected" : ""%>>Investigating</option>
+                                            <option value="identified" <%= status.curentstatus =="identified" ? "selected" : ""%>>Identified</option>
+                                            <option value="monitoring" <%= status.curentstatus =="monitoring" ? "selected" : ""%>>Monitoring</option>
+                                            <option value="resolved" <%= status.curentstatus =="resolved" ? "selected" : ""%>>Resolved</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="pb_select-wrap">
+                                        <label for="message">
+                                            Message
+                                        </label>
+                                        <textarea id="message" name="message" class="form-control pb_height-50 reverse"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="pb_select-wrap">
+                                        <label for="affected">
+                                            Component affected ( <%= monitor.label ? monitor.label: monitor.ip%>)
+                                        </label>
+                                        <select id="affected" name="affected" class="form-control pb_height-50 reverse" required>
+                                            <option value="operational" <%= status.affected =="operational" ? "selected" : ""%>>Operational</option>
+                                            <option value="degraded" <%= status.affected =="degraded" ? "selected" : ""%>>Degraded performance</option>
+                                            <option value="partialoutage" <%= status.affected =="partialoutage" ? "selected" : ""%>>Partial outage</option>
+                                            <option value="majoroutage" <%= status.affected =="majoroutage" ? "selected" : ""%>>Major outage</option>
+                                            <option value="maintenance" <%= status.affected =="maintenance" ? "selected" : ""%>>Under maintenance</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group text-center">
+                                    <input type="submit" class="btn btn-primary btn-lg btn-block pb_btn-pill btn-shadow-blue" value="Update Incident">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                <%}%>
+                <div class="form-group text-center pd-10">
+                    <a href="/monitor/<%=monitor.id%>" class="btn btn-primary btn-lg btn-block pb_btn-pill btn-shadow-blue">Back to monitor</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<% include partials/footer.ejs%>
+<script>
+    let textarea = document.querySelector('textarea');
+    if(textarea != null){
+        textarea.addEventListener('keydown', autosize);
+        function autosize(){
+            let el = this;
+            setTimeout(function(){
+                el.style.cssText = 'height:auto; padding:0';
+                el.style.cssText = 'height:' + el.scrollHeight + 'px !important';
+            },0);
+        }
+    }
+
+    function showHideEle(selectSrc) {
+        if(selectSrc.value==="investigating") {
+            document.getElementById("message").placeholder = "We're experiencing an elevated level of API errors and are currently looking into the issue.";
+        } else if(selectSrc.value ==="identified") {
+            document.getElementById("message").placeholder = "The issue has been identified and a fix is being implemented.";
+        }else if(selectSrc.value ==="monitoring"){
+            document.getElementById("message").placeholder = "A fix has been implemented and we are monitoring the results.";
+        }else if(selectSrc.value ==="resolved"){
+            document.getElementById("message").placeholder = "This incident has been resolved.";
+        }
+    }
+    function checkMessage(check){
+        if(document.getElementById("message").value.length === 0){
+            document.getElementById("message").value = document.getElementById("message").placeholder;
+            return true;
+        }
+        return true;
+    }
+    function changeselectImpactupdate(selectionSrc){
+        let xmlhttp = new XMLHttpRequest();
+        //url to send the status
+        let Url = window.location.pathname + "/impact";
+        xmlhttp.open("POST", Url);
+        xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        ///send info impact
+        xmlhttp.send(JSON.stringify({ "impact": selectionSrc.value}));
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState === 4) {
+                let response = JSON.parse(xmlhttp.responseText);
+                if (xmlhttp.status === 200) {
+                    let c = document.querySelector(".card-header.text-center");
+                    if(c.classList){
+                        c.classList.remove('BgNone');
+                        c.classList.remove('BgMajor');
+                        c.classList.remove('BgMinor');
+                        c.classList.remove('BgCritical');
+                        c.classList.add(response.css.css);
+                    }
+                    let target = document.querySelector("body");
+                    let div = document.createElement('div');
+                    div.className += "flash success";
+                    div.setAttribute("id", "flash");
+                    div.innerHTML = `<div class="flash-group-addon"><i class="fas fa-circle"></i></div><p class="flash-control">${response.css.Message}</p>`;
+                    target.parentNode.insertBefore( div, target );
+                    window.onload = flashAlert();
+                    /**
+                     * Fonction pour multi element flash
+                     */
+
+                    function flashAlert() {
+                        var allerts = document.querySelectorAll('#flash');
+
+                        for (var i = 0; i <= allerts.length; i++) {
+                            if (allerts[i]) {
+                                allerts[i].style.top =  70 + ( 50 * i ) + 'px';
+                            }
+                        }
+                    }
+
+                    /**
+                     * Fonction pour cacher chaque element flash aux bout de 5s
+                     */
+                    function header() {
+                        var allerts = document.querySelectorAll('#flash');
+                        for (var i = 0; i <= allerts.length; i++) {
+                            if (allerts[i]) {
+                                allerts[i].classList.add('hidden');
+                            }
+                        }
+                    }
+
+                    if (document.querySelector('#flash')) {
+                        setTimeout(header,5000)
+                    }
+                    //create success notifications
+                } else {
+                    //create error notification
+                    let target = document.querySelector("body");
+                    let div = document.createElement('div');
+                    div.className += "flash danger";
+                    div.setAttribute("id", "flash");
+                    div.innerHTML = `<div class="flash-group-addon"><i class="fas fa-circle"></i></div><p class="flash-control">${response.css.Message}</p>`;
+                    target.parentNode.insertBefore( div, target );
+                    window.onload = flashAlert();
+                    /**
+                     * Fonction pour multi element flash
+                     */
+
+                    function flashAlert() {
+                        var allerts = document.querySelectorAll('#flash');
+
+                        for (var i = 0; i <= allerts.length; i++) {
+                            if (allerts[i]) {
+                                allerts[i].style.top =  70 + ( 50 * i ) + 'px';
+                            }
+                        }
+                    }
+
+                    /**
+                     * Fonction pour cacher chaque element flash aux bout de 5s
+                     */
+                    function header() {
+                        var allerts = document.querySelectorAll('#flash');
+                        for (var i = 0; i <= allerts.length; i++) {
+                            if (allerts[i]) {
+                                allerts[i].classList.add('hidden');
+                            }
+                        }
+                    }
+
+                    if (document.querySelector('#flash')) {
+                        setTimeout(header,5000)
+                    }
+                }
+            }
+        }
+
+    }
+</script>
+</html>

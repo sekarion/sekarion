@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+<% include partials/head.ejs%>
+<body>
+<% include partials/header.ejs%>
+<div class="content">
+    <div class="container pt-70">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <form method="post" action="<%if(userinfo != null){%>/edit/<%=userinfo._id%><%}else{%>/adduser<%}%>" class="rounded boxform">
+                    <h2 class="mb-4 mt-0 text-center"><%if(userinfo != null){%>Profil of <%=userinfo.username%><%}else{%>User Add<%}%></h2>
+                    <%if(error.length > 0){%>
+                    <div class="error-msg">
+                        <%=error%>
+                    </div>
+                    <%}%>
+                    <% if(success_msg.length > 0){%>
+                        <div class="success-msg">
+                            <%= success_msg %>
+                        </div>
+                    <%}%>
+                    <div class="form-group">
+                        <label for="username">
+                            Username
+                        </label>
+                        <input type="text" id="username" name="username" class="form-control pb_height-50 reverse" placeholder="Username" <%if(userinfo != null){%>value="<%=userinfo.username%>"<%}%> required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">
+                            Email
+                        </label>
+                        <input type="text" id="email" name="email" class="form-control pb_height-50 reverse" placeholder="Email" <%if(userinfo != null){%>value="<%=userinfo.email%>"<%}%> required>
+                    </div>
+                    <div class="form-group">
+                        <div class="pb_select-wrap">
+                            <label for="level">
+                                Level
+                            </label>
+                            <select id="level" name="level" class="form-control pb_height-50 reverse" required>
+                                <option value="Admin" <%if(userinfo != null){%><%if(userinfo.rank === "Admin"){%>selected<%}%><%}%>>Administrator</option>
+                                <option value="User" <%if(userinfo != null){%><%if(userinfo.rank === "User"){%>selected<%}%>><%}%>User</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">
+                            Password
+                        </label>
+                        <input type="password" id="password" name="password" class="form-control pb_height-50 reverse" placeholder="Password">
+                    </div>
+                    <div class="form-group text-center">
+                        <input type="submit" class="btn btn-primary btn-lg btn-block pb_btn-pill btn-shadow-blue" value="<%if(userinfo != null){%>Edit profil<%}else{%>Create User<%}%>">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<% include partials/footer.ejs%>
+</html>

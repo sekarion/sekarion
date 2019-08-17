@@ -1,0 +1,18 @@
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title><%= titlepage%> | <%= sitename %></title>
+
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/material.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+
+    <noscript>Your browser does not support JavaScript!</noscript>
+    <script type="text/javascript" src="/js/main.js"></script>
+    <script type="text/javascript" src="/js/material.min.js"></script>
+    <%if(infoconf.customstyle ? infoconf.customstyle : false){%>
+        <style type="text/css">
+            <%= infoconf.customcss%>
+        </style>
+    <%}%>
+</head>

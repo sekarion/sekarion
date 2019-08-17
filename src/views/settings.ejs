@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<% include partials/head.ejs%>
+<body>
+<% include partials/header.ejs%>
+<div class="content">
+    <div class="container pt-70">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <form method="post">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h4 class="header-title text-center">Settings</h4>
+                        <div class="btn-actions-pane-right">
+                            <div role="group" class="btn-group-sm btn-group">
+                                <a href="/dashboard" class="btn btn-primary btn-sm">Back</a>
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <dl class="row">
+                                <dt class="col-md-4">website Name :</dt>
+                                <dd class="col-md-8"><input type="text" class="form-control pb_height-50 reverse" value="<%= config.websitename%>" name="websitename" placeholder="Name of Website" required></dd>
+                            </dl>
+                        </li>
+                        <li class="list-group-item">
+                            <dl class="row">
+                                <dt class="col-md-4">Website Port :</dt>
+                                <dd class="col-md-8"><input type="text" class="form-control pb_height-50 reverse" value="<%= config.websiteport%>" name="websiteport" placeholder="Port" required></dd>
+                            </dl>
+                        </li>
+                        <li class="list-group-item">
+                            <dl class="row">
+                                <dt class="col-md-4">Base Url :</dt>
+                                <dd class="col-md-8"><input type="text" class="form-control pb_height-50 reverse" value="<%= config.baseurl%>" name="baseurl" placeholder="base URL" required></dd>
+                            </dl>
+                        </li>
+                        <li class="list-group-item">
+                            <dl class="row">
+                                <dt class="col-md-4">Secret Session :</dt>
+                                <dd class="col-md-8"><input type="text" class="form-control pb_height-50 reverse" value="<%= config.secretsession%>" name="secretsession" placeholder="Secret Session" required></dd>
+                            </dl>
+                        </li>
+                        <li class="list-group-item">
+                            <dl class="row">
+                                <dt class="col-md-4">Show Header in public page :</dt>
+                                <dd class="col-md-8">
+                                  <li class="tg-list-item">
+                                    <input class="tgl tgl-light" id="cb1" type="checkbox" name="publicheader" <%= config.headershow ? "checked": ""%>>
+                                    <label class="tgl-btn" for="cb1"></label>
+                                    </li>
+                                </dd>
+                            </dl>
+                        </li>
+                        <li class="list-group-item">
+                            <dl class="row">
+                                <dt class="col-md-4">Show footer in public page :</dt>
+                                <dd class="col-md-8">
+                                <li class="tg-list-item">
+                                    <input class="tgl tgl-light" id="cb2" type="checkbox" name="publicfooter" <%= config.footershow ? "checked": ""%> >
+                                    <label class="tgl-btn" for="cb2"></label>
+                                </li>
+                            </dl>
+                        </li>
+                        <li class="list-group-item">
+                            <dl class="row">
+                                <dt class="col-md-4">Custom css :</dt>
+                                <dd class="col-md-8">
+                        <li class="tg-list-item">
+                            <input class="tgl tgl-light" id="cb3" type="checkbox" name="customstyle" <%= config.customstyle ? "checked": ""%> >
+                            <label class="tgl-btn" for="cb3"></label>
+                        </li>
+                        </dl>
+                        </li>
+                        <li class="list-group-item">
+                            <dl class="row">
+                                <dt class="col-md-4">
+                                    CSS :
+                                </dt>
+                                <dd class="col-md-8">
+                                    <textarea id="message" name="customcss" class="form-control pb_height-50 reverse" style="height: 245px !important;" placeholder="please add css here for custom"><%= config.customcss%></textarea>
+
+                                </dd>
+                            </dl>
+                        </li>
+                    </ul>
+                    <div class="form-group text-center">
+                        <input type="submit" class="btn btn-primary btn-lg btn-block pb_btn-pill btn-shadow-blue" value="Update Config">
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<%include partials/footer.ejs%>
+</html>

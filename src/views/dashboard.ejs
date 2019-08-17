@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<% include partials/head.ejs%>
+<body>
+<% include partials/header.ejs%>
+<div class="content">
+    <div class="container pt-70">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <%if(error.length > 0){%>
+                                <% for(let i=0; i < error.length; i++){%>
+                                <div class="error-msg">
+                                    <%=error[i]%>
+                                </div>
+                                <%}%>
+                            <%}%>
+                            <%if(error_msg.length > 0){%>
+                                <% for(let i=0; i < error_msg.length; i++){%>
+                                    <div class="error-msg">
+                                        <%=error_msg[i]%>
+                                    </div>
+                                <%}%>
+                            <%}%>
+                                <%if(success_msg.length > 0){%>
+                                    <% for(let i=0; i < success_msg.length; i++){%>
+                                    <div class="error-msg">
+                                        <%=success_msg[i]%>
+                                    </div>
+                                    <%}%>
+                                <%}%>
+                            <div class="form-group text-center">
+                                <a href="/addmonitor" class="btn btn-primary btn-lg btn-block pb_btn-pill btn-shadow-blue">Add Monitor</a>
+                            </div>
+                        </div>
+                        <%if(monitor.length > 0){%>
+                            <% for(var i=0; i<monitor.length; i++) {%>
+                                <div class="col-md-4 pd-10">
+                                    <div class="card">
+                                        <a href="/monitor/<%= monitor[i].id%>">
+                                            <div class="card-header text-center <%= monitor[i].laststatus ? monitor[i].laststatus.status == "offline"  ? "rtc": "btc": "btc"%>"><%= monitor[i].label ?monitor[i].label : "unknown" %>
+                                            </div>
+                                            <div class="table-responsive <%= monitor[i].laststatus ? monitor[i].laststatus.status === "offline" ? "rc": "tc" : "tc"%>">
+                                                Latency : <%= monitor[i].laststatus ? monitor[i].laststatus.latency ? monitor[i].laststatus.latency : 0: "Unknonwn"%>
+                                                <br>
+                                                Status: <%= monitor[i].laststatus ? monitor[i].laststatus.status ? monitor[i].laststatus.status : "online": "Never Check"%>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            <%}%>
+                        <%}else{%>
+                            <div class="col-12">
+                                <div class="rounded boxform">
+                                    <h2 class="mb-4 mt-0 text-center">No Monitor </h2>
+                                    <div class="form-group text-center">
+                                        <a href="/addmonitor" class="btn btn-primary btn-lg btn-block pb_btn-pill btn-shadow-blue">Add Monitor</a>
+                                    </div>
+                                </div>
+                            </div>
+                        <%}%>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<% include partials/footer.ejs%>
+</html>

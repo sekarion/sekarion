@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="fr">
+<% include ../partials/head.ejs%>
+<% include ../partials/headersetup.ejs%>
+<body>
+<div class="container pt-70" id="addmessage">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <%if (err){%>
+                <pre class="code">
+                    <code><%= errmess%></code>
+                </pre>
+            <%}%>
+            <form method="post" class="rounded boxform">
+                <h2 class="mb-4 mt-0 text-center">Installation of Sekarion</h2>
+                <div class="form-group">
+                    <label for="baseurl">
+                        Application base url
+                    </label>
+                    <input type="text" id="baseurl" name="baseurl" class="form-control pb_height-50 reverse" value="<%=url %>" placeholder="Application base url">
+                </div>
+                <div class="form-group">
+                    <label for="baseurl">
+                        Name of website
+                    </label>
+                    <input type="text" id="namewebsite" name="namewebsite" class="form-control pb_height-50 reverse" placeholder="Name of Website" value="Sekarion">
+                </div>
+                <div class="form-group">
+                    <div class="pb_select-wrap">
+                        <label for="db_type">
+                            Database Type
+                        </label>
+                        <select id="db_type" name="db_type" class="form-control pb_height-50 reverse" onchange="showHideEle(this)" required>
+                            <option value="" selected="" disabled>Select DB</option>
+                            <option value="mysql">MySQL</option>
+                            <option value="mongo">MongoDB</option>
+                            <option value="rethink">Rethinkdb</option>
+                            <option value="enmap">EnMap</option>
+                            <option value="sqlite">SQLite3</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="mongo_settings" class="none">
+                    <div class="form-group">
+                        <label for="db_host">
+                            DB Host
+                        </label>
+                        <input id="db_host" name="db_host" class="form-control pb_height-50 reverse" placeholder="db host" value="127.0.0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="db_port">
+                            DB Port
+                        </label>
+                        <input id="db_port" name="db_port" class="form-control pb_height-50 reverse" placeholder="db host" value="27017">
+                    </div>
+                    <div class="form-group">
+                        <label for="db_user">
+                            DB User
+                        </label>
+                        <input id="db_user" name="db_user" class="form-control pb_height-50 reverse" placeholder="DB user">
+                    </div>
+                    <div class="form-group">
+                        <label for="db_passwd">Password</label>
+                        <input id="db_passwd" name="db_passwd" class="form-control pb_height-50 reverse" type="password">
+                    </div>
+                    <div class="form-group">
+                        <label for="db_name">DB Name</label>
+                        <input id="db_name" name="db_name" class="form-control pb_height-50 reverse" value="sekarion">
+                    </div>
+                </div>
+                <div id="mysql_settings" class="none">
+                </div>
+                <div id="enmap_settings" class="none">
+                </div>
+                <div id="rethink_settings" class="none">
+                </div>
+                <div id="sqlite_settings" class="none">
+                </div>
+                <div class="form-group text-center">
+                    <input type="button" class="btn btn-primary btn-lg btn-block pb_btn-pill btn-shadow-blue" value="Save" onclick="return response(this);">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div id="loader" class="fullscreen">
+    <svg class="circular" width="48px" height="48px">
+        <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"></circle>
+        <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#1d82ff"></circle>
+    </svg>
+    <div class="text" id="textreplace">Loading </div>
+</div>
+</body>
+<% include ../partials/footer.ejs%>
+<script src="/js/setup.js"></script>
+<script>
+    function showHideEle(selectSrc) {
+        if(selectSrc.value==="mongo") {
+            //cache all other
+            document.getElementById("mongo_settings").style.display = "block";
+            document.getElementById("mysql_settings").style.display = "none";
+            document.getElementById("rethink_settings").style.display = "none";
+            document.getElementById("enmap_settings").style.display = "none";
+            document.getElementById("sqlite_settings").style.display = "none";
+        } else if(selectSrc.value ==="mysql") {
+            document.getElementById("mysql_settings").style.display = "block";
+            document.getElementById("rethink_settings").style.display = "none";
+            document.getElementById("mongo_settings").style.display = "none";
+            document.getElementById("sqlite_settings").style.display = "none";
+            document.getElementById("enmap_settings").style.display = "none";
+        }else if(selectSrc.value ==="rethink"){
+            document.getElementById("rethink_settings").style.display = "block";
+            document.getElementById("mysql_settings").style.display = "none";
+            document.getElementById("mongo_settings").style.display = "none";
+            document.getElementById("sqlite_settings").style.display = "none";
+            document.getElementById("enmap_settings").style.display = "none";
+        }else if(selectSrc.value ==="enmap"){
+            document.getElementById("enmap_settings").style.display = "block";
+            document.getElementById("rethink_settings").style.display = "none";
+            document.getElementById("mysql_settings").style.display = "none";
+            document.getElementById("mongo_settings").style.display = "none";
+            document.getElementById("sqlite_settings").style.display = "none";
+        }else if(selectSrc.value ==="sqlite"){
+            document.getElementById("sqlite_settings").style.display = "block";
+            document.getElementById("enmap_settings").style.display = "none";
+            document.getElementById("rethink_settings").style.display = "none";
+            document.getElementById("mysql_settings").style.display = "none";
+            document.getElementById("mongo_settings").style.display = "none";
+        }else{
+            document.getElementById("sqlite_settings").style.display = "none";
+            document.getElementById("enmap_settings").style.display = "none";
+            document.getElementById("rethink_settings").style.display = "none";
+            document.getElementById("mysql_settings").style.display = "none";
+            document.getElementById("mongo_settings").style.display = "none";
+        }
+    }
+    /*Send the form with info (test connexion of db)*/
+    function submitForm(json)
+    {
+        document.querySelector('#textreplace').textContent = "Mongoose : Test connexion...";
+        let xhr = new XMLHttpRequest();
+        xhr.open ("post", "/testdb", true);
+        xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
+        xhr.onload = function () {
+            let responseconnexion = JSON.parse(xhr.responseText);
+            json = JSON.parse(json);
+            if (xhr.readyState === 4 && xhr.status == "200") {
+                document.querySelector('#textreplace').textContent = "Mongoose : connected";
+                //create the block message
+                let el = document.querySelector('#loader');
+                let className= "show";
+                if (el.classList){
+                    el.classList.remove(className);
+
+                }else{
+                    el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+                }
+                if(document.getElementById('code') != null){
+                    document.getElementById('code').textContent = `<code>${responseconnexion.errmess.name} : failed to connect to server </code>`;
+                }else{
+                    let d1 = document.getElementById('addmessage');
+                    d1.insertAdjacentHTML('afterbegin', `<pre class="code" id="code"><code>successful login, please copy these lines to the config.json file. Click "Next !" for config user account
+{
+    "websiteport":"3000",
+    "httpsenable":false,
+    "websiteconfigured":true,
+    "baseurl":"${json.baseurl}",
+    "secretsession":"fijaepjfeiefaefa8256ae768f768va768e76e8a7efEFAFEFAE857FAE6FA76FE7",
+    "websitename":"${json.namewebsite}",
+    "dbtype": "${json.db_type}",
+    "${json.db_type}":{
+        "db_port":"${json.db_port}",
+        "db_host":"${json.db_host}",
+        "db_user":"${json.db_user}",
+        "db_passwd":"${json.db_passwd}",
+        "db_name":"${json.db_name}"
+    }
+}
+</code></pre>
+<div class="form-group text-center">
+    <a href="/setupuser" class="btn btn-primary btn-lg btn-block pb_btn-pill btn-shadow-blue">Next !</a>
+</div>`);
+                }
+            } else {
+                document.querySelector('#textreplace').textContent = "Mongoose : Error";
+                //create the error block message
+                let el = document.querySelector('#loader');
+                let className= "show";
+                if (el.classList){
+                    el.classList.remove(className);
+
+                }else{
+                    el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+                }
+                if(document.getElementById('code') != null){
+                    document.getElementById('code').textContent = `<code>${responseconnexion.errmess.name} : failed to connect to server </code>`;
+                }else{
+                    let d1 = document.getElementById('addmessage');
+                    d1.insertAdjacentHTML('afterbegin',`<pre class="code" id="code"><code>${responseconnexion.errmess.name} : failed to connect to server </code>`);
+                }
+                document.getElementById('db_host').style.border = "1px solid #c0392b";
+                document.getElementById('db_host').style.backgroundColor = "rgba(231, 76, 60, .5)";
+                document.getElementById('db_port').style.border = "1px solid #c0392b";
+                document.getElementById('db_port').style.backgroundColor = "rgba(231, 76, 60, .5)";
+                document.getElementById('db_user').style.border = "1px solid #c0392b";
+                document.getElementById('db_user').style.backgroundColor = "rgba(231, 76, 60, .5)";
+                document.getElementById('db_passwd').style.border = "1px solid #c0392b";
+                document.getElementById('db_passwd').style.backgroundColor = "rgba(231, 76, 60, .5)";
+            }
+        }
+        xhr.onerror = function(e){
+            document.querySelector('#textreplace').textContent = "Mongoose : Error"
+        } // failure case
+        xhr.send(json);
+        return false;
+    }
+    /**
+     * Install lib
+     **/
+    function response(e) {
+        document.querySelector('#textreplace').textContent = "Install of dependencies (mongoose)..."
+        let el = document.querySelector('#loader');
+        let className = "show";
+        if (el.classList) {
+            el.classList.add(className);
+        }else{
+            el.className += ' ' + className;
+        }
+        //send loading install lib
+        let data = {};
+        data.baseurl = document.getElementById("baseurl").value;
+        data.db_type = document.getElementById('db_type').value;
+        data.db_host = document.getElementById('db_host').value;
+        data.db_port = document.getElementById('db_port').value;
+        data.db_user = document.getElementById('db_user').value;
+        data.db_passwd = document.getElementById('db_passwd').value;
+        data.db_name = document.getElementById('db_name').value ? document.getElementById('db_name').value: "Sekarion";
+        data.namewebsite = document.getElementById('namewebsite').value ? document.getElementById('namewebsite').value : "Sekarion";
+        //send data to express
+        let json = JSON.stringify(data);
+
+        //send xhr request
+        let xhr = new XMLHttpRequest();
+        //install lib route
+        xhr.open("POST", "/installlib", true);
+        xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
+        xhr.onload = function () {
+            let responseinstall = JSON.parse(xhr.responseText);
+            if (xhr.readyState === 4 && xhr.status == "200") {
+                document.querySelector('#textreplace').textContent = responseinstall.message;
+                //extrait une seul fois les datas pas besoin de plus
+                submitForm(json);
+            } else {
+                document.querySelector('#textreplace').textContent = responseinstall.message;
+            }
+        }
+        xhr.send(json);
+    }
+</script>
+</html>

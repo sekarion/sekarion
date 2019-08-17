@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="fr">
+<% include partials/head.ejs%>
+<body>
+<% if(infoconf.headershow ? infoconf.headershow: false){%>
+    <% include partials/header.ejs%>
+<%}%>
+<div class="content">
+    <div class="container pt-70">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <%if(monitor.length > 0){%>
+                    <div class="status-site">
+                        <% for(var isn=0; isn<monitor.length; isn++) {%>
+                        <ul class="list-group status-group">
+                            <div class="group-items">
+                                <li class="list-group-item sub-component">
+                                    <a href="http://<%= monitor[isn].monit.ip%>" target="_blank" class="links"><%= monitor[isn].monit.label ? monitor[isn].monit.label : monitor[isn].monit.ip  %></a>
+                                    <%if(monitor[isn].monit.description ){%>
+                                        <i class="fa fa-question-circle help-icon" id="<%= monitor[isn].monit.label ? monitor[isn].monit.label : monitor[isn].monit.ip %><%=isn%>"></i>
+                                        <div class="mdl-tooltip" for="<%= monitor[isn].monit.label ? monitor[isn].monit.label : monitor[isn].monit.ip %><%=isn%>"><%=monitor[isn].description%></div>
+                                    <%}%>
+                                    <div class="right">
+                                        <%= todaystatus[0].incident[0].inc%>
+                                        <% for(let i=0;i <todaystatus.length; i++){%>
+                                            <%if(todaystatus[i].monit.id === monitor[isn].monit.id){%>
+
+                                            <% for(let incid=0;incid <todaystatus[i].incident.length; incid++){%>
+                                                <% if(todaystatus[i].incident[incid].inc.length ===0){%>
+                                                    <!-- No incident -->
+                                                    <small class="green" id="tt6">Online</small>
+                                                     <%}else{%>
+                                                    <% let impacttoday =todaystatus[i].incident[incid].inc[0].impact ? todaystatus[i].incident[incid].inc[0].impact : 0 %>
+                                                    <% for(let incidp=1;incidp <todaystatus[i].incident[incid].inc.length; incidp++){%>
+                                                        <%if(todaystatus[i].incident[incid].inc[incidp].impact > impacttoday){%>
+                                                            <% impacttoday = todaystatus[i].incident[incid].inc[incidp].impact %>
+                                                        <%}%>
+                                                    <%}%>
+                                                        <%if(impacttoday === 0){%>
+                                                            <small class="green" id="tt6">Online</small>
+                                                        <%}else if(impacttoday == 1){%>
+                                                            <small class="yellow" id="tt6">Partial Outage</small>
+                                                        <%}else if(impacttoday == 2){%>
+                                                            <small class="Major" id="tt6">Major Outage</small>
+                                                        <%}else if(impacttoday == 3){%>
+                                                            <small class="Critical" id="tt6">Outage</small>
+                                                        <%}else {%>
+                                                            <small class="online" id="tt6">Online</small>
+                                                        <%}%>
+                                                    <%}%>
+                                                <%}%>
+                                                <%}%>
+                                        <%}%>
+
+                                    </div>
+                                    <div class="shared-partial">
+                                        <svg class="line-graphic" preserveAspectRatio="none" height="34" viewBox="0 0 448 34">
+                                            <% let incidents = monitor[isn].incident.reverse()%>
+                                            <%for (var i=0; i< incidents.length; i++){%>
+                                            <%if(incidents[i].inc.length === 1){%>
+                                            <%if(incidents[i].inc[0].impact === 0){%>
+                                                <rect height="34" width="3" x="<%= 5*[i] %>" y="0" fill="#2fcc66" id="<%= monitor[isn].label ? monitor[isn].label : monitor[isn].ip  %><%=isn%>-reat-<%= 5*[i] %>" data-html="true"></rect>
+                                            <%}else if(incidents[i].inc[0].impact === 1){%>
+                                                <rect height="34" width="3" x="<%= 5*[i] %>" y="0" fill="#f39c12" id="<%= monitor[isn].label ? monitor[isn].label : monitor[isn].ip  %><%=isn%>-reat-<%= 5*[i] %>" data-html="true"></rect>
+                                            <%}else if(incidents[i].inc[0].impact === 2){%>
+                                                <rect height="34" width="3" x="<%= 5*[i] %>" y="0" fill="#d35400" id="<%= monitor[isn].label ? monitor[isn].label : monitor[isn].ip  %><%=isn%>-reat-<%= 5*[i] %>" data-html="true"></rect>
+                                            <%}else if(incidents[i].inc[0].impact === 3){%>
+                                                <rect height="34" width="3" x="<%= 5*[i] %>" y="0" fill="#c0392b" id="<%= monitor[isn].label ? monitor[isn].label : monitor[isn].ip  %><%=isn%>-reat-<%= 5*[i] %>" data-html="true"></rect>
+                                            <%}else {%>
+                                                <rect height="34" width="3" x="<%= 5*[i] %>" y="0" fill="#2fcc66" id="<%= monitor[isn].label ? monitor[isn].label : monitor[isn].ip  %><%=isn%>-reat-<%= 5*[i] %>" data-html="true"></rect>
+                                            <%}%>
+                                            <!-- check if multiple incidents-->
+                                            <%}else if(incidents[i].inc.length > 1){%>
+                                                <% impact = incidents[i].inc[0] ? incidents[i].inc[0] : 0%>
+                                                <%for(var io=1; io < incidents[i].inc.length; io++){%>
+                                                    <%if(incidents[i].inc[io].impact > impact){%>
+                                                        <% impact = incidents[i].inc[io].impact %>
+                                                    <%}%>
+                                                <%}%>
+                                                <%if(impact === 0){%>
+                                                    <rect height="34" width="3" x="<%= 5*[i] %>" y="0" fill="#2fcc66" id="<%= monitor[isn].label ? monitor[isn].label : monitor[isn].ip  %><%=isn%>-reat-<%= 5*[i] %>" data-html="true"></rect>
+                                                <%}else if(impact == 1){%>
+                                                    <rect height="34" width="3" x="<%= 5*[i] %>" y="0" fill="#f39c12" id="<%= monitor[isn].label ? monitor[isn].label : monitor[isn].ip  %><%=isn%>-reat-<%= 5*[i] %>" data-html="true"></rect>
+                                                <%}else if(impact == 2){%>
+                                                    <rect height="34" width="3" x="<%= 5*[i] %>" y="0" fill="#d35400" id="<%= monitor[isn].label ? monitor[isn].label : monitor[isn].ip  %><%=isn%>-reat-<%= 5*[i] %>" data-html="true"></rect>
+                                                <%}else if(impact == 3){%>
+                                                    <rect height="34" width="3" x="<%= 5*[i] %>" y="0" fill="#c0392b" id="<%= monitor[isn].label ? monitor[isn].label : monitor[isn].ip  %><%=isn%>-reat-<%= 5*[i] %>" data-html="true"></rect>
+                                                <%}else {%>
+                                                    <rect height="34" width="3" x="<%= 5*[i] %>" y="0" fill="#2fcc66" id="<%= monitor[isn].label ? monitor[isn].label : monitor[isn].ip  %><%=isn%>-reat-<%= 5*[i] %>" data-html="true"></rect>
+                                                <%}%>
+                                            <%}else{%>
+                                                <rect height="34" width="3" x="<%= 5*[i] %>" y="0" fill="#2fcc66" id="<%= monitor[isn].label ? monitor[isn].label : monitor[isn].ip  %><%=isn%>-reat-<%= 5*[i] %>" data-html="true"></rect>
+                                            <%}%>
+                                            <%}%>
+                                        </svg>
+                                        <%for (var count=0; count<monitor[isn].incident.length; count++){%>
+                                            <div class="mdl-tooltip" for="<%= monitor[isn].label ? monitor[isn].label : monitor[isn].ip  %><%=isn%>-reat-<%= 5*[count] %>">
+                                                <%= monitor[isn].incident[count].date%>
+                                                <br>
+                                                <%if(monitor[isn].incident[count].inc.length ==0){%>
+                                                    No downtime recorded on this day.
+                                                <%}else{%>
+                                                    <%for(let inc =0; inc < monitor[isn].incident[count].inc.length; inc++){%>
+                                                    <a class="mdl-color-text--white" href="/incident/<%= monitor[isn].incident[count].inc[inc].id%>"><%= monitor[isn].incident[count].inc[inc].name%></a>
+                                                    <%}%>
+                                                <%}%>
+                                            </div>
+                                        <%}%>
+                                    </div>
+                                </li>
+                            </div>
+                        </ul>
+                        <%}%>
+
+                        a suivre
+                    </div>
+            </div>
+            <%}else{%>
+            <div class="text-center">
+                <p>
+                    No monitors are currently public. <br>
+                    Please log in to make an audience or to view the status of one of the monitors that you have set up
+                </p>
+                <%if(user){%>
+                    <a href="/dashboard" class="btn btn-primary btn-shadow-blue btn-sm">Dashboard</a>
+                <%}else{%>
+                    <a href="/auth" class="btn btn-primary btn-shadow-blue btn-sm">Login</a>
+                <%}%>
+            </div>
+            <%}%>
+        </div>
+    </div>
+</div>
+</body>
+<% if(infoconf.footershow ? infoconf.footershow: false){%>
+    <% include partials/footer.ejs%>
+<%}%>
+</html>

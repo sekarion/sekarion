@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="fr">
+<% include partials/head.ejs%>
+<body>
+<% include partials/header.ejs%>
+<div class="content">
+    <div class="container pt-70">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <form method="post" class="rounded boxform" onsubmit="return checkMessage(this);">
+                    <h2 class="mb-4 mt-0 text-center">Add Incident </h2>
+                    <%if(error.length > 0){%>
+                    <div class="error-msg">
+                        <%=error%>
+                    </div>
+                    <%}%>
+                    <div class="form-group">
+                        <label for="nameincident">
+                            Incident Name
+                        </label>
+                        <input type="text" id="nameincident" name="nameincident" class="form-control pb_height-50 reverse" placeholder="Incident Name" required>
+                    </div>
+                    <div class="form-group">
+                        <div class="pb_select-wrap">
+                            <label for="status">
+                                Incident status
+                            </label>
+                            <select id="status" name="status" class="form-control pb_height-50 reverse" onchange="showHideEle(this)" required>
+                                <option value="" selected="" disabled>Select Status</option>
+                                <option value="investigating">Investigating</option>
+                                <option value="identified">Identified</option>
+                                <option value="monitoring">Monitoring</option>
+                                <option value="resolved">Resolved</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="pb_select-wrap">
+                            <label for="message">
+                                Message
+                            </label>
+                            <textarea id="message" name="message" class="form-control pb_height-50 reverse"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="pb_select-wrap">
+                            <label for="affected">
+                                Component affected ( <%= monitor.label ? monitor.label: monitor.ip%>)
+                            </label>
+                            <select id="affected" name="affected" class="form-control pb_height-50 reverse" required>
+                                <option value="operational">Operational</option>
+                                <option value="degraded">Degraded performance</option>
+                                <option value="partialoutage">Partial outage</option>
+                                <option value="majoroutage">Major outage</option>
+                                <option value="maintenance">Under maintenance</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group text-center">
+                        <input type="submit" class="btn btn-primary btn-lg btn-block pb_btn-pill btn-shadow-blue" value="Create Incident">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<% include partials/footer.ejs%>
+<script>
+    let textarea = document.querySelector('textarea');
+    textarea.addEventListener('keydown', autosize);
+    function autosize(){
+        let el = this;
+        setTimeout(function(){
+            el.style.cssText = 'height:auto; padding:0';
+            el.style.cssText = 'height:' + el.scrollHeight + 'px !important';
+        },0);
+    }
+    function showHideEle(selectSrc) {
+            if(selectSrc.value==="investigating") {
+                document.getElementById("message").placeholder = "We're experiencing an elevated level of API errors and are currently looking into the issue.";
+            } else if(selectSrc.value ==="identified") {
+                document.getElementById("message").placeholder = "The issue has been identified and a fix is being implemented.";
+            }else if(selectSrc.value ==="monitoring"){
+                document.getElementById("message").placeholder = "A fix has been implemented and we are monitoring the results.";
+            }else if(selectSrc.value ==="resolved"){
+                document.getElementById("message").placeholder = "This incident has been resolved.";
+            }
+    }
+    function checkMessage(check){
+        if(document.getElementById("message").value.length === 0){
+            document.getElementById("message").value = document.getElementById("message").placeholder;
+            return true;
+        }
+        return true;
+    }
+</script>
+</body>
+</html>
