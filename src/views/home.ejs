@@ -5,6 +5,8 @@
 <% if(infoconf.headershow ? infoconf.headershow: false){%>
     <% include partials/header.ejs%>
 <%}%>
+<script src="/js/apexcharts.js"></script>
+
 <div class="content">
     <div class="container pt-70">
         <div class="row">
@@ -112,7 +114,89 @@
                         </ul>
                         <%}%>
 
-                        a suivre
+                            <%for(let is =0; is <infosincidentspastday.length; is++){%>
+                                <%if(infosincidentspastday[is].monit.showmonitor ? infosincidentspastday[is].monit.showmonitor : false){%>
+                                <div class="card mgt-10">
+                                    <div class="card-body">
+                                        <h4 class="header-title text-center">Sytem Metric <%= infosincidentspastday[is].monit.label ? infosincidentspastday[is].monit.label : infosincidentspastday[is].monit.ip %></h4>
+                                    </div>
+                                    <div class="toolbar">
+                                        <button id="one_hours<%=is%>">1H</button>
+                                        <button id="one_days<%=is%>" class="active">1D</button>
+                                        <button id="one_week<%=is%>">1W</button>
+                                        <button id="one_month<%=is%>">1M</button>
+                                        <button id="six_months<%=is%>">6M</button>
+                                        <button id="one_year"<%=is%>>1Y</button>
+                                        <button id="all<%=is%>">ALL</button>
+                                    </div>
+                                    <div id="timeline-chart<%=is%>"></div>
+                                </div>
+                            <script>
+                                /**
+                                 * Convert data
+                                 **/
+                                function del_months(dt, n)
+                                {
+                                    return new Date(dt.setMonth(dt.getMonth() - n));
+                                }
+                                function del_hours(dt, n){
+                                    return new Date(dt.setHours(dt.getHours()-n));
+                                }
+                                function delDays(date, days) {
+                                    let result = new Date(date);
+                                    result.setDate(result.getDate() - days);
+                                    return result;
+                                }
+                                let options<%=is%> = {
+                                    chart: {
+                                        type: 'area',
+                                        height: 350,
+                                    },
+                                    dataLabels: {
+                                        enabled: false
+                                    },
+                                    series: [{
+                                        name: "Ping",
+                                        data: <%=JSON.stringify(infosincidentspastday[is].statusmonitor, null, 2).replace(/"/g, '');%>
+                                    },
+
+                                    ],
+                                    markers: {
+                                        size: 0,
+                                        style: 'hollow',
+                                    },
+                                    xaxis: {
+                                        type: 'datetime',
+                                        min: delDays(new Date(), 1).getTime(),
+                                        tickAmount: 6,
+                                    },
+                                    tooltip: {
+                                        x: {
+                                            format: 'dd MMM yyyy'
+                                        }
+                                    },
+                                    fill: {
+                                        type: 'gradient',
+                                        gradient: {
+                                            shadeIntensity: 1,
+                                            opacityFrom: 0.7,
+                                            opacityTo: 0.9,
+                                            stops: [0, 100]
+                                        }
+                                    },
+
+                                }
+
+                                let chart<%=is%> = new ApexCharts(
+                                    document.querySelector("#timeline-chart<%=is%>"),
+                                    options<%=is%>
+                                );
+
+                                chart<%=is%>.render();
+                            </script>
+                                <%}%>
+                            <%}%>
+                        </div>
                     </div>
             </div>
             <%}else{%>

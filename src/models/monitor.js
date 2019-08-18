@@ -27,6 +27,9 @@ let MonitorSchema = mongoose.Schema({
     privacy: {
         type: Boolean, default: false
     },
+    showmonitor: {
+        type: Boolean, default: false
+    },
     description: {
         type: String
     },

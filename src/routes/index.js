@@ -165,19 +165,34 @@ router.get('/', async (req, res) =>{
         }else{
             let monit2 = [];
             let today = [];
+            let infosincidentspastday = [];
+            let test = [];
+
             //construct new object with data incidents and monitor if exists
             for (let i=0; i < monit.length; i++) {
-                await monit2.push({monit: monit[i], incident: await getIncident(monit[i].id, 90)});
-                await today.push({monit: monit[i], incident: await getIncident(monit[i].id, 1)});
-                }
-            console.log(today);
-            res.render('home', {
+                let sts = [];
+                await Status.getByMonitorID(monit[i].id, async (er, status) => {
+                    if (er) {
+                        req.flash('error_msg', "The monitor does not exist");
+                        return res.redirect('/dashboard');
+                    }
+                    for (let i = 0; i < status.length; i++) {
+                        await sts.push([status[i].datecheck, status[i].latency]);
+                    }
+                });
+                    await monit2.push({monit: monit[i], incident: await getIncident(monit[i].id, 90)});
+                    await today.push({monit: monit[i], incident: await getIncident(monit[i].id, 1)});
+                    //show monitor with infos for monitor ,incident and status ping etc....
+                    await infosincidentspastday.push({monit: monit[i], incident: await getIncident(monit[i].id, 15), statusmonitor: sts});
+            }
+            return res.render('home', {
                 titlepage: "Accueil",
                 message: req.flash(),
                 nameconfig: config.websitename,
                 monitor: monit2,
                 todaystatus: today,
-                infoconf: infoconf
+                infoconf: infoconf,
+                infosincidentspastday: infosincidentspastday
             });
         }
 
@@ -203,6 +218,7 @@ router.post('/settings', isadmin, async(req, res) =>{
     info.websiteport = req.body.websiteport;
     info.customstyle = req.body.customstyle === "on";
     info.customcss = req.body.customcss;
+    info.showlogin = req.body.showlogin === "on";
     // Write a string to another file and set the file mode to 0755
     try {
         fs.writeFileSync(__dirname + '/../config/config.json', JSON.stringify(info, null, 4), { mode: 0o755 });
@@ -356,7 +372,7 @@ router.post('/monitor/:id/edit', ensureAuthenticated, async (req, res) =>{
             req.flash('error_msg', "The monitor doesn't exist");
             return res.redirect('/dashboard');
         }
-        if(req.body.label != null && req.body.domain != null && req.body.warning_threshold != null && req.body.privacymonitor != null){
+        if(req.body.label != null && req.body.domain != null && req.body.warning_threshold != null && req.body.privacymonitor != null && req.body.showmonitor != null){
             //type == website
             if(req.body.type.toLowerCase() === "service"){
                 if(req.body.port != null){
@@ -368,6 +384,8 @@ router.post('/monitor/:id/edit', ensureAuthenticated, async (req, res) =>{
                         monit.port = req.body.customport;
                         monit.warning_threshold = req.body.warning_threshold;
                         monit.privacy = req.body.privacymonitor === "public";
+                        monit.showmonitor = req.body.showmonitor === "yes";
+                        monit.description = req.body.description;
                         Monitor.updateMonitor(monit, (err, monitor) =>{
                             if(err){
                                 console.log(err);
@@ -384,6 +402,8 @@ router.post('/monitor/:id/edit', ensureAuthenticated, async (req, res) =>{
                         monit.port = req.body.port;
                         monit.warning_threshold = req.body.warning_threshold;
                         monit.privacy = req.body.privacymonitor === "public";
+                        monit.showmonitor = req.body.showmonitor === "yes";
+                        monit.description = req.body.description;
                         Monitor.updateMonitor(monit,(error, monitor) => {
                             if(error){
                                 console.log(error);
@@ -405,6 +425,8 @@ router.post('/monitor/:id/edit', ensureAuthenticated, async (req, res) =>{
                 monit.type = req.body.type;
                 monit.warning_threshold = req.body.warning_threshold;
                 monit.privacy = req.body.privacymonitor === "public";
+                monit.showmonitor = req.body.showmonitor === "yes";
+                monit.description = req.body.description;
                 Monitor.updateMonitor(monit, (error, monitor) => {
                     if(error){
                         console.log(error);
@@ -656,7 +678,7 @@ router.get('/addmonitor', isadmin, function (req, res) {
  * Route for add monitor why post data for create monitor
  **/
 router.post('/addmonitor', isadmin, function (req, res) {
-    if(req.body.label != null && req.body.domain != null && req.body.warning_threshold != null && req.body.privacymonitor != null){
+    if(req.body.label != null && req.body.domain != null && req.body.warning_threshold != null && req.body.privacymonitor != null && req.body.showmonitor != null){
         //Part of service
         if(req.body.type.toLowerCase() === "service"){
             if(req.body.port != null){
@@ -669,8 +691,10 @@ router.post('/addmonitor', isadmin, function (req, res) {
                         type: req.body.type,
                         port: req.body.customport,
                         warning_threshold: req.body.warning_threshold,
-                        privacy: req.body.privacymonitor === "public"
-                    });
+                        privacy: req.body.privacymonitor === "public",
+                        showmonitor : req.body.showmonitor === "yes",
+                        description : req.body.description
+                });
                     Monitor.createMonitor(newMonitor, (error, monitor) => {
                         if(error){
                             console.log(error);
@@ -688,7 +712,9 @@ router.post('/addmonitor', isadmin, function (req, res) {
                         type: req.body.type,
                         port: req.body.port,
                         warning_threshold: req.body.warning_threshold,
-                        privacy: req.body.privacymonitor === "public"
+                        privacy: req.body.privacymonitor === "public",
+                        showmonitor : req.body.showmonitor === "yes",
+                        description : req.body.description
                     });
                     //save the monitor and create
                     Monitor.createMonitor(newMonitor,(error, monitor) => {
@@ -712,7 +738,9 @@ router.post('/addmonitor', isadmin, function (req, res) {
                 ip: req.body.domain,
                 type: req.body.type,
                 warning_threshold: req.body.warning_threshold,
-                privacy: req.body.privacymonitor === "public"
+                privacy: req.body.privacymonitor === "public",
+                showmonitor : req.body.showmonitor === "yes",
+                description : req.body.description
             });
             Monitor.createMonitor(newMonitor, (error, monitor) => {
                 if(error){

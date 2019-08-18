@@ -52,6 +52,12 @@
                                         <dd class="col-md-8"><%= monitor.privacy ? "Public": "Private" %></dd>
                                     </dl>
                                 </li>
+                                <li class="list-group-item">
+                                    <dl class="row">
+                                        <dt class="col-md-4">Show Monitor if Public:</dt>
+                                        <dd class="col-md-8"><%= monitor.showmonitor ? "Yes": "No" %></dd>
+                                    </dl>
+                                </li>
                             </ul>
                             <div class="card-header text-center">
                                 <h4 class="header-title text-center">Settings</h4>
@@ -225,10 +231,6 @@
     );
 
     chart.render();
-    let infos = [];
-    <% for(var i=0; i< infosStatus.length; i++) {%>
-    infos.push([<%= infosStatus[i]%>]);
-    <%}%>
     let options2 = {
         chart: {
             type: 'area',
@@ -239,7 +241,7 @@
         },
         series: [{
             name: "Ping",
-            data: infos
+            data:  <%=JSON.stringify(infosStatus).replace(/"/g, '');%>
         },
 
         ],

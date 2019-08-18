@@ -46,10 +46,8 @@
                             <dl class="row">
                                 <dt class="col-md-4">Show Header in public page :</dt>
                                 <dd class="col-md-8">
-                                  <li class="tg-list-item">
                                     <input class="tgl tgl-light" id="cb1" type="checkbox" name="publicheader" <%= config.headershow ? "checked": ""%>>
                                     <label class="tgl-btn" for="cb1"></label>
-                                    </li>
                                 </dd>
                             </dl>
                         </li>
@@ -57,20 +55,16 @@
                             <dl class="row">
                                 <dt class="col-md-4">Show footer in public page :</dt>
                                 <dd class="col-md-8">
-                                <li class="tg-list-item">
                                     <input class="tgl tgl-light" id="cb2" type="checkbox" name="publicfooter" <%= config.footershow ? "checked": ""%> >
                                     <label class="tgl-btn" for="cb2"></label>
-                                </li>
                             </dl>
                         </li>
                         <li class="list-group-item">
                             <dl class="row">
                                 <dt class="col-md-4">Custom css :</dt>
                                 <dd class="col-md-8">
-                        <li class="tg-list-item">
                             <input class="tgl tgl-light" id="cb3" type="checkbox" name="customstyle" <%= config.customstyle ? "checked": ""%> >
                             <label class="tgl-btn" for="cb3"></label>
-                        </li>
                         </dl>
                         </li>
                         <li class="list-group-item">
@@ -80,6 +74,17 @@
                                 </dt>
                                 <dd class="col-md-8">
                                     <textarea id="message" name="customcss" class="form-control pb_height-50 reverse" style="height: 245px !important;" placeholder="please add css here for custom"><%= config.customcss%></textarea>
+                                </dd>
+                            </dl>
+                        </li>
+                        <li class="list-group-item">
+                            <dl class="row">
+                                <dt class="col-md-4">
+                                    Show Login Link :
+                                </dt>
+                                <dd class="col-md-8">
+                                    <input class="tgl tgl-light" id="cb4" type="checkbox" name="showlogin" <%= config.showlogin ? "checked": ""%> >
+                                    <label class="tgl-btn" for="cb4"></label>
 
                                 </dd>
                             </dl>
