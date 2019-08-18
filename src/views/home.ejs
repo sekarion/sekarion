@@ -20,7 +20,7 @@
                                     <a href="http://<%= monitor[isn].monit.ip%>" target="_blank" class="links"><%= monitor[isn].monit.label ? monitor[isn].monit.label : monitor[isn].monit.ip  %></a>
                                     <%if(monitor[isn].monit.description ){%>
                                         <i class="fa fa-question-circle help-icon" id="<%= monitor[isn].monit.label ? monitor[isn].monit.label : monitor[isn].monit.ip %><%=isn%>"></i>
-                                        <div class="mdl-tooltip" for="<%= monitor[isn].monit.label ? monitor[isn].monit.label : monitor[isn].monit.ip %><%=isn%>"><%=monitor[isn].description%></div>
+                                        <div class="mdl-tooltip" for="<%= monitor[isn].monit.label ? monitor[isn].monit.label : monitor[isn].monit.ip %><%=isn%>"><%=monitor[isn].monit.description%></div>
                                     <%}%>
                                     <div class="right">
                                         <%= todaystatus[0].incident[0].inc%>
