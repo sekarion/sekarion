@@ -22,6 +22,7 @@ router.get('/install/setup', function(req, res) {
     res.render('install/setup', {
         titlepage: "Installation de Sekarion",
         message: req.flash(),
+        nameconfig: "Sekarion",
         url: `${http}${req.headers.host}`,
         err: false,
         infoconf : null
@@ -46,7 +47,8 @@ router.get('/setupuser', function(req, res){
       message: req.flash(),
       err: false,
       messagecode: null,
-      infoconf: null
+      infoconf: null,
+      nameconfig: "Sekarion"
   });
 });
 router.post('/setupuser', function(req, res){
@@ -86,7 +88,8 @@ router.post('/setupuser', function(req, res){
                     message: req.flash(),
                     err: false,
                     messagecode: err,
-                    infoconf: null
+                    infoconf: null,
+                    nameconfig: "Sekarion"
                 });
             }else{
                 res.render("install/createuser",{
@@ -94,7 +97,8 @@ router.post('/setupuser', function(req, res){
                     message: req.flash(),
                     err: false,
                     messagecode: "The user has been created please restart the site to login",
-                    infoconf: null
+                    infoconf: null,
+                    nameconfig: "Sekarion"
                 });
             }
         });
