@@ -10,11 +10,8 @@ let router = express.Router();
 let passport = require('passport');
 let LocalStrategy = require('passport-local').Strategy;
 let config = require('../config/config');
-let User;
-let Monitor;
-let Status;
+let User,Monitor,Status,Incident;
 let fs = require('fs');
-let Incident;
 /**
  * Delete days for create auto calendar
  **/
@@ -59,7 +56,7 @@ async function UpdateInfo() {
     });
 }
 //check every 5 min status of website/service/ping
-setInterval(UpdateInfo, 300000);//300000
+setInterval(UpdateInfo, config.checkinterval);//300000
 /**
  * Check if user is connected if connected return next else return login
  **/
@@ -137,7 +134,7 @@ router.get('/auth', function(req, res) {
     res.render('auth', {
         titlepage: "Authentification",
         message: req.flash(),
-        nameconfig: config.websitename,
+        nameconfig: info.websitename,
         infoconf: info
     })
 });
@@ -153,12 +150,13 @@ router.post('/auth', passport.authenticate('local', {
  **/
 router.get('/', async (req, res) =>{
     let infoconf =  JSON.parse(fs.readFileSync(__dirname + '/../config/config.json', 'utf8'));
+    console.log(infoconf)
     await Monitor.findPublic(async(err, monit) => {
         if(monit.length === 0){
             res.render('home', {
                 titlepage: "Accueil",
                 message: req.flash(),
-                nameconfig: config.websitename,
+                nameconfig: infoconf.websitename,
                 monitor: monit,
                 infoconf : infoconf
             });
@@ -188,7 +186,7 @@ router.get('/', async (req, res) =>{
             return res.render('home', {
                 titlepage: "Accueil",
                 message: req.flash(),
-                nameconfig: config.websitename,
+                nameconfig: infoconf.websitename,
                 monitor: monit2,
                 todaystatus: today,
                 infoconf: infoconf,
@@ -203,7 +201,7 @@ router.get('/settings', isadmin, async (req, res)=>{
     res.render('settings', {
        titlepage: "Settings",
        message: req.flash(),
-       nameconfig: config.websitename,
+       nameconfig: info.websitename,
        config : info,
        infoconf: info
     });
@@ -241,7 +239,7 @@ router.get('/dashboard', ensureAuthenticated, async(req, res)=>{
         res.render('dashboard', {
             titlepage: "Status",
             message: req.flash(),
-            nameconfig: config.websitename,
+            nameconfig: info.websitename,
             monitor: monit,
             infoconf: info
         });
@@ -333,7 +331,7 @@ router.get('/monitor/:id', ensureAuthenticated, async(req, res)=>{
           res.render('monitor',{
               titlepage: `Monitor ${monit.label ? monit.label : monit.ip}`,
               message: req.flash(),
-              nameconfig: config.websitename,
+              nameconfig: info.websitename,
               monitor: monit,
               totalpercent: totalinfo,
               infosStatus: sts,
@@ -357,7 +355,7 @@ router.get('/monitor/:id/edit', ensureAuthenticated, async(req, res)=> {
         return res.render('editmonitor', {
             titlepage: `Edit Monitor ${monit.label ? monit.label : monit.ip}`,
             message: req.flash(),
-            nameconfig: config.websitename,
+            nameconfig: info.websitename,
             monitor: monit,
             infoconf: info
         })
@@ -454,7 +452,7 @@ router.get('/monitor/:id/addincident', ensureAuthenticated, async (req,res) =>{
        return res.render('addincident', {
            titlepage: `Add Incident for ${monit.label ? monit.label : monit.ip}`,
            message: req.flash(),
-           nameconfig: config.websitename,
+           nameconfig: info.websitename,
            monitor: monit,
            infoconf: info
        });
@@ -611,7 +609,7 @@ router.get('/monitor/:id/incident/:idincident', ensureAuthenticated, async(req, 
             return res.render('incidentpage', {
                 titlepage: `Incident for ${monit.label ? monit.label : monit.ip}`,
                 message: req.flash(),
-                nameconfig: config.websitename,
+                nameconfig: info.websitename,
                 monitor: monit,
                 status: status,
                 infoconf: info
@@ -669,7 +667,7 @@ router.get('/addmonitor', isadmin, function (req, res) {
     res.render('addmonitor', {
        titlepage: "Monitor Add",
        message: req.flash(),
-       nameconfig: config.websitename,
+       nameconfig: info.websitename,
        infoconf: info
    })
 });

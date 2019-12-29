@@ -8,5 +8,6 @@
   "footershow": true,
   "customstyle": false,
   "customcss": "",
-  "showlogin": false
+  "showlogin": false,
+  "checkinterval": 300000
 }

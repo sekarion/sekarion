@@ -52,7 +52,7 @@ router.get('/profile', ensureAuthenticated, function (req, res) {
     res.render('profil', {
         titlepage: `Profil of ${req.user.username}`,
         message: req.flash(),
-        nameconfig: config.websitename,
+        nameconfig: info.websitename,
         infoconf: info
     });
 });
@@ -116,7 +116,7 @@ router.get('/users', isadmin, function (req, res) {
             return res.render('users',{
                 titlepage: "User Management",
                 message: req.flash(),
-                nameconfig: config.websitename,
+                nameconfig: info.websitename,
                 users: users,
                 infoconf: info
             });
@@ -131,7 +131,7 @@ router.get('/adduser', isadmin, function (req, res) {
     return res.render('adduser',{
         titlepage: "User Add",
         message: req.flash(),
-        nameconfig: config.websitename,
+        nameconfig: info.websitename,
         userinfo: null,
         infoconf: info
     })
@@ -153,7 +153,7 @@ router.get('/edit/:id', isadmin, function (req, res) {
             return res.render('adduser', {
                 titlepage: `Edit Profil of ${user.username}`,
                 message: req.flash(),
-                nameconfig: config.websitename,
+                nameconfig: info.websitename,
                 userinfo : user,
                 infoconf: info
             });
