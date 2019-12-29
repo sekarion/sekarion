@@ -217,6 +217,7 @@ router.post('/settings', isadmin, async(req, res) =>{
     info.customstyle = req.body.customstyle === "on";
     info.customcss = req.body.customcss;
     info.showlogin = req.body.showlogin === "on";
+    info.checkinterval = req.body.checkinterval;
     // Write a string to another file and set the file mode to 0755
     try {
         fs.writeFileSync(__dirname + '/../config/config.json', JSON.stringify(info, null, 4), { mode: 0o755 });

@@ -20,7 +20,7 @@
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">
                             <dl class="row">
-                                <dt class="col-md-4">website Name :</dt>
+                                <dt class="col-md-4">Website Name :</dt>
                                 <dd class="col-md-8"><input type="text" class="form-control pb_height-50 reverse" value="<%= config.websitename%>" name="websitename" placeholder="Name of Website" required></dd>
                             </dl>
                         </li>
@@ -86,6 +86,14 @@
                                     <input class="tgl tgl-light" id="cb4" type="checkbox" name="showlogin" <%= config.showlogin ? "checked": ""%> >
                                     <label class="tgl-btn" for="cb4"></label>
 
+                                </dd>
+                            </dl>
+                        </li>
+                        <li class="list-group-item">
+                            <dl class="row">
+                                <dt class="col-md-4">Ping Check Interval : </dt>
+                                <dd class="col-md-8">
+                                    <input type="number" class="form-control pb_height-50 reverse" value="<%= config.checkinterval%>" name="checkinterval" placeholder="checkinterval" required="">
                                 </dd>
                             </dl>
                         </li>
