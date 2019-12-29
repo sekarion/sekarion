@@ -32,9 +32,11 @@
                         </ul>
                     </label>
                 <%}else{%>
-                    <% if(infoconf.showlogin ? infoconf.showlogin : true){%>
-                        <li class="nav-item "><a href="/auth" class="nav-link">Login</a></li>
-                    <%}%>
+                    <% if(infoconf != null){%>
+                            <% if(infoconf.showlogin ? infoconf.showlogin : true){%>
+                                <li class="nav-item "><a href="/auth" class="nav-link">Login</a></li>
+                            <%}%>
+                        <%}%>
                     <%}%>
             </ul>
         </div>
