@@ -92,10 +92,10 @@ function isadmin(req, res, next){
     }
 }
 if(config.mongo != null){
-    User = require('./../models/users');
-    Monitor = require('./../models/monitor');
-    Status = require('./../models/status');
-    Incident = require('./../models/incidents');
+    User = require('./../models/mongoose/users');
+    Monitor = require('./../models/mongoose/monitor');
+    Status = require('./../models/mongoose/status');
+    Incident = require('./../models/mongoose/incidents');
     passport.use(new LocalStrategy(
         function(username, password, done) {
             User.getUserByUsername(username, function(err, user) {

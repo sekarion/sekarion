@@ -13,8 +13,8 @@ let fs = require('fs');
 let Status;
 let Monitor;
 if(config.mongo != null){
-    User = require('./../models/users');
-    Monitor = require('./../models/monitor');
+    User = require('./../models/mongoose/users');
+    Monitor = require('./../models/mongoose/monitor');
 }
 /**
  * Check if user is connected if connected return next else return login

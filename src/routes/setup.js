@@ -55,7 +55,7 @@ router.post('/setupuser', function(req, res){
     if(configforceupdate.dbtype === "mongo") {
         let mongoose = require('mongoose');
         mongoose.Promise = global.Promise;
-        let User = require('../models/users');
+        let User = require('../models/mongoose/users');
         let mongourl = "";
         if (configforceupdate.mongo.db_user && configforceupdate.mongo.db_user) {
             mongourl = `mongodb://${configforceupdate.mongo.db_user}:${configforceupdate.mongo.db_passwd}@${configforceupdate.mongo.db_host ? configforceupdate.mongo.db_host : '127.0.0.1'}/${configforceupdate.mongo.db_name ? configforceupdate.mongo.db_name : 'sekarion'}`
@@ -85,14 +85,16 @@ router.post('/setupuser', function(req, res){
                     titlepage: "Create User of Sekarion",
                     message: req.flash(),
                     err: false,
-                    messagecode: err
+                    messagecode: err,
+                    infoconf: null
                 });
             }else{
                 res.render("install/createuser",{
                     titlepage: "Create User of Sekarion",
                     message: req.flash(),
                     err: false,
-                    messagecode: "The user has been created please restart the site to login"
+                    messagecode: "The user has been created please restart the site to login",
+                    infoconf: null
                 });
             }
         });
