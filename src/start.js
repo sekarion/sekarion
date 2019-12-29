@@ -101,7 +101,7 @@ try{
         } else {
             mongourl = `mongodb://${config.mongo.db_host ? config.mongo.db_host : '127.0.0.1'}:${config.mongo.db_port}/${config.mongo.db_name}`
         }
-        mongoose.connect(mongourl, {useNewUrlParser: true});
+        mongoose.connect(mongourl, { useUnifiedTopology: true });
         let db = mongoose.connection;
         db.on('error', function  callback() {
             log.endDraft("launchdb", "[Sekarion] Lancement de la base de données : error", false)

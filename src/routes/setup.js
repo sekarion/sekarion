@@ -66,7 +66,7 @@ router.post('/setupuser', function(req, res){
         }
 
         //init mongoose and connect
-        mongoose.connect(mongourl, {useNewUrlParser: true});
+        mongoose.connect(mongourl, { useUnifiedTopology: true });
         let db = mongoose.connection;
         db.on('error', console.error.bind(console, 'connection error:'));
         db.once('open', function callback () {
