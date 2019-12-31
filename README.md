@@ -30,6 +30,7 @@ Sekarion Monitor is a script that checks whether your websites and servers are u
    * SQLite3 (not ok for moment )
    
 ## Install
+Copy ``config.json.example`` or rame in `config.json` (in folder `src/config`)
 
 To be able to run an installation from the repo, you need to run the following command to install the dependencies: 
 ```js
@@ -39,15 +40,14 @@ after you need to start the website with :
 ```js
 node main.js
 ```
+
 ## Licence 
 Sekarion Monitor is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-
 
 ## Authors and helpers 
 
  * Joris Dugué
- 
- 
+  
 ## Changelogs
 
 * V0.0.1 : 
@@ -58,6 +58,12 @@ Sekarion Monitor is free software: you can redistribute it and/or modify it unde
     - Add Incidents /resolve 
     - Define the impact have incident 
     - Auto checking the website (loop every 5minutes by default)
-- V0.0.1RC
+    
+- V0.0.1RC :
     - Add Ping Monitor
-    - minor bug fixing 
+    - Minor bug fixing 
+
+- V0.0.2 :
+    - Major bug fix
+    - Fix bug with ping service
+    - Add new config for user (custom loop for checking website)

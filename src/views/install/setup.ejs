@@ -159,7 +159,7 @@
                     document.getElementById('code').textContent = `<code>${responseconnexion.errmess.name} : failed to connect to server </code>`;
                 }else{
                     let d1 = document.getElementById('addmessage');
-                    d1.insertAdjacentHTML('afterbegin', `<pre class="code" id="code"><code>successful login, please copy these lines to the config.json file. Click "Next !" for config user account
+                    d1.insertAdjacentHTML('afterbegin', `<pre class="code" id="code"><code>Successful login, please copy these lines to the config.json file. Click "Next !" for config user account
 {
     "websiteport":"3000",
     "httpsenable":false,
@@ -179,7 +179,8 @@
     "footershow": true,
     "customstyle": false,
     "customcss": "",
-    "showlogin": false
+    "showlogin": false,
+    "checkinterval": "300000"
 }
 </code></pre>
 <div class="form-group text-center">
