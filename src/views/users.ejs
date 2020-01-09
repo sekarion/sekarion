@@ -3,70 +3,63 @@
 <% include partials/head.ejs%>
 <body>
 <% include partials/header.ejs%>
-<div class="content">
-    <div class="container pt-70">
+<div class="wrap">
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <%if(error.length > 0){%>
-                <div class="error-msg">
-                    <%=error%>
-                </div>
-                <%}%>
-                <% if(success_msg.length > 0){%>
-                    <div class="success-msg">
-                        <%= success_msg %>
-                    </div>
-                <%}%>
-                <div class="card">
-                    <div class="card-header text-center">Users Account
-                        <div class="btn-actions-pane-right">
-                            <div role="group" class="btn-group-sm btn-group">
-                                <a href="/adduser" class="btn btn-success btn-sm">Add User</a>
-                            </div>
+            <div class="col-xl-12">
+                <div class="card m-b-30">
+                    <div class="card-header">
+                        <div class="float-left">
+                            <a href="#"><h4>Users Account</h4></a>
+                        </div>
+                        <div class="float-right">
+                            <a class="btn btn-success" href="/adduser">Add User</a>
                         </div>
                     </div>
-                    <div class="table-responsive">
-                        <table class="align-middle mb-0 table table-borderless table-striped table-hover">
-                            <thead>
-                            <tr>
-                                <th class="text-center">#</th>
-                                <th>Name</th>
-                                <th class="text-center">Email</th>
-                                <th class="text-center">Status</th>
-                                <th class="text-center">Level</th>
-                                <th class="text-center">Actions</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <% for(var i=0; i<users.length; i++) {%>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
                                 <tr>
-                                    <td class="text-center text-muted"><%= users[i]._id%></td>
-                                    <td>
-                                        <div class="widget-content p-0">
-                                            <div class="widget-content-wrapper">
-                                                <div class="widget-content-left flex2">
-                                                    <div class="widget-heading"><%= users[i].username%></div>
-                                                    <div class="widget-subheading opacity-7"><%= users[i].name%></div>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Level</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <% for(var i=0; i<users.length; i++) {%>
+                                    <tr>
+                                        <td class=" text-muted"><%= users[i]._id%></td>
+                                        <td>
+                                            <div class="widget-content p-0">
+                                                <div class="widget-content-wrapper">
+                                                    <div class="widget-content-left flex2">
+                                                        <div class="widget-heading"><%= users[i].username%></div>
+                                                        <div class="widget-subheading opacity-7"><%= users[i].name%></div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td class="text-center">
-                                        <%= users[i].email%>
-                                    </td>
-                                    <td class="text-center">
-                                        <div class="badge badge-<%if(users[i].rank === false){%>danger<%}else{%>success<%}%>"><%if (users[i].enable){%>Enable<%}else{%>Disable<%}%></div>
-                                    </td>
-                                    <td class="text-center">
-                                        <div class="badge badge-<%if(users[i].rank === "Admin"){%>danger<%}else{%>success<%}%>"><%= users[i].rank%></div>
-                                    </td>
-                                    <td class="text-center">
-                                        <a href="<% if(user.id == users[i]._id){ %>/profile<%}else{%>/edit/<%=users[i]._id%><%}%>" class="btn btn-primary btn-sm">Details</a>
-                                    </td>
-                                </tr>
-                            <% }%>
-                            </tbody>
-                        </table>
+                                        </td>
+                                        <td>
+                                            <%= users[i].email%>
+                                        </td>
+                                        <td>
+                                            <div class="badge badge-<%if(users[i].rank === false){%>danger<%}else{%>success<%}%>"><%if (users[i].enable){%>Enable<%}else{%>Disable<%}%></div>
+                                        </td>
+                                        <td>
+                                            <div class="badge badge-<%if(users[i].rank === "Admin"){%>danger<%}else{%>success<%}%>"><%= users[i].rank%></div>
+                                        </td>
+                                        <td>
+                                            <a href="<% if(user.id == users[i]._id){ %>/profile<%}else{%>/edit/<%=users[i]._id%><%}%>" class="btn btn-primary btn-sm">Details</a>
+                                        </td>
+                                    </tr>
+                                <% }%>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

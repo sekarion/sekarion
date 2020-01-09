@@ -1,222 +1,483 @@
 <!DOCTYPE html>
 <html lang="fr">
-<% include partials/head.ejs%>
+<% include partials/head.ejs %>
 <body>
-<% if(infoconf.headershow ? infoconf.headershow: false){%>
-    <% include partials/header.ejs%>
-<%}%>
-<script src="/js/apexcharts.js"></script>
-
-<div class="content">
-    <div class="container pt-70">
+<% if(infoconf.headershow ? infoconf.headershow : false){ %>
+    <% include partials/header.ejs %>
+<% } %>
+<script src="/js/apexcharts.js" charset="UTF-8" type="application/javascript"></script>
+<script src="/js/axios.js" charset="UTF-8" type="application/javascript"></script>
+<div class="wrap">
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <%if(monitor.length > 0){%>
+            <div class="col-xl-12">
+                <% if(monitor.length > 0){ %>
                     <div class="status-site">
-                        <% for(var isn=0; isn<monitor.length; isn++) {%>
-                        <ul class="list-group status-group">
-                            <div class="group-items">
-                                <li class="list-group-item sub-component">
-                                    <a href="http://<%= monitor[isn].monit.ip%>" target="_blank" class="links"><%= monitor[isn].monit.label ? monitor[isn].monit.label : monitor[isn].monit.ip  %></a>
-                                    <%if(monitor[isn].monit.description ){%>
-                                        <i class="fa fa-question-circle help-icon" id="<%= monitor[isn].monit.label ? monitor[isn].monit.label : monitor[isn].monit.ip %><%=isn%>"></i>
-                                        <div class="mdl-tooltip" for="<%= monitor[isn].monit.label ? monitor[isn].monit.label : monitor[isn].monit.ip %><%=isn%>"><%=monitor[isn].monit.description%></div>
-                                    <%}%>
-                                    <div class="right">
-                                        <%= todaystatus[0].incident[0].inc%>
-                                        <% for(let i=0;i <todaystatus.length; i++){%>
-                                            <%if(todaystatus[i].monit.id === monitor[isn].monit.id){%>
-
-                                            <% for(let incid=0;incid <todaystatus[i].incident.length; incid++){%>
-                                                <% if(todaystatus[i].incident[incid].inc.length ===0){%>
-                                                    <!-- No incident -->
-                                                    <small class="green" id="tt6">Online</small>
-                                                     <%}else{%>
-                                                    <% let impacttoday =todaystatus[i].incident[incid].inc[0].impact ? todaystatus[i].incident[incid].inc[0].impact : 0 %>
-                                                    <% for(let incidp=1;incidp <todaystatus[i].incident[incid].inc.length; incidp++){%>
-                                                        <%if(todaystatus[i].incident[incid].inc[incidp].impact > impacttoday){%>
+                        <% for(var isn = 0; isn < monitor.length; isn++) { %>
+                            <ul class="list-group status-group">
+                                <div class="group-items">
+                                    <li class="list-group-item sub-component">
+                                        <a href="http://<%= monitor[isn].monit.ip %>" target="_blank"
+                                           class="links"><%= monitor[isn].monit.label ? monitor[isn].monit.label : monitor[isn].monit.ip %></a>
+                                        <% if(monitor[isn].monit.description ){ %>
+                                            <i class="fa fa-question-circle help-icon"
+                                               data-toggle="tooltip" title="<%= monitor[isn].monit.description %>" id="<%= monitor[isn].monit.label ? monitor[isn].monit.label : monitor[isn].monit.ip %><%= isn %>"></i>
+                                        <% } %>
+                                        <div class="float-right">
+                                            <% for(let i = 0;i < todaystatus.length; i++){ %>
+                                            <% if(todaystatus[i].monit.id === monitor[isn].monit.id){ %>
+                                                <% for(let incid = 0;incid < todaystatus[i].incident.length; incid++){ %>
+                                                    <% if(todaystatus[i].incident[incid].inc.length === 0){ %>
+                                                        <!-- No incident -->
+                                                        <small class="green" id="tt6">Online</small>
+                                                    <% }else{ %>
+                                                        <% let impacttoday = todaystatus[i].incident[incid].inc[0].impact ? todaystatus[i].incident[incid].inc[0].impact : 0 %>
+                                                        <% for(let incidp = 1;incidp < todaystatus[i].incident[incid].inc.length; incidp++){ %>
+                                                        <% if(todaystatus[i].incident[incid].inc[incidp].impact > impacttoday){ %>
                                                             <% impacttoday = todaystatus[i].incident[incid].inc[incidp].impact %>
-                                                        <%}%>
-                                                    <%}%>
-                                                        <%if(impacttoday === 0){%>
+                                                        <% } %>
+                                                        <% } %>
+                                                        <% if(impacttoday === 0){ %>
                                                             <small class="green" id="tt6">Online</small>
-                                                        <%}else if(impacttoday == 1){%>
+                                                        <% }else if(impacttoday == 1){ %>
                                                             <small class="yellow" id="tt6">Partial Outage</small>
-                                                        <%}else if(impacttoday == 2){%>
+                                                        <% }else if(impacttoday == 2){ %>
                                                             <small class="Major" id="tt6">Major Outage</small>
-                                                        <%}else if(impacttoday == 3){%>
+                                                        <% }else if(impacttoday == 3){ %>
                                                             <small class="Critical" id="tt6">Outage</small>
-                                                        <%}else {%>
+                                                        <% }else { %>
                                                             <small class="online" id="tt6">Online</small>
-                                                        <%}%>
-                                                    <%}%>
-                                                <%}%>
-                                                <%}%>
-                                        <%}%>
+                                                        <% } %>
+                                                    <% } %>
+                                                <% } %>
+                                            <% } %>
+                                            <% } %>
 
-                                    </div>
-                                    <div class="shared-partial">
-                                        <svg class="line-graphic" preserveAspectRatio="none" height="34" viewBox="0 0 448 34">
-                                            <% let incidents = monitor[isn].incident.reverse()%>
-                                            <%for (var i=0; i< incidents.length; i++){%>
-                                            <%if(incidents[i].inc.length === 1){%>
-                                            <%if(incidents[i].inc[0].impact === 0){%>
-                                                <rect height="34" width="3" x="<%= 5*[i] %>" y="0" fill="#2fcc66" id="<%= monitor[isn].label ? monitor[isn].label : monitor[isn].ip  %><%=isn%>-reat-<%= 5*[i] %>" data-html="true"></rect>
-                                            <%}else if(incidents[i].inc[0].impact === 1){%>
-                                                <rect height="34" width="3" x="<%= 5*[i] %>" y="0" fill="#f39c12" id="<%= monitor[isn].label ? monitor[isn].label : monitor[isn].ip  %><%=isn%>-reat-<%= 5*[i] %>" data-html="true"></rect>
-                                            <%}else if(incidents[i].inc[0].impact === 2){%>
-                                                <rect height="34" width="3" x="<%= 5*[i] %>" y="0" fill="#d35400" id="<%= monitor[isn].label ? monitor[isn].label : monitor[isn].ip  %><%=isn%>-reat-<%= 5*[i] %>" data-html="true"></rect>
-                                            <%}else if(incidents[i].inc[0].impact === 3){%>
-                                                <rect height="34" width="3" x="<%= 5*[i] %>" y="0" fill="#c0392b" id="<%= monitor[isn].label ? monitor[isn].label : monitor[isn].ip  %><%=isn%>-reat-<%= 5*[i] %>" data-html="true"></rect>
-                                            <%}else {%>
-                                                <rect height="34" width="3" x="<%= 5*[i] %>" y="0" fill="#2fcc66" id="<%= monitor[isn].label ? monitor[isn].label : monitor[isn].ip  %><%=isn%>-reat-<%= 5*[i] %>" data-html="true"></rect>
-                                            <%}%>
-                                            <!-- check if multiple incidents-->
-                                            <%}else if(incidents[i].inc.length > 1){%>
-                                                <% impact = incidents[i].inc[0] ? incidents[i].inc[0] : 0%>
-                                                <%for(var io=1; io < incidents[i].inc.length; io++){%>
-                                                    <%if(incidents[i].inc[io].impact > impact){%>
+                                        </div>
+                                        <div class="shared-partial">
+                                            <svg class="line-graphic" preserveAspectRatio="none" height="34"
+                                                 viewBox="0 0 448 34">
+                                                <% let incidents = monitor[isn].incident.reverse() %>
+                                                <% for (var i = 0; i < incidents.length; i++){ %>
+                                                <% if(incidents[i].inc.length === 1){ %>
+                                                <% if(incidents[i].inc[0].impact === 0){ %>
+                                                    <rect height="34" width="3" data-toggle="popover" data-placement="bottom"
+                                                          data-content="<% if(monitor[isn].incident[i].inc.length == 0){ %>
+                                                                No downtime recorded on this day.
+                                                            <% }else{ %>
+                                                                <% for(let inc = 0; inc < monitor[isn].incident[i].inc.length; inc++){ %>
+                                                                    <a href='/incident/<%= monitor[isn].incident[i].inc[inc].id %>'>
+                                                                    <%= monitor[isn].incident[i].inc[inc].name %></a>
+                                                                <% } %>
+                                                            <% } %>"
+                                                          title="<%= formattedDate(monitor[isn].incident[i].date) %>"
+                                                          x="<%= 5 * [i] %>" y="0" fill="#2fcc66"
+                                                          id="<%= monitor[isn].label ? monitor[isn].label : monitor[isn].ip %><%= isn %>-reat-<%= 5 * [i] %>"
+                                                          data-html="true"></rect>
+                                                <% }else if(incidents[i].inc[0].impact === 1){ %>
+                                                    <rect height="34" width="3"
+                                                          data-toggle="popover" data-placement="bottom"
+                                                          data-content="<% if(monitor[isn].incident[i].inc.length == 0){ %>
+                                                                No downtime recorded on this day.
+                                                            <% }else{ %>
+                                                                <% for(let inc = 0; inc < monitor[isn].incident[i].inc.length; inc++){ %>
+                                                                    <a href='/incident/<%= monitor[isn].incident[i].inc[inc].id %>'>
+                                                                    <%= monitor[isn].incident[i].inc[inc].name %></a>
+                                                                <% } %>
+                                                            <% } %>"
+                                                          title="<%= formattedDate(monitor[isn].incident[i].date) %>"
+                                                          x="<%= 5 * [i] %>" y="0" fill="#f39c12"
+                                                          id="<%= monitor[isn].label ? monitor[isn].label : monitor[isn].ip %><%= isn %>-reat-<%= 5 * [i] %>"
+                                                          data-html="true"></rect>
+                                                <% }else if(incidents[i].inc[0].impact === 2){ %>
+                                                    <rect height="34" width="3" data-toggle="popover"
+                                                          data-content="<% if(monitor[isn].incident[i].inc.length == 0){ %>
+                                                                No downtime recorded on this day.
+                                                            <% }else{ %>
+                                                                <% for(let inc = 0; inc < monitor[isn].incident[i].inc.length; inc++){ %>
+                                                                    <a href='/incident/<%= monitor[isn].incident[i].inc[inc].id %>'>
+                                                                    <%= monitor[isn].incident[i].inc[inc].name %></a>
+                                                                <% } %>
+                                                            <% } %>"
+                                                          title="<%= formattedDate(monitor[isn].incident[i].date) %>" data-placement="bottom"
+                                                          x="<%= 5 * [i] %>" y="0" fill="#d35400"
+                                                          id="<%= monitor[isn].label ? monitor[isn].label : monitor[isn].ip %><%= isn %>-reat-<%= 5 * [i] %>"
+                                                          data-html="true"></rect>
+                                                <% }else if(incidents[i].inc[0].impact === 3){ %>
+                                                    <rect height="34" width="3" data-toggle="popover"
+                                                          data-content="<% if(monitor[isn].incident[i].inc.length == 0){ %>
+                                                                No downtime recorded on this day.
+                                                            <% }else{ %>
+                                                                <% for(let inc = 0; inc < monitor[isn].incident[i].inc.length; inc++){ %>
+                                                                    <a href='/incident/<%= monitor[isn].incident[i].inc[inc].id %>'>
+                                                                    <%= monitor[isn].incident[i].inc[inc].name %></a>
+                                                                <% } %>
+                                                            <% } %>"
+                                                          title="<%= formattedDate(monitor[isn].incident[i].date) %>" data-placement="bottom"
+                                                          x="<%= 5 * [i] %>" y="0" fill="#c0392b"
+                                                          id="<%= monitor[isn].label ? monitor[isn].label : monitor[isn].ip %><%= isn %>-reat-<%= 5 * [i] %>"
+                                                          data-html="true"></rect>
+                                                <% }else { %>
+                                                    <rect height="34" width="3" data-toggle="popover"
+                                                          data-content="<% if(monitor[isn].incident[i].inc.length == 0){ %>
+                                                                No downtime recorded on this day.
+                                                            <% }else{ %>
+                                                                <% for(let inc = 0; inc < monitor[isn].incident[i].inc.length; inc++){ %>
+                                                                    <a href='/incident/<%= monitor[isn].incident[i].inc[inc].id %>'>
+                                                                    <%= monitor[isn].incident[i].inc[inc].name %></a>
+                                                                <% } %>
+                                                            <% } %>"
+                                                          title="<%= formattedDate(monitor[isn].incident[i].date) %>" data-placement="bottom"
+                                                          x="<%= 5 * [i] %>" y="0" fill="#2fcc66"
+                                                          id="<%= monitor[isn].label ? monitor[isn].label : monitor[isn].ip %><%= isn %>-reat-<%= 5 * [i] %>"
+                                                          data-html="true"></rect>
+                                                <% } %>
+                                                <!-- check if multiple incidents-->
+                                                <% }else if(incidents[i].inc.length > 1){ %>
+                                                    <% impact = incidents[i].inc[0] ? incidents[i].inc[0] : 0 %>
+                                                    <% for(var io = 1; io < incidents[i].inc.length; io++){ %>
+                                                    <% if(incidents[i].inc[io].impact > impact){ %>
                                                         <% impact = incidents[i].inc[io].impact %>
-                                                    <%}%>
-                                                <%}%>
-                                                <%if(impact === 0){%>
-                                                    <rect height="34" width="3" x="<%= 5*[i] %>" y="0" fill="#2fcc66" id="<%= monitor[isn].label ? monitor[isn].label : monitor[isn].ip  %><%=isn%>-reat-<%= 5*[i] %>" data-html="true"></rect>
-                                                <%}else if(impact == 1){%>
-                                                    <rect height="34" width="3" x="<%= 5*[i] %>" y="0" fill="#f39c12" id="<%= monitor[isn].label ? monitor[isn].label : monitor[isn].ip  %><%=isn%>-reat-<%= 5*[i] %>" data-html="true"></rect>
-                                                <%}else if(impact == 2){%>
-                                                    <rect height="34" width="3" x="<%= 5*[i] %>" y="0" fill="#d35400" id="<%= monitor[isn].label ? monitor[isn].label : monitor[isn].ip  %><%=isn%>-reat-<%= 5*[i] %>" data-html="true"></rect>
-                                                <%}else if(impact == 3){%>
-                                                    <rect height="34" width="3" x="<%= 5*[i] %>" y="0" fill="#c0392b" id="<%= monitor[isn].label ? monitor[isn].label : monitor[isn].ip  %><%=isn%>-reat-<%= 5*[i] %>" data-html="true"></rect>
-                                                <%}else {%>
-                                                    <rect height="34" width="3" x="<%= 5*[i] %>" y="0" fill="#2fcc66" id="<%= monitor[isn].label ? monitor[isn].label : monitor[isn].ip  %><%=isn%>-reat-<%= 5*[i] %>" data-html="true"></rect>
-                                                <%}%>
-                                            <%}else{%>
-                                                <rect height="34" width="3" x="<%= 5*[i] %>" y="0" fill="#2fcc66" id="<%= monitor[isn].label ? monitor[isn].label : monitor[isn].ip  %><%=isn%>-reat-<%= 5*[i] %>" data-html="true"></rect>
-                                            <%}%>
-                                            <%}%>
-                                        </svg>
-                                        <%for (var count=0; count<monitor[isn].incident.length; count++){%>
-                                            <div class="mdl-tooltip" for="<%= monitor[isn].label ? monitor[isn].label : monitor[isn].ip  %><%=isn%>-reat-<%= 5*[count] %>">
-                                                <%= monitor[isn].incident[count].date%>
-                                                <br>
-                                                <%if(monitor[isn].incident[count].inc.length ==0){%>
-                                                    No downtime recorded on this day.
-                                                <%}else{%>
-                                                    <%for(let inc =0; inc < monitor[isn].incident[count].inc.length; inc++){%>
-                                                    <a class="mdl-color-text--white" href="/incident/<%= monitor[isn].incident[count].inc[inc].id%>"><%= monitor[isn].incident[count].inc[inc].name%></a>
-                                                    <%}%>
-                                                <%}%>
-                                            </div>
-                                        <%}%>
-                                    </div>
-                                </li>
-                            </div>
-                        </ul>
-                        <%}%>
+                                                    <% } %>
+                                                    <% } %>
+                                                    <% if(impact === 0){ %>
+                                                        <rect height="34" width="3" x="<%= 5 * [i] %>"
+                                                              data-toggle="popover"
+                                                          data-content="<% if(monitor[isn].incident[i].inc.length == 0){ %>
+                                                                No downtime recorded on this day.
+                                                            <% }else{ %>
+                                                                <% for(let inc = 0; inc < monitor[isn].incident[i].inc.length; inc++){ %>
+                                                                    <a href='/incident/<%= monitor[isn].incident[i].inc[inc].id %>'>
+                                                                    <%= monitor[isn].incident[i].inc[inc].name %></a>
+                                                                <% } %>
+                                                            <% } %>"
+                                                          title="<%= formattedDate(monitor[isn].incident[i].date) %>" data-placement="bottom" y="0"
+                                                              fill="#2fcc66"
+                                                              id="<%= monitor[isn].label ? monitor[isn].label : monitor[isn].ip %><%= isn %>-reat-<%= 5 * [i] %>"
+                                                              data-html="true"></rect>
+                                                    <% }else if(impact == 1){ %>
+                                                        <rect height="34" width="3" x="<%= 5 * [i] %>"
+                                                              data-toggle="popover"
+                                                          data-content="<% if(monitor[isn].incident[i].inc.length == 0){ %>
+                                                                No downtime recorded on this day.
+                                                            <% }else{ %>
+                                                                <% for(let inc = 0; inc < monitor[isn].incident[i].inc.length; inc++){ %>
+                                                                    <a href='/incident/<%= monitor[isn].incident[i].inc[inc].id %>'>
+                                                                    <%= monitor[isn].incident[i].inc[inc].name %></a>
+                                                                <% } %>
+                                                            <% } %>"
+                                                          title="<%= formattedDate(monitor[isn].incident[i].date) %>" data-placement="bottom" y="0"
+                                                              fill="#f39c12"
+                                                              id="<%= monitor[isn].label ? monitor[isn].label : monitor[isn].ip %><%= isn %>-reat-<%= 5 * [i] %>"
+                                                              data-html="true"></rect>
+                                                    <% }else if(impact == 2){ %>
+                                                        <rect height="34" width="3" x="<%= 5 * [i] %>"
+                                                              data-toggle="popover"
+                                                          data-content="<% if(monitor[isn].incident[i].inc.length == 0){ %>
+                                                                No downtime recorded on this day.
+                                                            <% }else{ %>
+                                                                <% for(let inc = 0; inc < monitor[isn].incident[i].inc.length; inc++){ %>
+                                                                    <a href='/incident/<%= monitor[isn].incident[i].inc[inc].id %>'>
+                                                                    <%= monitor[isn].incident[i].inc[inc].name %></a>
+                                                                <% } %>
+                                                            <% } %>"
+                                                          title="<%= formattedDate(monitor[isn].incident[i].date) %>" data-placement="bottom" y="0"
+                                                              fill="#d35400"
+                                                              id="<%= monitor[isn].label ? monitor[isn].label : monitor[isn].ip %><%= isn %>-reat-<%= 5 * [i] %>"
+                                                              data-html="true"></rect>
+                                                    <% }else if(impact == 3){ %>
+                                                        <rect height="34" width="3" x="<%= 5 * [i] %>"
+                                                              data-toggle="popover"
+                                                          data-content="<% if(monitor[isn].incident[i].inc.length == 0){ %>
+                                                                No downtime recorded on this day.
+                                                            <% }else{ %>
+                                                                <% for(let inc = 0; inc < monitor[isn].incident[i].inc.length; inc++){ %>
+                                                                    <a href='/incident/<%= monitor[isn].incident[i].inc[inc].id %>'>
+                                                                    <%= monitor[isn].incident[i].inc[inc].name %></a>
+                                                                <% } %>
+                                                            <% } %>"
+                                                          title="<%= formattedDate(monitor[isn].incident[i].date) %>" data-placement="bottom" y="0"
+                                                              fill="#c0392b"
+                                                              id="<%= monitor[isn].label ? monitor[isn].label : monitor[isn].ip %><%= isn %>-reat-<%= 5 * [i] %>"
+                                                              data-html="true"></rect>
+                                                    <% }else { %>
+                                                        <rect height="34" width="3" x="<%= 5 * [i] %>"
+                                                              data-toggle="popover"
+                                                          data-content="<% if(monitor[isn].incident[i].inc.length == 0){ %>
+                                                                No downtime recorded on this day.
+                                                            <% }else{ %>
+                                                                <% for(let inc = 0; inc < monitor[isn].incident[i].inc.length; inc++){ %>
+                                                                    <a href='/incident/<%= monitor[isn].incident[i].inc[inc].id %>'>
+                                                                    <%= monitor[isn].incident[i].inc[inc].name %></a>
+                                                                <% } %>
+                                                            <% } %>"
+                                                          title="<%= formattedDate(monitor[isn].incident[i].date) %>" data-placement="bottom" y="0"
+                                                              fill="#2fcc66"
+                                                              id="<%= monitor[isn].label ? monitor[isn].label : monitor[isn].ip %><%= isn %>-reat-<%= 5 * [i] %>"
+                                                              data-html="true"></rect>
+                                                    <% } %>
+                                                <% }else{ %>
+                                                    <rect height="34" width="3" x="<%= 5 * [i] %>" y="0"
+                                                          data-toggle="popover"
+                                                          data-content="<% if(monitor[isn].incident[i].inc.length == 0){ %>
+                                                                No downtime recorded on this day.
+                                                            <% }else{ %>
+                                                                <% for(let inc = 0; inc < monitor[isn].incident[i].inc.length; inc++){ %>
+                                                                    <a href='/incident/<%= monitor[isn].incident[i].inc[inc].id %>'>
+                                                                    <%= monitor[isn].incident[i].inc[inc].name %></a>
+                                                                <% } %>
+                                                            <% } %>"
+                                                          title="<%= formattedDate(monitor[isn].incident[i].date) %>" data-placement="bottom"
+                                                          fill="#2fcc66"
+                                                          id="<%= monitor[isn].label ? monitor[isn].label : monitor[isn].ip %><%= isn %>-reat-<%= 5 * [i] %>"
+                                                          data-html="true"></rect>
+                                                <% } %>
+                                                <% } %>
+                                            </svg>
 
-                            <%for(let is =0; is <infosincidentspastday.length; is++){%>
-                                <%if(infosincidentspastday[is].monit.showmonitor ? infosincidentspastday[is].monit.showmonitor : false){%>
-                                <div class="card mgt-10">
-                                    <div class="card-body">
-                                        <h4 class="header-title text-center">Sytem Metric <%= infosincidentspastday[is].monit.label ? infosincidentspastday[is].monit.label : infosincidentspastday[is].monit.ip %></h4>
-                                    </div>
-                                    <div class="toolbar">
-                                        <button id="one_hours<%=is%>">1H</button>
-                                        <button id="one_days<%=is%>" class="active">1D</button>
-                                        <button id="one_week<%=is%>">1W</button>
-                                        <button id="one_month<%=is%>">1M</button>
-                                        <button id="six_months<%=is%>">6M</button>
-                                        <button id="one_year"<%=is%>>1Y</button>
-                                        <button id="all<%=is%>">ALL</button>
-                                    </div>
-                                    <div id="timeline-chart<%=is%>"></div>
+                                        </div>
+                                    </li>
                                 </div>
-                            <script>
-                                /**
-                                 * Convert data
-                                 **/
-                                function del_months(dt, n)
-                                {
-                                    return new Date(dt.setMonth(dt.getMonth() - n));
-                                }
-                                function del_hours(dt, n){
-                                    return new Date(dt.setHours(dt.getHours()-n));
-                                }
-                                function delDays(date, days) {
-                                    let result = new Date(date);
-                                    result.setDate(result.getDate() - days);
-                                    return result;
-                                }
-                                let options<%=is%> = {
-                                    chart: {
-                                        type: 'area',
-                                        height: 350,
-                                    },
-                                    dataLabels: {
+                            </ul>
+                        <% } %>
+
+                        <% for(let is = 0; is < infosincidentspastday.length; is++){ %>
+                        <% if(infosincidentspastday[is].monit.showmonitor ? infosincidentspastday[is].monit.showmonitor : false){ %>
+                        <div class="metrics-container">
+                            <div class="timestamp-container">
+                                <a class="title-metrics no-link" id="<%= infosincidentspastday[is].monit.id %>metrics"
+                                   href="#<%= infosincidentspastday[is].monit.id %>metrics">System Metrics</a>
+                                <button class="timestamp months months<%= infosincidentspastday[is].monit.id %>" data-number="<%=is%>" data-id="<%= infosincidentspastday[is].monit.id %>">Months</button>
+                                <button class="timestamp weeks weeks<%= infosincidentspastday[is].monit.id %>" data-number="<%=is%>" data-id="<%= infosincidentspastday[is].monit.id %>">Weeks</button>
+                                <button class="timestamp days days<%= infosincidentspastday[is].monit.id %>" data-number="<%=is%>" data-id="<%= infosincidentspastday[is].monit.id %>">Day</button>
+                                <button class="timestamp active hours hours<%= infosincidentspastday[is].monit.id %>" data-number="<%=is%>" data-id="<%= infosincidentspastday[is].monit.id %>">Hour</button>
+                            </div>
+                            <div class="metric border-metric">
+                                <div class="metric-info">
+                                    <div class="metric-title"><%= infosincidentspastday[is].monit.label ? infosincidentspastday[is].monit.label : infosincidentspastday[is].monit.ip %></div>
+                                    <div class="metric-average" id="average<%= infosincidentspastday[is].monit.id %>">
+                                        Loading...
+                                    </div>
+                                    <div class="metric-display">
+                                        <div id="timeline-chart<%= is %>"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <script>
+                            /**
+                             * Convert data
+                             **/
+                            function del_months(dt, n) {
+                                return new Date(dt.setMonth(dt.getMonth() - n));
+                            }
+
+                            function del_hours(dt, n) {
+                                return new Date(dt.setHours(dt.getHours() - n));
+                            }
+
+                            function delDays(date, days) {
+                                let result = new Date(date);
+                                result.setDate(result.getDate() - days);
+                                return result;
+                            }
+
+                            let options<%= is %> = {
+                                chart: {
+                                    type: 'area',
+                                    height: 135,
+                                    zoom: {
                                         enabled: false
                                     },
-                                    series: [{
-                                        name: "Ping",
-                                        data: <%=JSON.stringify(infosincidentspastday[is].statusmonitor, null, 2).replace(/"/g, '');%>
+                                    toolbar: {
+                                        show: false
+                                    }
+                                },
+                                legend: {
+                                    show: false
+                                },
+                                dataLabels: {
+                                    enabled: false
+                                },
+                                series: [],
+                                markers: {
+                                    size: 0,
+                                    style: 'hollow',
+                                },
+                                xaxis: {
+                                    type: 'datetime',
+                                    min: del_hours(new Date(), 1).getTime(),
+                                },
+                                tooltip: {
+                                    enabled: true,
+                                    x: {
+                                        format: 'dd MMM yyyy'
                                     },
-
-                                    ],
-                                    markers: {
+                                    onDatasetHover: {
+                                        highlightDataSeries: false,
+                                    },
+                                    y: {
+                                        show: false
+                                    },
+                                    marker: {
                                         size: 0,
-                                        style: 'hollow',
+                                        show: true,
                                     },
+                                },
+                                fill: {
+                                    type: 'gradient',
+                                    gradient: {
+                                        shadeIntensity: 1,
+                                        opacityFrom: 0.7,
+                                        opacityTo: 0.9,
+                                        stops: [0, 100]
+                                    }
+                                },
+                                noData: {
+                                    text: 'Loading...'
+                                }
+                            }
+
+                            var chart<%= is %> = new ApexCharts(
+                                document.querySelector("#timeline-chart<%= is %>"),
+                                options<%= is %>
+                            );
+
+                            chart<%= is %>.render();
+                            axios({
+                                method: 'GET',
+                                url: "/hours/<%= infosincidentspastday[is].monit.id %>",
+                            }).then(function(response) {
+                                chart<%= is %>.updateOptions({
+                                    series: [{
+                                        name: 'Ping',
+                                        data: response.data.metric.data
+                                    }],
                                     xaxis: {
                                         type: 'datetime',
-                                        min: delDays(new Date(), 1).getTime(),
-                                        tickAmount: 6,
+                                        min: response.data.time,
                                     },
-                                    tooltip: {
-                                        x: {
-                                            format: 'dd MMM yyyy'
-                                        }
-                                    },
-                                    fill: {
-                                        type: 'gradient',
-                                        gradient: {
-                                            shadeIntensity: 1,
-                                            opacityFrom: 0.7,
-                                            opacityTo: 0.9,
-                                            stops: [0, 100]
-                                        }
-                                    },
-
-                                }
-
-                                let chart<%=is%> = new ApexCharts(
-                                    document.querySelector("#timeline-chart<%=is%>"),
-                                    options<%=is%>
-                                );
-
-                                chart<%=is%>.render();
-                            </script>
-                                <%}%>
-                            <%}%>
-                        </div>
+                                });
+                                document.getElementById("average<%= infosincidentspastday[is].monit.id %>").innerHTML = response.data.summary.average.toFixed(0) +" ms"
+                            });
+                        </script>
+                        <% } %>
+                        <% } %>
                     </div>
             </div>
-            <%}else{%>
-            <div class="text-center">
-                <p>
-                    No monitors are currently public. <br>
-                    Please log in to make an audience or to view the status of one of the monitors that you have set up
-                </p>
-                <%if(user){%>
-                    <a href="/dashboard" class="btn btn-primary btn-shadow-blue btn-sm">Dashboard</a>
-                <%}else{%>
-                    <a href="/auth" class="btn btn-primary btn-shadow-blue btn-sm">Login</a>
-                <%}%>
-            </div>
-            <%}%>
         </div>
+        <% }else{ %>
+        <div class="text-center">
+            <p>
+                No monitors are currently public. <br>
+                Please log in to make an audience or to view the status of one of the monitors that you have set up
+            </p>
+            <% if(user){ %>
+                <a href="/dashboard" class="btn btn-primary btn-shadow-blue btn-sm">Dashboard</a>
+            <% }else{ %>
+                <a href="/auth" class="btn btn-primary btn-shadow-blue btn-sm">Login</a>
+            <% } %>
+        </div>
+        <% } %>
     </div>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        $(".days").on("click", function (evt) {
+            axios({
+                method: 'GET',
+                url: `/days/${evt.target.dataset.id}`,
+            }).then(function (response) {
+                window["chart"+evt.target.dataset.number].updateOptions({
+                    series: [{
+                        name: 'Ping',
+                        data: response.data.metric.data
+                    }],
+                    xaxis: {
+                        type: 'datetime',
+                        min: response.data.time,
+                    },
+                });
+                document.getElementById(`average${evt.target.dataset.id}`).innerHTML = response.data.summary.average.toFixed(0) + " ms"
+            });
+            document.querySelector(`.days${evt.target.dataset.id}`).classList.add("active");
+            document.querySelector(`.hours${evt.target.dataset.id}`).classList.remove("active");
+            document.querySelector(`.weeks${evt.target.dataset.id}`).classList.remove("active");
+            document.querySelector(`.months${evt.target.dataset.id}`).classList.remove("active");
+        });
+        $(".hours").on("click", function (evt) {
+            axios({
+                method: 'GET',
+                url: `/hours/${evt.target.dataset.id}`,
+            }).then(function (response) {
+                window["chart"+evt.target.dataset.number].updateOptions({
+                    series: [{
+                        name: 'Ping',
+                        data: response.data.metric.data
+                    }],
+                    xaxis: {
+                        type: 'datetime',
+                        min: response.data.time,
+                    },
+                });
+                document.getElementById(`average${evt.target.dataset.id}`).innerHTML = response.data.summary.average.toFixed(0) + " ms"
+            });
+            document.querySelector(`.hours${evt.target.dataset.id}`).classList.add("active");
+            document.querySelector(`.days${evt.target.dataset.id}`).classList.remove("active");
+            document.querySelector(`.weeks${evt.target.dataset.id}`).classList.remove("active");
+            document.querySelector(`.months${evt.target.dataset.id}`).classList.remove("active");
+        });
+        $(".months").on("click", function (evt) {
+            axios({
+                method: 'GET',
+                url: `/months/${evt.target.dataset.id}`,
+            }).then(function (response) {
+                window["chart"+evt.target.dataset.number].updateOptions({
+                    series: [{
+                        name: 'Ping',
+                        data: response.data.metric.data
+                    }],
+                    xaxis: {
+                        type: 'datetime',
+                        min: response.data.time,
+                    },
+                });
+                document.getElementById(`average${evt.target.dataset.id}`).innerHTML = response.data.summary.average.toFixed(0) + " ms"
+            });
+            document.querySelector(`.months${evt.target.dataset.id}`).classList.add("active");
+            document.querySelector(`.hours${evt.target.dataset.id}`).classList.remove("active");
+            document.querySelector(`.weeks${evt.target.dataset.id}`).classList.remove("active");
+            document.querySelector(`.days${evt.target.dataset.id}`).classList.remove("active");
+        });
+        $(".weeks").on("click", function (evt) {
+            axios({
+                method: 'GET',
+                url: `/weeks/${evt.target.dataset.id}`,
+            }).then(function (response) {
+                window["chart"+evt.target.dataset.number].updateOptions({
+                    series: [{
+                        name: 'Ping',
+                        data: response.data.metric.data
+                    }],
+                    xaxis: {
+                        type: 'datetime',
+                        min: response.data.time,
+                    },
+                });
+                document.getElementById(`average${evt.target.dataset.id}`).innerHTML = response.data.summary.average.toFixed(0) + " ms"
+            });
+            document.querySelector(`.weeks${evt.target.dataset.id}`).classList.add("active");
+            document.querySelector(`.hours${evt.target.dataset.id}`).classList.remove("active");
+            document.querySelector(`.days${evt.target.dataset.id}`).classList.remove("active");
+            document.querySelector(`.months${evt.target.dataset.id}`).classList.remove("active");
+        });
+    });
+
+</script>
+<% if(infoconf.footershow ? infoconf.footershow : false){ %>
+    <% include partials/footer.ejs %>
+<% } %>
 </body>
-<% if(infoconf.footershow ? infoconf.footershow: false){%>
-    <% include partials/footer.ejs%>
-<%}%>
+
+<script src="/js/waves.js"></script>
 </html>

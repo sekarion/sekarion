@@ -2,174 +2,169 @@
 <html lang="fr">
 <% include partials/head.ejs%>
 <body>
-<% include partials/header.ejs%>
-<div class="content">
-    <div class="container pt-70">
+<% if(infoconf.headershow ? infoconf.headershow: false){%>
+    <% include partials/header.ejs%>
+<%}%>
+<script src="/js/axios.js" charset="UTF-8" type="application/javascript"></script>
+<div class="wrap">
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <div class="row">
-                    <div class="col-sm-12 col-md-6 col-lg-8 col-xl-8">
-                        <div class="card">
-                            <div class="card-header text-center">
-                                <h4 class="header-title text-center"><%= monitor.label ? monitor.label : "UNKNOWN"%></h4>
-                                <div class="btn-actions-pane-right">
-                                    <div role="group" class="btn-group-sm btn-group">
-                                        <a href="/monitor/<%= monitor.id%>/edit" class="btn btn-success btn-sm">Edit</a>
-                                        <a href="/dashboard" class="btn btn-primary btn-sm">Back</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">
-                                    <dl class="row">
-                                        <dt class="col-md-4">Domain/IP:</dt>
-                                        <dd class="col-md-8"><%= monitor.ip%></dd>
-                                    </dl>
-                                </li>
-                                <% if(monitor.port){%>
-                                    <li class="list-group-item">
-                                        <dl class="row">
-                                            <dt class="col-md-4">Port:</dt>
-                                            <dd class="col-md-8"><%= monitor.port%></dd>
-                                        </dl>
-                                    </li>
-                                <%}%>
-                                <li class="list-group-item">
-                                    <dl class="row">
-                                        <dt class="col-md-4">Status:</dt>
-                                        <dd class="col-md-8 <%= monitor.laststatus ? monitor.laststatus.status : "online"%>"><%= monitor.laststatus ? monitor.laststatus.status : "Never Check"%></dd>
-                                    </dl>
-                                </li>
-                                <li class="list-group-item">
-                                    <dl class="row">
-                                        <dt class="col-md-4">Latency:</dt>
-                                        <dd class="col-md-8"><%= monitor.laststatus ? monitor.laststatus.latency : "Never Check"%> seconds</dd>
-                                    </dl>
-                                </li>
-                                <li class="list-group-item">
-                                    <dl class="row">
-                                        <dt class="col-md-4">Privacy:</dt>
-                                        <dd class="col-md-8"><%= monitor.privacy ? "Public": "Private" %></dd>
-                                    </dl>
-                                </li>
-                                <li class="list-group-item">
-                                    <dl class="row">
-                                        <dt class="col-md-4">Show Monitor if Public:</dt>
-                                        <dd class="col-md-8"><%= monitor.showmonitor ? "Yes": "No" %></dd>
-                                    </dl>
-                                </li>
-                            </ul>
-                            <div class="card-header text-center">
-                                <h4 class="header-title text-center">Settings</h4>
-                            </div>
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">
-                                    <dl class="row">
-                                        <dt class="col-md-4">Type:</dt>
-                                        <dd class="col-md-8"><%= monitor.type%></dd>
-                                    </dl>
-                                </li>
-                                <li class="list-group-item">
-                                    <dl class="row">
-                                        <dt class="col-md-4">Warning threshold:</dt>
-                                        <dd class="col-md-8"><%= monitor.warning_threshold%></dd>
-                                    </dl>
-                                </li>
-                            </ul>
+            <div class="col-sm-12 col-md-6 col-lg-8 col-xl-8">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="float-left">
+                            <h4><a href="http://<%=monitor.ip%>"><%= monitor.label ? monitor.label : "UNKNOWN"%></a></h4>
+                        </div>
+                        <div class="float-right">
+                            <a href="/monitor/<%= monitor.id%>/edit" class="btn btn-success waves-effect">Edit</a>
+                            <a href="/dashboard" class="btn btn-primary waves-effect">Back</a>
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="header-title text-center">Uptime</h4>
-                                <div id="chart"></div>
-                            </div>
-                        </div>
-                        <div class="card mgt-10">
-                            <div class="card-body">
-                                <div class="text-center">
-                                    <a href="/monitor/<%= monitor.id%>/edit" class="btn btn-success btn-sm w100">Edit Monitor</a>
-                                </div>
-                                <div class="text-center pd-10">
-                                    <a href="/monitor/<%= monitor.id%>/addincident" class="btn btn-orange btn-sm w100">Create Incident</a>
-                                </div>
-                                <div class="text-center pd-10">
-                                    <a href="#open-modal" data="<%=monitor.id%>" class="btn btn-danger btn-sm w100">Delete Monitor</a>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="card-body">
+                        <dl class="row mb-0">
+                            <dt class="col-sm-4">Domain/IP:</dt>
+                            <dd class="col-sm-8"><%= monitor.ip%></dd>
+                        </dl>
+                        <% if(monitor.port){%>
+                            <dl class="row mb-0">
+                                <dt class="col-md-4">Port:</dt>
+                                <dd class="col-md-8"><%= monitor.port%></dd>
+                            </dl>
+                        <%}%>
+                        <dl class="row mb-0">
+                            <dt class="col-md-4">Status:</dt>
+                            <dd class="col-md-8 <%= monitor.laststatus ? monitor.laststatus.status : "online"%>"><%= monitor.laststatus ? monitor.laststatus.status : "Never Check"%></dd>
+                        </dl>
+                        <dl class="row mb-0">
+                            <dt class="col-md-4">Latency:</dt>
+                            <dd class="col-md-8"><%= monitor.laststatus ? monitor.laststatus.latency : "Never Check"%> seconds</dd>
+                        </dl>
+                        <dl class="row mb-0">
+                            <dt class="col-md-4">Privacy:</dt>
+                            <dd class="col-md-8"><%= monitor.privacy ? "Public": "Private" %></dd>
+                        </dl>
+                        <dl class="row mb-0">
+                            <dt class="col-md-4">Show Monitor if Public:</dt>
+                            <dd class="col-md-8"><%= monitor.showmonitor ? "Yes": "No" %></dd>
+                        </dl>
                     </div>
-                    <div id="open-modal" class="modal-window">
-                        <div>
-                            <a href="#" title="Close" class="modal-close">Close</a>
-                            <h1>Are you sure to delete this monitor ?</h1>
-                            <div class="btn-group">
-                                <a href="#" class="btn btn-danger left" title="Close">No</a>
-                                <form method="post" action="/monitor/<%=monitor.id%>/delete" class="right">
-                                    <button type="submit" class="btn btn-primary">Yes</button>
-                                    <input type="hidden" name="delete" value="yes">
-                                </form>
-                            </div>
-                        </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="header-title text-center">Uptime</h4>
                     </div>
-                    <div class="col-12 pd-10">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="header-title text-center">Sytem Metric</h4>
-                            </div>
-                            <div class="toolbar">
-                                <button id="one_hours">1H</button>
-                                <button id="one_days" class="active">1D</button>
-                                <button id="one_week">1W</button>
-                                <button id="one_month">1M</button>
-                                <button id="six_months">6M</button>
-                                <button id="one_year">1Y</button>
-                                <button id="all">ALL</button>
-                            </div>
-                            <div id="timeline-chart"></div>
-                        </div>
+                    <div class="card-body">
+                        <div id="chart"></div>
                     </div>
-                    <div class="col-12 pd-10">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="header-title text-center">Past Incidents</h4>
-                            </div>
-                            <% for(var is=0; is < incedent.length ; is++) { %>
-                                <div class="status-day <%= incedent[is].inc.length === 0 ? "no-incidents" : ""%>">
-                                    <div class="date border-color"><%= incedent[is].date.toDateString()%></div>
-                                   <% if(incedent[is].inc.length === 0){%>
-                                        <p class="color-secondary">
-                                            No incidents reported.
-                                        </p>
-                                   <%}else{%>
-                                        <% for(var isn=0; isn < incedent[is].inc.length; isn++){%>
-                                            <% var varincedent = incedent[is].inc[isn].infosstatus.reverse(); %>
-                                            <% for(var io=0; io < varincedent.length; io++){%>
-                                                <div class="incident-container">
-                                                    <%if(io == 0){%>
-                                                    <div class="incident-title">
-                                                        <a href="/monitor/<%= incedent[is].inc[isn].monitorid%>/incident/<%= incedent[is].inc[isn].id%>" class="<% if(incedent[is].inc[isn].impact == 0){%>None<%}else if(incedent[is].inc[isn].impact == 1){%>Minor<%}else if(incedent[is].inc[isn].impact== 2){%>Major<%}else if(incedent[is].inc[isn].impact== 3){%>Critical<%}%>"><%= incedent[is].inc[isn].name%></a>
-                                                    </div>
-                                                        <%}%>
-                                                    <div class="updates-container">
-                                                        <div class="update">
-                                                            <strong><%= varincedent[io].status%></strong> -
-                                                            <%= varincedent[io].description%>
-                                                            <br>
-                                                            <small>
-                                                                <%= new Date(varincedent[io].createAt).toLocaleString()%>
-                                                            </small>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            <%}%>
-                                        <%}%>
-                                    <%}%>
-                                </div>
-                            <%}%>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-8 col-xl-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="header-title">Settings</h4>
+                    </div>
+                    <div class="card-body">
+                        <dl class="row mb-0">
+                            <dt class="col-sm-4">Type:</dt>
+                            <dd class="col-sm-8"><%= monitor.type%></dd>
+                        </dl>
+                        <dl class="row mb-0">
+                            <dt class="col-md-4">Warning threshold:</dt>
+                            <dd class="col-md-8"><%= monitor.warning_threshold%></dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="button-items">
+                            <a href="/monitor/<%= monitor.id%>/edit" class="btn btn-md btn-success waves-effect" role="button">Edit Monitor</a>
+                            <a href="/monitor/<%= monitor.id%>/addincident" class="btn btn-md btn-orange waves-effect" role="button">Create Incident</a>
+                            <a href="#open-modal" data-toggle="modal" data-target="#deletemonitor" data="<%=monitor.id%>" class="btn btn-md btn-danger waves-effect" role="button">Delete Monitor</a>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="col-xl-12">
+                <div class="metrics-container">
+                    <div class="timestamp-container">
+                        <a class="title-metrics no-link" id="<%=monitor.id%>metrics" href="#<%=monitor.id%>metrics">System Metrics</a>
+                        <button class="timestamp months">Months</button>
+                        <button class="timestamp weeks">Weeks</button>
+                        <button class="timestamp days">Day</button>
+                        <button class="timestamp hour active">Hour</button>
+                    </div>
+                    <div class="metric border-metric">
+                        <div class="metric-info">
+                            <div class="metric-title"><%= monitor.label ? monitor.label : monitor.ip %></div>
+                            <div class="metric-average" id="average<%= monitor.id%>">Loading...</div>
+                            <div class="metric-display">
+                                <div id="timeline-chart"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-12">
+                <h2>Past Incidents</h2>
+                <div class="status-days">
+                    <% for(var is=0; is < incedent.length ; is++) { %>
+                        <div class="status-day <%= incedent[is].inc.length === 0 ? "no-incidents" : ""%>">
+                            <h5 class="date border-color"><%= incedent[is].date.toDateString()%></h5>
+                            <% if(incedent[is].inc.length === 0){%>
+                                <p class="color-secondary">
+                                    No incidents reported.
+                                </p>
+                            <%}else{%>
+                                <% for(var isn=0; isn < incedent[is].inc.length; isn++){%>
+                                    <% var varincedent = incedent[is].inc[isn].infosstatus.reverse(); %>
+                                    <%if (varincedent.length == 0){%>
+                                        <div class="incident-title">
+                                            <a href="/monitor/<%= incedent[is].inc[isn].monitorid%>/incident/<%= incedent[is].inc[isn].id%>" class="<% if(incedent[is].inc[isn].impact == 0){%>None<%}else if(incedent[is].inc[isn].impact == 1){%>Minor<%}else if(incedent[is].inc[isn].impact== 2){%>Major<%}else if(incedent[is].inc[isn].impact== 3){%>Critical<%}%>"><%= incedent[is].inc[isn].name%></a>
+                                        </div>
+                                    <%}else{%>
+                                    <div class="row">
+                                        <div class="col-lg-12 mx-auto">
+                                            <ul class="timeline">
+                                                <% for(var io=0; io < varincedent.length; io++){%>
+                                                    <li class="timeline-item bg-white rounded ml-3 p-4 shadow <%= varincedent[io].status%>">
+                                                        <div class="timeline-arrow"></div>
+                                                        <h2 class="h5 mb-0"><%= varincedent[io].status%></h2><span class="small text-gray"><i class="fa fa-clock-o mr-1"></i><%= new Date(varincedent[io].createAt).toLocaleString()%></span>
+                                                        <p class="text-small mt-2 font-weight-light"><%= varincedent[io].description%></p>
+                                                    </li>
+                                                <%}%>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <%}%>
+                                <%}%>
+                            <%}%>
+                        </div>
+                    <%}%>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deletemonitor" tabindex="-1" role="dialog" aria-labelledby="deletemonitor" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Are you sure to delete this monitor ?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+                <form method="post" action="/monitor/<%=monitor.id%>/delete">
+                    <button type="button" class="btn btn-primary">Yes</button>
+                    <input type="hidden" name="delete" value="yes">
+                </form>
             </div>
         </div>
     </div>
@@ -231,61 +226,7 @@
     );
 
     chart.render();
-    let options2 = {
-        chart: {
-            type: 'area',
-            height: 350,
-        },
-        dataLabels: {
-            enabled: false
-        },
-        series: [{
-            name: "Ping",
-            data:  <%=JSON.stringify(infosStatus).replace(/"/g, '');%>
-        },
 
-        ],
-        markers: {
-            size: 0,
-            style: 'hollow',
-        },
-        xaxis: {
-            type: 'datetime',
-            min: delDays(new Date(), 1).getTime(),
-            tickAmount: 6,
-        },
-        tooltip: {
-            x: {
-                format: 'dd MMM yyyy'
-            }
-        },
-        fill: {
-            type: 'gradient',
-            gradient: {
-                shadeIntensity: 1,
-                opacityFrom: 0.7,
-                opacityTo: 0.9,
-                stops: [0, 100]
-            }
-        },
-
-    }
-
-    let chart2 = new ApexCharts(
-        document.querySelector("#timeline-chart"),
-        options2
-    );
-
-    chart2.render();
-
-    let resetCssClasses = function (activeEl) {
-        let els = document.querySelectorAll("button");
-        Array.prototype.forEach.call(els, function (el) {
-            el.classList.remove('active');
-        });
-
-        activeEl.target.classList.add('active')
-    }
     /**
      * Convert data
      **/
@@ -301,84 +242,176 @@
         result.setDate(result.getDate() - days);
         return result;
     }
-    document.querySelector("#one_hours").addEventListener('click', function(e){
-       let dt = new Date();
-       let t = new Date();
-       resetCssClasses(e);
-        chart2.updateOptions({
-            xaxis: {
-                min: del_hours(t, 1).getTime(),
-                max: dt.getTime(),
+
+    let options1 = {
+        chart: {
+            type: 'area',
+            height: 135,
+            zoom:{
+                enabled: false
+            },
+            toolbar: {
+                show: false
             }
-        })
+        },
+        legend: {
+            show: false
+        },
+        dataLabels: {
+            enabled: false
+        },
+        series: [],
+        markers: {
+            size: 0,
+            style: 'hollow',
+        },
+        xaxis: {
+            type: 'datetime',
+            min: del_hours(new Date(), 1).getTime(),
+        },
+        tooltip: {
+            enabled: true,
+            x: {
+                format: 'dd MMM yyyy'
+            },
+            onDatasetHover: {
+                highlightDataSeries: false,
+            },
+            y: {
+                show:false
+            },
+            marker: {
+                size: 0,
+                show: true,
+            },
+        },
+        fill: {
+            type: 'gradient',
+            gradient: {
+                shadeIntensity: 1,
+                opacityFrom: 0.7,
+                opacityTo: 0.9,
+                stops: [0, 100]
+            }
+        },
+        noData: {
+            text: 'Loading...'
+        }
+    }
+
+    var chart1 = new ApexCharts(
+        document.querySelector("#timeline-chart"),
+        options1
+    );
+
+    chart1.render();
+    //load default days
+    axios({
+        method: 'GET',
+        url: "/hours/<%=monitor.id%>",
+    }).then(function(response) {
+        chart1.updateOptions({
+            series: [{
+                name: 'Ping',
+                data: response.data.metric.data
+            }],
+            xaxis: {
+                type: 'datetime',
+                min: response.data.time,
+            },
+        });
+        document.getElementById("average<%=monitor.id%>").innerHTML = response.data.summary.average.toFixed(0) +" ms"
     });
-    document.querySelector("#one_days").addEventListener('click', function (e) {
-        let dt = new Date();
-        let t = new Date();
-        resetCssClasses(e)
-        chart2.updateOptions({
-            xaxis: {
-                min: delDays(t, 1).getTime(),
-                max: dt.getTime(),
-            }
-        })
-    });
-    document.querySelector("#one_month").addEventListener('click', function (e) {
-        let dt = new Date();
-        let t = new Date();
-        resetCssClasses(e)
-        chart2.updateOptions({
-            xaxis: {
-                min: del_months(dt, 1).getTime(),
-                max: t.getTime(),
-            }
-        })
+    document.querySelector(".hour").addEventListener("click", function () {
+        axios({
+            method: 'GET',
+            url: "/hours/<%=monitor.id%>",
+        }).then(function(response) {
+            chart1.updateOptions({
+                series: [{
+                    name: 'Ping',
+                    data: response.data.metric.data
+                }],
+                xaxis: {
+                    type: 'datetime',
+                    min: response.data.time,
+                },
+            });
+            document.getElementById("average<%=monitor.id%>").innerHTML = response.data.summary.average.toFixed(0) +" ms"
+        });
+            document.querySelector(".hour").classList.add("active");
+            document.querySelector(".days").classList.remove("active");
+            document.querySelector(".weeks").classList.remove("active");
+            document.querySelector(".months").classList.remove("active");
     });
 
-    document.querySelector("#six_months").addEventListener('click', function (e) {
-        let dt = new Date();
-        let t = new Date();
-        resetCssClasses(e)
-        chart2.updateOptions({
-            xaxis: {
-                min: del_months(dt, 6).getTime(),
-                max: t.getTime(),
-            }
-        })
+    document.querySelector(".days").addEventListener("click", function () {
+        axios({
+            method: 'GET',
+            url: "/days/<%=monitor.id%>",
+        }).then(function(response) {
+            chart1.updateOptions({
+                series: [{
+                    name: 'Ping',
+                    data: response.data.metric.data
+                }],
+                xaxis: {
+                    type: 'datetime',
+                    min: response.data.time,
+                },
+            });
+            document.getElementById("average<%=monitor.id%>").innerHTML = response.data.summary.average.toFixed(0) +" ms"
+        });
+            document.querySelector(".days").classList.add("active");
+            document.querySelector(".hour").classList.remove("active");
+            document.querySelector(".weeks").classList.remove("active");
+            document.querySelector(".months").classList.remove("active");
     });
 
-    document.querySelector("#one_year").addEventListener('click', function (e) {
-        let dt = new Date();
-        let t = new Date();
-        resetCssClasses(e)
-        chart2.updateOptions({
-            xaxis: {
-                min: del_months(dt, 12).getTime(),
-                max: t.getTime(),
-            }
-        })
+    document.querySelector(".weeks").addEventListener("click", function () {
+        axios({
+            method: 'GET',
+            url: "/weeks/<%=monitor.id%>",
+        }).then(function(response) {
+            chart1.updateOptions({
+                series: [{
+                    name: 'Ping',
+                    data: response.data.metric.data
+                }],
+                xaxis: {
+                    type: 'datetime',
+                    min: response.data.time,
+                },
+            });
+            document.getElementById("average<%=monitor.id%>").innerHTML = response.data.summary.average.toFixed(0) +" ms"
+        });
+            document.querySelector(".weeks").classList.add("active");
+            document.querySelector(".hour").classList.remove("active");
+            document.querySelector(".days").classList.remove("active");
+            document.querySelector(".months").classList.remove("active");
     });
 
-    document.querySelector("#one_week").addEventListener('click', function (e) {
-        let dt = new Date();
-        let t = new Date();
-        resetCssClasses(e)
-        chart2.updateOptions({
-            xaxis: {
-                min: delDays(dt, 7).getTime(),
-                max: t.getTime(),
-            }
-        })
-    });
-
-    document.querySelector("#all").addEventListener('click', function (e) {
-        resetCssClasses(e)
-        chart2.updateOptions({
-            xaxis: {
-                min: undefined,
-                max: undefined,
-            }
-        })
+    document.querySelector(".months").addEventListener("click", function () {
+        axios({
+            method: 'GET',
+            url: "/months/<%=monitor.id%>",
+        }).then(function(response) {
+            chart1.updateOptions({
+                series: [{
+                    name: 'Ping',
+                    data: response.data.metric.data
+                }],
+                xaxis: {
+                    type: 'datetime',
+                    min: response.data.time,
+                },
+            });
+            document.getElementById("average<%=monitor.id%>").innerHTML = response.data.summary.average.toFixed(0) +" ms"
+        });
+            document.querySelector(".months").classList.add("active");
+            document.querySelector(".hour").classList.remove("active");
+            document.querySelector(".days").classList.remove("active");
+            document.querySelector(".weeks").classList.remove("active");
     });
 </script>
 <% include partials/footer.ejs%>

@@ -67,3 +67,14 @@ Sekarion Monitor is free software: you can redistribute it and/or modify it unde
     - Major bug fix
     - Fix bug with ping service
     - Add new config for user (custom loop for checking website)
+- V0.0.3 :
+    - Fix bug with timeline (infinity request)
+    - Add Timeline in dashboard and home (can select hour, day, weeks or month with ping)
+    - Rework UI/UX (not finish with language)
+    - Load script with ajax for speed loading page to user
+    - Add params methods global formattedDate() for convert date to format Date/Month/Year
+    - Remove Material design
+    - Add Bootstrap with effect (waves) 
+    - Add Jquery and codeflask for (waves and setup)
+    - Add Adorable api avatar (remove later maybe)
+  

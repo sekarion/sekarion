@@ -3,18 +3,21 @@
 <% include partials/head.ejs%>
 <body>
 <% include partials/header.ejs%>
-<div class="content">
-    <div class="container pt-70">
+<div class="wrap">
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="col-xl-12">
+                <div class="form-group text-center pd-10">
+                    <a href="/monitor/<%=monitor.id%>" class="btn btn-primary btn-lg btn-block pb_btn-pill btn-shadow-blue">Back to monitor</a>
+                </div>
                 <div class="card">
-                    <div class="card-header text-center Bg<% if(status.impact == 0){%>None<%}else if(status.impact == 1){%>Minor<%}else if(status.impact== 2){%>Major<%}else if(status.impact== 3){%>Critical<%}%>">
-                        <h4 class="header-title text-center"><%= status.name ? status.name : "UNKNOWN"%></h4>
-                        <div class="btn-actions-pane-right">
+                    <div class="card-header custom-item Bg<% if(status.impact == 0){%>None<%}else if(status.impact == 1){%>Minor<%}else if(status.impact== 2){%>Major<%}else if(status.impact== 3){%>Critical<%}%>">
+                        <h4 class="header-title float-left"><%= status.name ? status.name : "UNKNOWN"%></h4>
+                        <div class="btn-actions-pane-right float-right pd-10">
                             <div role="group" class="btn-group-sm btn-group">
                                 <div class="page">
-                                    <label for="status" class="left mgspe">Impact</label>
-                                    <div class="select-dropdown right">
+                                    <label for="status" class="float-left mgspe">Impact</label>
+                                    <div class="select-dropdown float-right">
                                         <select id="status" onchange="changeselectImpactupdate(this)">
                                             <option value="None" <%= status.impact  === 0? "selected" : ""%>>None</option>
                                             <option value="Minor" <%= status.impact  === 1? "selected" : ""%>>Minor</option>
@@ -31,14 +34,14 @@
                     </div>
                 </div>
                 <%for(let i=0; i < status.infosstatus.length; i++){%>
-                <div class="card mgt-10">
-                    <div class="card-header">
-                        <h4 class="header title"><%= status.infosstatus[i].status %></h4>  <small class="pdl-15">(<%= new Date(status.date)%>)</small>
+                    <div class="card mgt-10">
+                        <div class="card-header">
+                            <h4 class="header title"><%= status.infosstatus[i].status %></h4>  <small class="pdl-15">(<%= new Date(status.date)%>)</small>
+                        </div>
+                        <div class="card-body">
+                            <%= status.infosstatus[i].description%>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <%= status.infosstatus[i].description%>
-                    </div>
-                </div>
                 <%}%>
                 <%if(status.curentstatus != "resolved"){%>
                     <div class="card mgt-10">
@@ -89,9 +92,6 @@
                         </div>
                     </div>
                 <%}%>
-                <div class="form-group text-center pd-10">
-                    <a href="/monitor/<%=monitor.id%>" class="btn btn-primary btn-lg btn-block pb_btn-pill btn-shadow-blue">Back to monitor</a>
-                </div>
             </div>
         </div>
     </div>
@@ -141,7 +141,7 @@
             if (xmlhttp.readyState === 4) {
                 let response = JSON.parse(xmlhttp.responseText);
                 if (xmlhttp.status === 200) {
-                    let c = document.querySelector(".card-header.text-center");
+                    let c = document.querySelector(".card-header.custom-item");
                     if(c.classList){
                         c.classList.remove('BgNone');
                         c.classList.remove('BgMajor');

@@ -3,34 +3,36 @@
 <% include partials/head.ejs%>
 <body>
 <% include partials/header.ejs%>
-<div class="content">
-    <div class="container pt-70">
-        <div class="row">
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <form method="post" class="rounded boxform">
-                    <h2 class="mb-4 mt-0 text-center">Login </h2>
-                    <%if(error.length > 0){%>
-                    <div class="error-msg">
-                        <%=error%>
+<div class="wrap">
+    <div class="login-form-bg h-100">
+        <div class="container h-100">
+            <div class="row justify-content-center h-100">
+                <div class="col-xl-12">
+                    <div class="form-input-content">
+                        <div class="card login-form mb-0">
+                            <div class="card-body pt-5">
+                                <a class="text-center" href="/"><h4><%= nameconfig%></h4></a>
+                                <form class="mt-5 mb-5 login-input" method="POST">
+                                    <%if(error.length > 0){%>
+                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                            <%=error%>
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                    <%}%>
+                                    <div class="form-group">
+                                        <input type="text" id="username" name="username" class="form-control" placeholder="Username" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+                                    </div>
+                                    <button type="submit" class="btn login-form__btn submit w-100 waves-effect">Login</button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
-
-                    <%}%>
-                    <div class="form-group">
-                        <label for="username">
-                            Username
-                        </label>
-                        <input type="text" id="username" name="username" class="form-control pb_height-50 reverse" placeholder="Username" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="password">
-                            Password
-                        </label>
-                        <input type="password" id="password" name="password" class="form-control pb_height-50 reverse" placeholder="Password" required>
-                    </div>
-                    <div class="form-group text-center">
-                        <input type="submit" class="btn btn-primary btn-lg btn-block pb_btn-pill btn-shadow-blue" value="Login">
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>

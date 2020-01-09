@@ -3,7 +3,7 @@
  * @author Joris Dugué
  * @link https://sekarion.tk
  * @licence http://www.gnu.org/licenses/gpl.txt GNU GPL v3
- * @copyright Copyright (c) 2019 Joris Dugué
+ * @copyright Copyright (c) 2020 Joris Dugué
  **/
 let express = require('express');
 let router = express.Router();
@@ -56,7 +56,7 @@ async function UpdateInfo() {
     });
 }
 //check every 5 min status of website/service/ping
-setInterval(UpdateInfo, config.checkinterval);//300000
+setInterval(UpdateInfo, 300000);//300000
 /**
  * Check if user is connected if connected return next else return login
  **/
@@ -150,7 +150,6 @@ router.post('/auth', passport.authenticate('local', {
  **/
 router.get('/', async (req, res) =>{
     let infoconf =  JSON.parse(fs.readFileSync(__dirname + '/../config/config.json', 'utf8'));
-    console.log(infoconf)
     await Monitor.findPublic(async(err, monit) => {
         if(monit.length === 0){
             res.render('home', {
@@ -204,6 +203,180 @@ router.get('/settings', isadmin, async (req, res)=>{
        nameconfig: info.websitename,
        config : info,
        infoconf: info
+    });
+});
+//get stats by days
+router.get('/days/:id', async(req, res) =>{
+    Monitor.getMonitorById(req.params.id, async (er, status) => {
+        if(er || !status){
+            return res.json({
+               "err": true,
+               "message" : "No found",
+               "metric": []
+            });
+        }else{
+            let infos= [];
+            let nb =0,last =0;
+            //get by days
+            await Status.getByMonitorIDByDays(req.params.id, (err, monit) =>{
+                for (let isn=0; isn < monit.length; isn++){
+                    infos.push([monit[isn].datecheck, parseFloat(monit[isn].latency)]);
+                    nb += parseInt(monit[isn].latency);
+                    last = monit[isn].latency;
+                }
+            });
+            return res.json({
+                "err" : false,
+                "metric": {
+                    "data": infos
+                },
+                "count": infos.length,
+                "summary":{
+                    "average": nb > 0 ? nb/infos.length: 0,
+                    "sum": nb,
+                    "last": last
+                },
+                "time": new Date(new Date().setDate(new Date().getDate()-1)).getTime()
+            });
+        }
+    });
+});
+router.get("/hours/:id", async(req, res) => {
+    Monitor.getMonitorById(req.params.id, async (er, status) => {
+        if(er || !status){
+            return res.json({
+                "err": true,
+                "message" : "No found",
+                "metric": []
+            });
+        }else{
+            let infos= [];
+            let nb =0,last =0;
+            //get by days
+            await Status.getByMonitorIDByHours(req.params.id, (err, monit) =>{
+                //get date now
+                for (let isn=0; isn < monit.length; isn++){
+                    infos.push([monit[isn].datecheck, parseFloat(monit[isn].latency)]);
+                    nb += parseInt(monit[isn].latency);
+                    last = monit[isn].latency;
+                }
+            });
+            //convert datetime to date (timestamp and UTC )
+            let datetime = parseInt((new Date()).getTime() / 300000) * 300000;
+            //delete 1 hours without function
+            datetime = datetime- 3600000;
+            return res.json({
+                "err" : false,
+                "metric": {
+                    "data": infos
+                },
+                "count": infos.length,
+                "summary":{
+                    "average": nb > 0 ? nb/infos.length: 0,
+                    "sum": nb,
+                    "last": last
+                },
+                "time" : datetime
+            });
+        }
+    });
+});
+router.get("/weeks/:id", async (req, res)=> {
+    Monitor.getMonitorById(req.params.id, async (er, status) => {
+        if(er || !status){
+            return res.json({
+                "err": true,
+                "message" : "No found",
+                "metric": []
+            });
+        }else{
+            let infos= [];
+            let nb =0,last =0;
+            //get by days
+            await Status.getByMonitorIDByWeeks(req.params.id, (err, monit) =>{
+                let infodate = null;
+                //get date now
+                if (monit.length > 0){
+                    infodate = monit[0].datecheck + (1800*60*60);
+                }
+                for (let isn=0; isn < monit.length; isn++){
+                    if (isn === 0){
+                        infos.push([monit[isn].datecheck, parseFloat(monit[isn].latency)]);
+                        nb += parseInt(monit[isn].latency);
+                        last = monit[isn].latency;
+                    }else{
+                        if (infodate-monit[isn].datecheck < 0){
+                            infos.push([monit[isn].datecheck, parseFloat(monit[isn].latency)]);
+                            nb += parseInt(monit[isn].latency);
+                            last = monit[isn].latency;
+                            infodate = monit[isn].datecheck + (1800*60*60);
+                        }
+                    }
+                }
+            });
+            return res.json({
+                "err" : false,
+                "metric": {
+                    "data": infos
+                },
+                "count": infos.length,
+                "summary":{
+                    "average": nb > 0 ? nb/infos.length: 0,
+                    "sum": nb,
+                    "last": last
+                },
+                "time": new Date(new Date().setDate(new Date().getDate()-7)).getTime()
+            });
+        }
+    });
+});
+//get information for metric
+router.get("/months/:id", async(req, res) => {
+    Monitor.getMonitorById(req.params.id, async (er, status) => {
+        if(er || !status){
+            return res.json({
+                "err": true,
+                "message" : "No found",
+                "metric": []
+            });
+        }else{
+            let infos= [];
+            let nb =0,last =0;
+            //get by days
+            await Status.getByMonitorIDByMonths(req.params.id, (err, monit) =>{
+                let infodate = null;
+                if(monit[0].datecheck){
+                    infodate = monit[0].datecheck+ 7200* 60*60;
+                }
+                for (let isn=0; isn < monit.length; isn++){
+                    if(isn === 0){
+                        infos.push([monit[0].datecheck, parseFloat(monit[isn].latency)]);
+                        nb += parseInt(monit[isn].latency);
+                        last = monit[isn].latency;
+                    }else{
+                        if(monit[isn].datecheck - infodate < 0){
+                            infos.push([monit[isn].datecheck, parseFloat(monit[isn].latency)]);
+                            nb += parseInt(monit[isn].latency);
+                            last = monit[isn].latency;
+                            infodate = monit[isn].datecheck+ 7200* 60*60;
+                        }
+                    }
+                }
+            });
+            return res.json({
+                "err" : false,
+                "metric": {
+                    "data": infos
+                },
+                "count": infos.length,
+                "summary":{
+                    "average": nb > 0 ? nb/infos.length: 0,
+                    "sum": nb,
+                    "last": last
+                },
+                "time" : new Date(new Date().setMonth(new Date().getMonth() - 1)).getTime()
+            });
+        }
     });
 });
 router.post('/settings', isadmin, async(req, res) =>{
@@ -292,7 +465,30 @@ async function getIncident(id, days){
         }
     });
 }
+async function getDaysPing(id, days){
+    return new Promise(async (resolve, reject) =>{
+        let dt = new Date(new Date().setHours(0, 0, 0, 0));
+        let del;
+        let ino = [];
+        let ip = 0;
+        for (let i = 0; i < days; i++) {
+            let inc =[];
+            if(i===0){
+                dt = delDays(dt, 0);
+            }else{
+                dt = delDays(dt, 1);
+            }
+            del = addDays(dt, 1);
 
+            ino.push({date: dt, inc: inc});
+            ip++;
+
+        }
+        if (ip === days) {
+            return resolve(ino);
+        }
+    });
+}
 
 router.get('/monitor/:id', ensureAuthenticated, async(req, res)=>{
     let info = JSON.parse(fs.readFileSync(__dirname + '/../config/config.json', 'utf8'));

@@ -3,34 +3,51 @@
  * @author Joris Dugué
  * @link https://sekarion.tk
  * @licence http://www.gnu.org/licenses/gpl.txt GNU GPL v3
- * @copyright Copyright (c) 2019 Joris Dugué
+ * @copyright Copyright (c) 2020 Joris Dugué
  **/
-document.addEventListener("DOMContentLoaded",function(){
-    document.addEventListener("click", function (b) {
-        let a = "show";
-        if(b.target.matches(".navbar-toggler")){
-            let c = document.querySelector(".collapse.navbar-collapse");
-            if(c.classList) {
-                c.classList.toggle(a);
-            }else{
-                let b=c.className.split(" "),
-                    d=b.indexOf(a);0<=d?b.splice(d,1):b.push(a);
-                    c.className=b.join(" ")}}
+document.addEventListener("DOMContentLoaded", function () {
+    //load waves
+    Waves.init();
+    $(".nav-menu a").each(function () {
+        let pageUrl = window.location.href.split(/[?#]/)[0];
+        if (this.href === pageUrl) {
+            $(this).parent().addClass("active"); // add active to li of the current link
+            $(this).parent().parent().parent().addClass("active"); // add active class to an anchor
+            $(this).parent().parent().parent().parent().parent().addClass("active"); // add active class to an anchor
+        }
+    });
+    $('.navbar-toggle').on('click', function (event) {
+        $(this).toggleClass('open');
+        $('#navigation').slideToggle(400);
+    });
+
+    $('.nav-menu>li').slice(-1).addClass('last-elements');
+
+    $('.nav-menu li.has-submenu a[href="#"]').on('click', function (e) {
+        if ($(window).width() < 992) {
+            e.preventDefault();
+            $(this).parent('li').toggleClass('open').find('.submenu:first').toggleClass('open');
+        }
+    });
+    $('[data-toggle="tooltip"]').tooltip();
+    $('body').popover({
+        selector: '[data-toggle="popover"]',
+        trigger: 'hover',
+        container: 'body',
+        animation: false
+    }).on('hide.bs.popover', function () {
+        if ($(".popover:hover").length) {
+            return false;
+        }
+    });
+
+    $('body').on('mouseleave', '.popover', function () {
+        $('.popover').popover('hide');
     });
 });
-/**
- * Conditions avec fonction pour cacher l'element #sesssion
- * @param  document.querySelector('#session') selection la div avec la l'id session
- */
-// if () {
-// 	function header() {
-// 		document.querySelector('#flash').classList.add('hidden');
-// 	}
-// 	setTimeout(header,5000)
-// }
-
 
 window.onload = flashAlert();
+
 /**
  * Fonction pour multi element flash
  */
@@ -40,7 +57,7 @@ function flashAlert() {
 
     for (var i = 0; i <= allerts.length; i++) {
         if (allerts[i]) {
-            allerts[i].style.top =  70 + ( 50 * i ) + 'px';
+            allerts[i].style.top = 140 + (50 * i) + 'px';
         }
     }
 }
@@ -58,5 +75,5 @@ function header() {
 }
 
 if (document.querySelector('#flash')) {
-    setTimeout(header,5000)
+    setTimeout(header, 5000)
 }

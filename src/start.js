@@ -3,7 +3,7 @@
  * @author Joris Dugué
  * @link https://sekarion.tk
  * @licence http://www.gnu.org/licenses/gpl.txt GNU GPL v3
- * @copyright Copyright (c) 2019 Joris Dugué
+ * @copyright Copyright (c) 2020 Joris Dugué
  **/
 let config;
 //les logs
@@ -78,6 +78,11 @@ try{
         res.locals.user = req.user || null;
         next();
     });
+    //add function locals converted the auto the date
+    app.locals.formattedDate = function(d = new Date) {
+        return [d.getDate(), d.getMonth()+1, d.getFullYear()]
+            .map(n => n < 10 ? `0${n}` : `${n}`).join('/');
+    };
     /*Route Index*/
     if(config.websiteconfigured){
         app.use('/', IndexRouter);

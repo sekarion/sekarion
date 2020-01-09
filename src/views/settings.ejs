@@ -3,106 +3,75 @@
 <% include partials/head.ejs%>
 <body>
 <% include partials/header.ejs%>
-<div class="content">
-    <div class="container pt-70">
-        <div class="row">
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <form method="post">
-                <div class="card">
-                    <div class="card-header text-center">
-                        <h4 class="header-title text-center">Settings</h4>
-                        <div class="btn-actions-pane-right">
-                            <div role="group" class="btn-group-sm btn-group">
-                                <a href="/dashboard" class="btn btn-primary btn-sm">Back</a>
+<div class="wrap">
+    <div class="login-form-bg h-100">
+        <div class="container h-100">
+            <div class="row justify-content-center h-100">
+                <div class="col-xl-12">
+                    <div class="card login-form mb-0">
+                        <div class="card-header">
+                            <div class="float-left">
+                                <a href="#"><h4>Settings</h4></a>
+                            </div>
+                            <div class="float-right">
+                                <a class="btn btn-primary" href="/dashboard">Back</a>
                             </div>
                         </div>
-                    </div>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                            <dl class="row">
-                                <dt class="col-md-4">Website Name :</dt>
-                                <dd class="col-md-8"><input type="text" class="form-control pb_height-50 reverse" value="<%= config.websitename%>" name="websitename" placeholder="Name of Website" required></dd>
-                            </dl>
-                        </li>
-                        <li class="list-group-item">
-                            <dl class="row">
-                                <dt class="col-md-4">Website Port :</dt>
-                                <dd class="col-md-8"><input type="text" class="form-control pb_height-50 reverse" value="<%= config.websiteport%>" name="websiteport" placeholder="Port" required></dd>
-                            </dl>
-                        </li>
-                        <li class="list-group-item">
-                            <dl class="row">
-                                <dt class="col-md-4">Base Url :</dt>
-                                <dd class="col-md-8"><input type="text" class="form-control pb_height-50 reverse" value="<%= config.baseurl%>" name="baseurl" placeholder="base URL" required></dd>
-                            </dl>
-                        </li>
-                        <li class="list-group-item">
-                            <dl class="row">
-                                <dt class="col-md-4">Secret Session :</dt>
-                                <dd class="col-md-8"><input type="text" class="form-control pb_height-50 reverse" value="<%= config.secretsession%>" name="secretsession" placeholder="Secret Session" required></dd>
-                            </dl>
-                        </li>
-                        <li class="list-group-item">
-                            <dl class="row">
-                                <dt class="col-md-4">Show Header in public page :</dt>
-                                <dd class="col-md-8">
+                        <div class="card-body pt-5">
+                            <form class="mt-5 mb-5 login-input" method="POST">
+                                <%if(error.length > 0){%>
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <%=error%>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <%}%>
+                                <div class="form-group">
+                                    <label for="websitename">Website Name</label>
+                                    <input type="text" class="form-control" id="websitename" value="<%= config.websitename%>" name="websitename" placeholder="Name of Website" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="websiteport">Website Port</label>
+                                    <input type="text" class="form-control" id="websiteport" value="<%= config.websiteport%>" name="websiteport" placeholder="Port" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="baseurl">Base Url</label>
+                                    <input type="text" class="form-control" id="baseurl" value="<%= config.baseurl%>" name="baseurl" placeholder="base URL" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="secretsession">Secret Session </label>
+                                    <input type="text" class="form-control" id="secretsession" value="<%= config.secretsession%>" name="secretsession" placeholder="Secret Session" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cb1">Show Header in public page</label>
                                     <input class="tgl tgl-light" id="cb1" type="checkbox" name="publicheader" <%= config.headershow ? "checked": ""%>>
                                     <label class="tgl-btn" for="cb1"></label>
-                                </dd>
-                            </dl>
-                        </li>
-                        <li class="list-group-item">
-                            <dl class="row">
-                                <dt class="col-md-4">Show footer in public page :</dt>
-                                <dd class="col-md-8">
+                                </div>
+                                <div class="form-group">
+                                    <label for="cb2">Show Footer in public page</label>
                                     <input class="tgl tgl-light" id="cb2" type="checkbox" name="publicfooter" <%= config.footershow ? "checked": ""%> >
                                     <label class="tgl-btn" for="cb2"></label>
-                            </dl>
-                        </li>
-                        <li class="list-group-item">
-                            <dl class="row">
-                                <dt class="col-md-4">Custom css :</dt>
-                                <dd class="col-md-8">
-                            <input class="tgl tgl-light" id="cb3" type="checkbox" name="customstyle" <%= config.customstyle ? "checked": ""%> >
-                            <label class="tgl-btn" for="cb3"></label>
-                        </dl>
-                        </li>
-                        <li class="list-group-item">
-                            <dl class="row">
-                                <dt class="col-md-4">
-                                    CSS :
-                                </dt>
-                                <dd class="col-md-8">
-                                    <textarea id="message" name="customcss" class="form-control pb_height-50 reverse" style="height: 245px !important;" placeholder="please add css here for custom"><%= config.customcss%></textarea>
-                                </dd>
-                            </dl>
-                        </li>
-                        <li class="list-group-item">
-                            <dl class="row">
-                                <dt class="col-md-4">
-                                    Show Login Link :
-                                </dt>
-                                <dd class="col-md-8">
+                                </div>
+                                <div class="form-group">
+                                    <label for="cb3">Custom css</label>
+                                    <input class="tgl tgl-light" id="cb3" type="checkbox" name="customstyle" <%= config.customstyle ? "checked": ""%> >
+                                    <label class="tgl-btn" for="cb3"></label>
+                                </div>
+                                <div class="form-group">
+                                    <label for="customcss">CSS</label>
+                                    <textarea id="message" name="customcss" id="customcss" class="form-control" style="border: 1px solid;" placeholder="please add css here for custom"><%= config.customcss%></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cb4">Show Login Link</label>
                                     <input class="tgl tgl-light" id="cb4" type="checkbox" name="showlogin" <%= config.showlogin ? "checked": ""%> >
                                     <label class="tgl-btn" for="cb4"></label>
-
-                                </dd>
-                            </dl>
-                        </li>
-                        <li class="list-group-item">
-                            <dl class="row">
-                                <dt class="col-md-4">Ping Check Interval : </dt>
-                                <dd class="col-md-8">
-                                    <input type="number" class="form-control pb_height-50 reverse" value="<%= config.checkinterval%>" name="checkinterval" placeholder="checkinterval" required="">
-                                </dd>
-                            </dl>
-                        </li>
-                    </ul>
-                    <div class="form-group text-center">
-                        <input type="submit" class="btn btn-primary btn-lg btn-block pb_btn-pill btn-shadow-blue" value="Update Config">
+                                </div>
+                                <button type="submit" class="btn login-form__btn submit w-100 waves-effect">Update Config</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
-                </form>
             </div>
         </div>
     </div>

@@ -3,7 +3,7 @@
  * @author Joris Dugué
  * @link https://sekarion.tk
  * @licence http://www.gnu.org/licenses/gpl.txt GNU GPL v3
- * @copyright Copyright (c) 2019 Joris Dugué
+ * @copyright Copyright (c) 2020 Joris Dugué
  **/
 let curl = require('./curl');
 class UpdateStatus {
@@ -40,10 +40,6 @@ class UpdateStatus {
         return {status: this.status, run: this.run, time: this.time, error: this.error}
     }
 
-    msToMS( ms ) {
-        // 1- Convert to seconds:
-        return ms / 1000;
-    }
     /**
      * @param {Number} maxrun how many times should the script recheck the server if unavailable.
      * @param {String} ip
@@ -57,11 +53,11 @@ class UpdateStatus {
             //if error default is false and calculate the time and resolve
             try{
                 await curl.PingService(ip, port,function(inUse) {
-                    self.time = self.msToMS(Date.now()-timestart);
+                    self.time = Date.now()-timestart;
                     self.status = inUse;
                 });
             }catch (e) {
-                self.time= self.msToMS(Date.now()-timestart);
+                self.time= Date.now()-timestart;
                 self.status = false;
             }
             resolve(self.status);
@@ -76,7 +72,7 @@ class UpdateStatus {
         let self = this;
         return new Promise(async (resolve, reject) => {
             await curl.curl_get(ip, false, true, null, false, false, (statusCode, data, headers) => {
-                self.time = self.msToMS(new Date().getTime() - timestart);
+                self.time = new Date().getTime() - timestart;
                 //close curl
                 //exclude error page if error page return down
                 this.status = !(statusCode < 200 && statusCode < 400);
@@ -95,7 +91,7 @@ class UpdateStatus {
         let self = this;
         return new Promise(async (resolve, reject) =>{
             curl.Ping(ip, maxrun, this.run, async (infos) => {
-                self.time = self.msToMS(new Date().getTime() - timestart);
+                self.time = new Date().getTime() - timestart;
                 if(infos.success > 0){
                     self.status= true;
                     resolve(self.status);

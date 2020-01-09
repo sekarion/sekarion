@@ -3,7 +3,7 @@
  * @author Joris Dugué
  * @link https://sekarion.tk
  * @licence http://www.gnu.org/licenses/gpl.txt GNU GPL v3
- * @copyright Copyright (c) 2019 Joris Dugué
+ * @copyright Copyright (c) 2020 Joris Dugué
  **/
 let { Curl } = require('node-libcurl');
 

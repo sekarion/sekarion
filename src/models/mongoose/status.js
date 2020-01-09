@@ -62,6 +62,84 @@ module.exports.getByMonitorID = function (id, callback) {
 };
 
 /**
+ * Find Status by Id Monitor by Days
+ * @param {Number} id
+ * @param {function} callback
+ **/
+module.exports.getByMonitorIDByDays = function(id, callback){
+    return Status.find(
+        {
+            "monitorid": id,
+            datecheck: {
+                $lt: new Date(),
+                $gte: new Date(new Date().setDate(new Date().getDate()-1))
+            }
+        },
+        //exclude fields
+        {
+            "_id": false,
+            "__v": 0,
+            "monitorid": 0
+        }, callback
+    );
+};
+module.exports.getByMonitorIDByHours = function(id, callback){
+    let filtertime = new Date();
+    filtertime.setHours(filtertime.getHours() - 2);
+    return Status.find(
+        {
+            "monitorid": id,
+            datecheck: {
+                $lt: new Date(),
+                $gte: filtertime
+            }
+        },
+        //exclude fields
+        {
+            "_id": false,
+            "__v": 0,
+            "monitorid": 0
+        }, callback
+    );
+};
+/**
+ * Find Status by Id Monitor by months
+ * @param {Number} id
+ * @param {function} callback
+ **/
+module.exports.getByMonitorIDByMonths = function(id, callback){
+  return Status.find(
+      {
+          "monitorid": id,
+          datecheck: {
+              $lt: new Date(),
+              $gte: new Date(new Date().setDate(new Date().getMonth()-1))
+          }
+      }, //exclude fields
+      {
+          "_id": false,
+          "__v": 0,
+          "monitorid": 0
+      }, callback
+  )
+};
+module.exports.getByMonitorIDByWeeks = function(id, callback){
+    return Status.find(
+        {
+            "monitorid": id,
+            datecheck: {
+                $lt: new Date(),
+                $gte: new Date(new Date().setDate(new Date().getDay()-7))
+            }
+        }, //exclude fields
+        {
+            "_id": false,
+            "__v": 0,
+            "monitorid": 0
+        }, callback
+    );
+};
+/**
  * Delete all results in current Monitor selection
  **/
 module.exports.deleteStatus = function(currenttodelete, callback){
