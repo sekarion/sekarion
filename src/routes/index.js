@@ -219,10 +219,12 @@ router.get('/days/:id', async(req, res) =>{
             let nb =0,last =0;
             //get by days
             await Status.getByMonitorIDByDays(req.params.id, (err, monit) =>{
-                for (let isn=0; isn < monit.length; isn++){
-                    infos.push([monit[isn].datecheck, parseFloat(monit[isn].latency)]);
-                    nb += parseInt(monit[isn].latency);
-                    last = monit[isn].latency;
+                if(monit.length > 0) {
+                    for (let isn = 0; isn < monit.length; isn++) {
+                        infos.push([monit[isn].datecheck, parseFloat(monit[isn].latency)]);
+                        nb += parseInt(monit[isn].latency);
+                        last = monit[isn].latency;
+                    }
                 }
             });
             return res.json({
@@ -255,10 +257,12 @@ router.get("/hours/:id", async(req, res) => {
             //get by days
             await Status.getByMonitorIDByHours(req.params.id, (err, monit) =>{
                 //get date now
-                for (let isn=0; isn < monit.length; isn++){
-                    infos.push([monit[isn].datecheck, parseFloat(monit[isn].latency)]);
-                    nb += parseInt(monit[isn].latency);
-                    last = monit[isn].latency;
+                if(monit.length > 0) {
+                    for (let isn = 0; isn < monit.length; isn++) {
+                        infos.push([monit[isn].datecheck, parseFloat(monit[isn].latency)]);
+                        nb += parseInt(monit[isn].latency);
+                        last = monit[isn].latency;
+                    }
                 }
             });
             //convert datetime to date (timestamp and UTC )
@@ -296,20 +300,22 @@ router.get("/weeks/:id", async (req, res)=> {
             await Status.getByMonitorIDByWeeks(req.params.id, (err, monit) =>{
                 let infodate = null;
                 //get date now
-                if (monit.length > 0){
-                    infodate = monit[0].datecheck + (1800*60*60);
-                }
-                for (let isn=0; isn < monit.length; isn++){
-                    if (isn === 0){
-                        infos.push([monit[isn].datecheck, parseFloat(monit[isn].latency)]);
-                        nb += parseInt(monit[isn].latency);
-                        last = monit[isn].latency;
-                    }else{
-                        if (infodate-monit[isn].datecheck < 0){
+                if(monit.length > 0) {
+                    if (monit.length > 0) {
+                        infodate = monit[0].datecheck + (1800 * 60 * 60);
+                    }
+                    for (let isn = 0; isn < monit.length; isn++) {
+                        if (isn === 0) {
                             infos.push([monit[isn].datecheck, parseFloat(monit[isn].latency)]);
                             nb += parseInt(monit[isn].latency);
                             last = monit[isn].latency;
-                            infodate = monit[isn].datecheck + (1800*60*60);
+                        } else {
+                            if (infodate - monit[isn].datecheck < 0) {
+                                infos.push([monit[isn].datecheck, parseFloat(monit[isn].latency)]);
+                                nb += parseInt(monit[isn].latency);
+                                last = monit[isn].latency;
+                                infodate = monit[isn].datecheck + (1800 * 60 * 60);
+                            }
                         }
                     }
                 }
@@ -345,20 +351,22 @@ router.get("/months/:id", async(req, res) => {
             //get by days
             await Status.getByMonitorIDByMonths(req.params.id, (err, monit) =>{
                 let infodate = null;
-                if(monit[0].datecheck){
-                    infodate = monit[0].datecheck+ 7200* 60*60;
-                }
-                for (let isn=0; isn < monit.length; isn++){
-                    if(isn === 0){
-                        infos.push([monit[0].datecheck, parseFloat(monit[isn].latency)]);
-                        nb += parseInt(monit[isn].latency);
-                        last = monit[isn].latency;
-                    }else{
-                        if(monit[isn].datecheck - infodate < 0){
-                            infos.push([monit[isn].datecheck, parseFloat(monit[isn].latency)]);
+                if(monit.length > 0){
+                    if(monit[0].datecheck){
+                        infodate = monit[0].datecheck+ 7200* 60*60;
+                    }
+                    for (let isn=0; isn < monit.length; isn++){
+                        if(isn === 0){
+                            infos.push([monit[0].datecheck, parseFloat(monit[isn].latency)]);
                             nb += parseInt(monit[isn].latency);
                             last = monit[isn].latency;
-                            infodate = monit[isn].datecheck+ 7200* 60*60;
+                        }else{
+                            if(monit[isn].datecheck - infodate < 0){
+                                infos.push([monit[isn].datecheck, parseFloat(monit[isn].latency)]);
+                                nb += parseInt(monit[isn].latency);
+                                last = monit[isn].latency;
+                                infodate = monit[isn].datecheck+ 7200* 60*60;
+                            }
                         }
                     }
                 }
