@@ -5,10 +5,10 @@
  * @licence http://www.gnu.org/licenses/gpl.txt GNU GPL v3
  * @copyright Copyright (c) 2020 Joris Dugué
  **/
-const chalk = require('chalk');
-const sleep = require('./sleep');
-require('draftlog').into(console);
-const frames = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
+const chalk = require("chalk");
+const sleep = require("./sleep");
+require("draftlog").into(console);
+const frames = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"];
 /**
  * @prop {Map} drafts
  **/
@@ -22,7 +22,7 @@ class Log {
      * @returns {void}
      **/
     loading(load, returnString) {
-        const log = `[${chalk.magenta(Date().toString().split(' ').slice(1, 5).join(' '))}] ${load}`;
+        const log = `[${chalk.magenta(Date().toString().split(" ").slice(1, 5).join(" "))}] ${load}`;
         if (returnString) {
             return log;
         } else {
@@ -35,7 +35,7 @@ class Log {
      * @returns {void}
      **/
     cmds(cmd, returnString) {
-        const log = `[${chalk.cyan(Date().toString().split(' ').slice(1, 5).join(' '))}] ${cmd}`;
+        const log = `[${chalk.cyan(Date().toString().split(" ").slice(1, 5).join(" "))}] ${cmd}`;
         if (returnString) {
             return log;
         } else {
@@ -48,7 +48,7 @@ class Log {
      * @returns {void}
      **/
     error(err, returnString) {
-        const log = `[${chalk.red(Date().toString().split(' ').slice(1, 5).join(' '))}] ${err}`;
+        const log = `[${chalk.red(Date().toString().split(" ").slice(1, 5).join(" "))}] ${err}`;
         if (returnString) {
             return log;
         } else {
@@ -61,7 +61,7 @@ class Log {
      * @returns {void}
      **/
     warning(warning, returnString) {
-        const log = `[${chalk.yellow(Date().toString().split(' ').slice(1, 5).join(' '))}] ${warning}`;
+        const log = `[${chalk.yellow(Date().toString().split(" ").slice(1, 5).join(" "))}] ${warning}`;
         if (returnString) {
             return log;
         } else {
@@ -69,7 +69,7 @@ class Log {
         }
     }
     info(info, returnString) {
-        const log = `[${chalk.green(Date().toString().split(' ').slice(1, 5).join(' '))}] ${info}`;
+        const log = `[${chalk.green(Date().toString().split(" ").slice(1, 5).join(" "))}] ${info}`;
         if (returnString) {
             return log;
         } else {
@@ -92,7 +92,7 @@ class Log {
         });
         for (let i = 0; this.drafts.get(name).spinning; i++) {
             await sleep(50);
-            this.drafts.get(name).draft(this.info(`${frames[i % frames.length]} ${text}`, true))
+            this.drafts.get(name).draft(this.info(`${frames[i % frames.length]} ${text}`, true));
         }
     }
     /**
@@ -104,7 +104,7 @@ class Log {
     async endDraft(name, text, succeed = true) {
         this.drafts.get(name).spinning = false;
         await sleep(50);
-        this.drafts.get(name).draft(this[succeed ? 'info' : 'error'](`${succeed ? '✔' : '✖'} ${text}`, true));
+        this.drafts.get(name).draft(this[succeed ? "info" : "error"](`${succeed ? "✔" : "✖"} ${text}`, true));
         this.drafts.delete(name);
     }
 }

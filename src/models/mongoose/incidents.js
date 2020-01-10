@@ -6,7 +6,7 @@
  * @copyright Copyright (c) 2019 Joris Dugué
  **/
 
-let mongoose = require('mongoose');
+let mongoose = require("mongoose");
 //config only for ping or service (no configured request for moment )
 let IncidentSchema = mongoose.Schema({
     name: {
@@ -44,7 +44,7 @@ let IncidentSchema = mongoose.Schema({
         type: String
     }
 });
-let Incident = module.exports = mongoose.model('Incidents', IncidentSchema);
+let Incident = module.exports = mongoose.model("Incidents", IncidentSchema);
 
 /**
  * Create status with params

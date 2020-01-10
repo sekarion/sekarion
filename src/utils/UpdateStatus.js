@@ -5,7 +5,7 @@
  * @licence http://www.gnu.org/licenses/gpl.txt GNU GPL v3
  * @copyright Copyright (c) 2020 Joris Dugué
  **/
-let curl = require('./curl');
+let curl = require("./curl");
 class UpdateStatus {
     constructor() {
         this.status = "";
@@ -22,22 +22,22 @@ class UpdateStatus {
      * @param {String} port
      **/
     async update(serverid, ip, maxrun, type, port = null){
-        this.error = '';
+        this.error = "";
         if (!ip) {
             return false;
         }
         switch (type) {
-            case 'ping':
+            case "ping":
                 this.status = await this.updatePing(maxrun, ip);
                 break;
-            case 'service':
+            case "service":
                 this.status = await this.updateService(maxrun, ip, port);
                 break;
-            case 'website':
+            case "website":
                 this.status = await this.updateWebsite(maxrun, ip);
                 break;
         }
-        return {status: this.status, run: this.run, time: this.time, error: this.error}
+        return {status: this.status, run: this.run, time: this.time, error: this.error};
     }
 
     /**
@@ -49,7 +49,9 @@ class UpdateStatus {
     async updateService(maxrun, ip, port){
         let timestart = new Date().getTime();
         let self = this;
-        return new Promise(async (resolve, reject) => {
+        /*eslint-disable */
+        return new Promise(async (resolve, reject) =>{
+            /*eslint-enable */
             //if error default is false and calculate the time and resolve
             try{
                 await curl.PingService(ip, port,function(inUse) {
@@ -70,14 +72,16 @@ class UpdateStatus {
     async updateWebsite(maxrun, ip) {
         let timestart = new Date().getTime();
         let self = this;
-        return new Promise(async (resolve, reject) => {
+        /*eslint-disable */
+        return new Promise(async (resolve, reject) =>{
             await curl.curl_get(ip, false, true, null, false, false, (statusCode, data, headers) => {
+                /*eslint-enable */
                 self.time = new Date().getTime() - timestart;
                 //close curl
                 //exclude error page if error page return down
                 this.status = !(statusCode < 200 && statusCode < 400);
             });
-        })
+        });
     }
 
     /**
@@ -89,7 +93,9 @@ class UpdateStatus {
     async updatePing(maxrun, ip) {
         let timestart = new Date().getTime();
         let self = this;
+        /*eslint-disable */
         return new Promise(async (resolve, reject) =>{
+            /*eslint-enable */
             curl.Ping(ip, maxrun, this.run, async (infos) => {
                 self.time = new Date().getTime() - timestart;
                 if(infos.success > 0){

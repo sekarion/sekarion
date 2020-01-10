@@ -24,10 +24,10 @@ Sekarion Monitor is a script that checks whether your websites and servers are u
 
  * you can choose to install the database you want among the following:
    * EnMap (not ok for moment )
-   * MongoDB (implementer)
-   * Mysql (not ok for moment)
-   * Rethinkdb (not ok for moment)
-   * SQLite3 (not ok for moment )
+   * [MongoDB](https://www.mongodb.com) (implementer)
+   * [Mysql](https://www.mysql.com) (not ok for moment)
+   * [Rethinkdb](https://rethinkdb.com) (not ok for moment)
+   * [SQLite3](https://sqlite.org/index.html) (not ok for moment )
    
 ## Install
 Copy ``config.json.example`` or rame in `config.json` (in folder `src/config`)

@@ -5,7 +5,7 @@
  * @licence http://www.gnu.org/licenses/gpl.txt GNU GPL v3
  * @copyright Copyright (c) 2020 Joris Dugué
  **/
-let { Curl } = require('node-libcurl');
+let { Curl } = require("node-libcurl");
 
 /**
  * Shortcut to curl
@@ -25,26 +25,26 @@ module.exports.curl_get = function(href, header = false, body = true, timeout = 
     let CURL_TIMEOUT = 10;
     //check if timeout is int
     timeout = timeout == null ? CURL_TIMEOUT : parseInt(timeout);
-    curl.setOpt('URL', href);
-    curl.setOpt('HEADER', header);
-    curl.setOpt('NOBODY', (!body));
-    curl.setOpt('FOLLOWLOCATION', true);
-    curl.setOpt('SSL_VERIFYHOST', false);
-    curl.setOpt('SSL_VERIFYPEER', false);
-    curl.setOpt('CONNECTTIMEOUT', timeout);
-    curl.setOpt('FOLLOWLOCATION', true);
-    curl.setOpt('TIMEOUT', timeout);
+    curl.setOpt("URL", href);
+    curl.setOpt("HEADER", header);
+    curl.setOpt("NOBODY", (!body));
+    curl.setOpt("FOLLOWLOCATION", true);
+    curl.setOpt("SSL_VERIFYHOST", false);
+    curl.setOpt("SSL_VERIFYPEER", false);
+    curl.setOpt("CONNECTTIMEOUT", timeout);
+    curl.setOpt("FOLLOWLOCATION", true);
+    curl.setOpt("TIMEOUT", timeout);
 
     //curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     //curl_setopt($ch, CURLOPT_ENCODING, '');
     if(website_username !== false && website_password !== false && (website_username != null) && (website_password != null)) {
-        curl.setOpt('USERPWD', website_username + ":" + website_password);
+        curl.setOpt("USERPWD", website_username + ":" + website_password);
     }
     //custom user agent
-    curl.setOpt('USERAGENT', 'Mozilla/5.0 (compatible; sekarion; https://sekarion.tk)');
+    curl.setOpt("USERAGENT", "Mozilla/5.0 (compatible; sekarion; https://sekarion.tk)");
     //just once because on = memory leak...
-    curl.once('end', callback);
-    curl.once('error', callback);
+    curl.once("end", callback);
+    curl.once("error", callback);
     curl.perform();
     //close the request after
     //curl.close();
@@ -55,7 +55,7 @@ module.exports.curl_get = function(href, header = false, body = true, timeout = 
  * @param {function} callback
  */
 module.exports.PingService = async function (ip, port, callback){
-    let tcpPortUsed = require('tcp-port-used');
+    let tcpPortUsed = require("tcp-port-used");
     //convert host to ip
     if (!checkifip(ip)){
         ip = await lookupdns(ip);
@@ -69,16 +69,20 @@ module.exports.PingService = async function (ip, port, callback){
  * @param {Number} run default run 1
  * @param {Function} callback return function Error , target
  */
+/* eslint-disable */
 module.exports.Ping = function(ip, max_runs, run = 1, callback) {
-    const tcpie = require('tcpie');
+    /* eslint-enable */
+    const tcpie = require("tcpie");
     const pie = tcpie(ip, 80, {count: 1, interval: 500, timeout: 2000});
-    pie.on('connect', function(stats) {
+    /* eslint-disable */
+    pie.on("connect", function(stats) {
        // console.info('connect', stats);
-    }).on('error', function(err, stats) {
+    }).on("error", function(err, stats) {
        // console.error(err, stats);
-    }).on('timeout', function(stats) {
+    }).on("timeout", function(stats) {
        // console.info('timeout', stats);
-    }).on('end', callback).start();
+    }).on("end", callback).start();
+    /* eslint-enable */
     /*if (!status && run < max_runs) {
         return Ping(ip, max_runs, run + 1);
     }*/
@@ -91,7 +95,7 @@ module.exports.Ping = function(ip, max_runs, run = 1, callback) {
  * @return {Boolean}
  **/
 function checkifip(ip) {
-    const v4 = '(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)(?:\\.(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)){3}';
+    const v4 = "(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)(?:\\.(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)){3}";
     return new RegExp(`^${v4}$`).test(ip);
 }
 /**
@@ -100,10 +104,12 @@ function checkifip(ip) {
  * @return {string} ip converted
  **/
 async function lookupdns(ip) {
-    const dns = require('dns');
+    const dns = require("dns");
+    /* eslint-disable */
     return new Promise(async (resolve, reject) => {
         dns.lookup(ip, function (err, address, family) {
             resolve(address);
         });
     });
+    /* eslint-enable */
 }

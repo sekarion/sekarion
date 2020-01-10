@@ -6,7 +6,7 @@
  * @copyright Copyright (c) 2019 Joris Dugué
  **/
 
-let mongoose = require('mongoose');
+let mongoose = require("mongoose");
 //config only for ping or service (no configured request for moment )
 let StatusSchema = mongoose.Schema({
     latency: {
@@ -26,7 +26,7 @@ let StatusSchema = mongoose.Schema({
         type: String
     }
 });
-let Status = module.exports = mongoose.model('Status', StatusSchema);
+let Status = module.exports = mongoose.model("Status", StatusSchema);
 
 /**
  * Create status with params
@@ -121,7 +121,7 @@ module.exports.getByMonitorIDByMonths = function(id, callback){
           "__v": 0,
           "monitorid": 0
       }, callback
-  )
+  );
 };
 module.exports.getByMonitorIDByWeeks = function(id, callback){
     return Status.find(

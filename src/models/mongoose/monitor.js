@@ -6,7 +6,7 @@
  * @copyright Copyright (c) 2019 Joris Dugué
  **/
 
-let mongoose = require('mongoose');
+let mongoose = require("mongoose");
 //config only for ping or service (no configured request for moment )
 let MonitorSchema = mongoose.Schema({
     label: {
@@ -35,14 +35,14 @@ let MonitorSchema = mongoose.Schema({
     },
     laststatus: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Status'
+        ref: "Status"
     },
 });
 
 /**
  * Export model schema
  **/
-let Monitor = module.exports = mongoose.model('Monitor', MonitorSchema);
+let Monitor = module.exports = mongoose.model("Monitor", MonitorSchema);
 /**
  * Find Monitor by ID
  * @param {Number|String} id

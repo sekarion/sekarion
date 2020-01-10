@@ -5,9 +5,9 @@
  * @licence http://www.gnu.org/licenses/gpl.txt GNU GPL v3
  * @copyright Copyright (c) 2019 Joris Dugué
  **/
-let mongoose = require('mongoose');
+let mongoose = require("mongoose");
 //encrypt the password with bcrypt
-let bcrypt = require('bcryptjs');
+let bcrypt = require("bcryptjs");
 
 let UserSchema = mongoose.Schema({
     username: {
@@ -30,7 +30,7 @@ let UserSchema = mongoose.Schema({
 /**
  * Export model schema
  **/
-let User = module.exports = mongoose.model('User', UserSchema);
+let User = module.exports = mongoose.model("User", UserSchema);
 
 /**
  * Create user with params
