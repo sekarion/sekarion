@@ -114,7 +114,7 @@ try{
         db.once("open", function callback () {
             log.endDraft("launchdb", "[Sekarion] Lancement de la base de données : réussie");
             servicelaunch += 1;
-            if(config.websiteconfigured != null) {
+            if(config.websiteconfigured !== null) {
                 if(config.websiteconfigured){
                     if (servicelaunch === 2) {
                         log.endDraft("start", "[Sekarion] Tous les services sont lancé");

@@ -1,5 +1,44 @@
-@import url("https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700&display=swap");
+@font-face {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: local('Poppins Light'), local('Poppins-Light'), url("/fonts/pxiByp8kv8JHgFVrLDz8Z1xlFQ.woff2") format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: local('Poppins Regular'), local('Poppins-Regular'), url("/fonts/pxiEyp8kv8JHgFVrJJfecg.woff2") format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
 
+@font-face {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: local('Poppins Medium'), local('Poppins-Medium'), url("/fonts/pxiByp8kv8JHgFVrLGT9Z1xlFQ.woff2") format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: local('Poppins SemiBold'), local('Poppins-SemiBold'), url("/fonts/pxiByp8kv8JHgFVrLEj6Z1xlFQ.woff2") format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: local('Poppins Bold'), local('Poppins-Bold'), url("/fonts/pxiByp8kv8JHgFVrLCz7Z1xlFQ.woff2") format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
 html {
     overflow-x: hidden;
     position: relative;
@@ -252,11 +291,11 @@ a:hover {
 
 
 .navbar-custom .dropdown-menu.dropdown-menu-right {
-    -webkit-transform: none !important;
-    transform: none !important;
-    top: 100% !important;
-    right: 0 !important;
-    left: auto !important;
+    -webkit-transform: none;
+    transform: none;
+    top: 100%;
+    right: 0;
+    left: auto;
 }
 
 .navinfo.list-inline-item:not(:last-child) {
@@ -323,7 +362,7 @@ a:hover {
     -webkit-transition: all 300ms ease;
     -o-transition: all 300ms ease;
     -ms-transition: all 300ms ease;
-    margin-top: 20px !important;
+    margin-top: 20px;
 }
 
 .waves-effect {
@@ -342,7 +381,7 @@ a:hover {
 .show > .dropdown-menu {
     visibility: visible;
     opacity: 1;
-    margin-top: 0 !important;
+    margin-top: 0;
 }
 
 .arrow-none:after {
@@ -358,7 +397,7 @@ a:hover {
 
 .footer {
     bottom: 0;
-    text-align: center !important;
+    text-align: center;
     padding: 19px 30px 20px;
     position: absolute;
     background-color: #ffffff;
@@ -585,7 +624,7 @@ a:hover {
     }
 
     #navbar .has-submenu.active > a, #navbar .submenu li.active > a, #navbar .nav-menu > li > a:active, #navbar .nav-menu > li > a:hover {
-        color: #30419b !important;
+        color: #30419b;
     }
 
     #navbar .navigation-menu > li > a i {
@@ -860,18 +899,18 @@ svg rect:hover {
     border-width: 0px;
     border-left-width: 1px;
     border-style: solid;
-    padding: 4px 18px 2px !important;
+    padding: 4px 18px 2px;
     text-align: center;
-    border: none !important;
+    border: none;
     border-radius: 20px;
-    margin: 1px !important;
+    margin: 1px;
     transition: 200ms;
 }
 
 .timestamp.active {
-    color: white !important;
+    color: white;
     background-color: #30419b;
-    font-weight: normal !important;
+    font-weight: normal;
 }
 
 .timestamp:hover {
@@ -881,6 +920,7 @@ svg rect:hover {
 
 .timestamp.active:hover {
     background-color: #697ec4;
+    color: #FFF;
 }
 
 .metric-info {
@@ -943,7 +983,7 @@ svg rect:hover {
 }
 
 .green {
-    color: #27ae60;
+    color: #115605;
 }
 
 .mgspe {

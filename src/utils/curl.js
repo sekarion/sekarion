@@ -8,6 +8,31 @@
 let { Curl } = require("node-libcurl");
 
 /**
+ *
+ * Check if is valid IPV4
+ * @param {string} ip
+ * @return {Boolean}
+ **/
+function checkifip(ip) {
+    const v4 = "(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)(?:\\.(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)){3}";
+    return new RegExp(`^${v4}$`).test(ip);
+}
+/**
+ * convert domain/host to ip
+ * @param {string} ip - domain/host to convert
+ * @return {string} ip converted
+ **/
+async function lookupdns(ip) {
+    const dns = require("dns");
+    /* eslint-disable */
+    return new Promise(async (resolve, reject) => {
+        dns.lookup(ip, function (err, address, family) {
+            resolve(address);
+        });
+    });
+    /* eslint-enable */
+}
+/**
  * Shortcut to curl
  *
  * @param {string} href
@@ -24,7 +49,7 @@ module.exports.curl_get = function(href, header = false, body = true, timeout = 
     //default timeout for curl is 1sec define to 10s
     let CURL_TIMEOUT = 10;
     //check if timeout is int
-    timeout = timeout == null ? CURL_TIMEOUT : parseInt(timeout);
+    timeout = timeout == null ? CURL_TIMEOUT : parseInt(timeout, 10);
     curl.setOpt("URL", href);
     curl.setOpt("HEADER", header);
     curl.setOpt("NOBODY", (!body));
@@ -87,29 +112,3 @@ module.exports.Ping = function(ip, max_runs, run = 1, callback) {
         return Ping(ip, max_runs, run + 1);
     }*/
 };
-
-/**
- *
- * Check if is valid IPV4
- * @param {string} ip
- * @return {Boolean}
- **/
-function checkifip(ip) {
-    const v4 = "(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)(?:\\.(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)){3}";
-    return new RegExp(`^${v4}$`).test(ip);
-}
-/**
- * convert domain/host to ip
- * @param {string} ip - domain/host to convert
- * @return {string} ip converted
- **/
-async function lookupdns(ip) {
-    const dns = require("dns");
-    /* eslint-disable */
-    return new Promise(async (resolve, reject) => {
-        dns.lookup(ip, function (err, address, family) {
-            resolve(address);
-        });
-    });
-    /* eslint-enable */
-}

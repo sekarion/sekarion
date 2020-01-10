@@ -1,24 +1,19 @@
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title><%= titlepage%> | <%= nameconfig %></title>
+<meta charset="utf-8">
+<title><%= titlepage %> | <%= nameconfig %></title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width">
 
-    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="/css/style.css">
-    <link rel="stylesheet" type="text/css" href="/css/waves.min.css">
+<link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css" media="all">
+<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" media="all">
+<link rel="stylesheet" type="text/css" href="/css/style.css" media="all">
+<link rel="stylesheet" type="text/css" href="/css/waves.min.css" media="all">
 
-
-    <noscript>Your browser does not support JavaScript!</noscript>
-    <script type="text/javascript" src="/js/jquery-3.4.1.min.js"></script>
-    <script type="text/javascript" src="/js/bootstrap.bundle.min.js"></script>
-    <script type="text/javascript" src="/js/waves.min.js"></script>
-    <script type="text/javascript" src="/js/main.js"></script>
-    <% if(infoconf != null){%>
-    <%if(infoconf.customstyle ? infoconf.customstyle : false){%>
+<noscript>Your browser does not support JavaScript!</noscript>
+<script src="/js/axios.js" charset="UTF-8" type="application/javascript" async></script>
+<% if(infoconf != null){ %>
+    <% if(infoconf.customstyle ? infoconf.customstyle : false){ %>
         <style type="text/css">
             <%= infoconf.customcss%>
         </style>
-    <%}%>
-    <%}%>
-</head>
+    <% } %>
+<% } %>

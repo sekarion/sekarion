@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="fr">
-<% include partials/head.ejs%>
+<head>
+    <% include partials/head.ejs %>
+</head>
 <body>
 <% include partials/header.ejs%>
 <div class="wrap">
@@ -66,7 +68,9 @@
     </div>
 </div>
 <% include partials/footer.ejs%>
-<script>
+</body>
+<%include partials/link.ejs%>
+<script charset="UTF-8" type="application/javascript">
     let textarea = document.querySelector('textarea');
     textarea.addEventListener('keydown', autosize);
     function autosize(){
@@ -95,5 +99,4 @@
         return true;
     }
 </script>
-</body>
 </html>

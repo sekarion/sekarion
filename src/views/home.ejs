@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="fr">
-<% include partials/head.ejs %>
+<head>
+    <% include partials/head.ejs %>
+    <script src="/js/apexcharts.js" charset="UTF-8" type="application/javascript"></script>
+</head>
 <body>
 <% if(infoconf.headershow ? infoconf.headershow : false){ %>
     <% include partials/header.ejs %>
 <% } %>
-<script src="/js/apexcharts.js" charset="UTF-8" type="application/javascript"></script>
-<script src="/js/axios.js" charset="UTF-8" type="application/javascript"></script>
 <div class="wrap">
     <div class="container-fluid">
         <div class="row">
@@ -15,9 +16,8 @@
                     <div class="status-site">
                         <% for(var isn = 0; isn < monitor.length; isn++) { %>
                             <ul class="list-group status-group">
-                                <div class="group-items">
-                                    <li class="list-group-item sub-component">
-                                        <a href="http://<%= monitor[isn].monit.ip %>" target="_blank"
+                                <li class="list-group-item sub-component">
+                                        <a href="http://<%= monitor[isn].monit.ip %>" target="_blank" rel="noopener"
                                            class="links"><%= monitor[isn].monit.label ? monitor[isn].monit.label : monitor[isn].monit.ip %></a>
                                         <% if(monitor[isn].monit.description ){ %>
                                             <i class="fa fa-question-circle help-icon"
@@ -29,7 +29,7 @@
                                                 <% for(let incid = 0;incid < todaystatus[i].incident.length; incid++){ %>
                                                     <% if(todaystatus[i].incident[incid].inc.length === 0){ %>
                                                         <!-- No incident -->
-                                                        <small class="green" id="tt6">Online</small>
+                                                        <small class="green">Online</small>
                                                     <% }else{ %>
                                                         <% let impacttoday = todaystatus[i].incident[incid].inc[0].impact ? todaystatus[i].incident[incid].inc[0].impact : 0 %>
                                                         <% for(let incidp = 1;incidp < todaystatus[i].incident[incid].inc.length; incidp++){ %>
@@ -38,15 +38,15 @@
                                                         <% } %>
                                                         <% } %>
                                                         <% if(impacttoday === 0){ %>
-                                                            <small class="green" id="tt6">Online</small>
+                                                            <small class="green">Online</small>
                                                         <% }else if(impacttoday == 1){ %>
-                                                            <small class="yellow" id="tt6">Partial Outage</small>
+                                                            <small class="yellow">Partial Outage</small>
                                                         <% }else if(impacttoday == 2){ %>
-                                                            <small class="Major" id="tt6">Major Outage</small>
+                                                            <small class="Major">Major Outage</small>
                                                         <% }else if(impacttoday == 3){ %>
-                                                            <small class="Critical" id="tt6">Outage</small>
+                                                            <small class="Critical">Outage</small>
                                                         <% }else { %>
-                                                            <small class="online" id="tt6">Online</small>
+                                                            <small class="online">Online</small>
                                                         <% } %>
                                                     <% } %>
                                                 <% } %>
@@ -237,7 +237,6 @@
 
                                         </div>
                                     </li>
-                                </div>
                             </ul>
                         <% } %>
 
@@ -381,103 +380,10 @@
         <% } %>
     </div>
 </div>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        $(".days").on("click", function (evt) {
-            axios({
-                method: 'GET',
-                url: `/days/${evt.target.dataset.id}`,
-            }).then(function (response) {
-                window["chart"+evt.target.dataset.number].updateOptions({
-                    series: [{
-                        name: 'Ping',
-                        data: response.data.metric.data
-                    }],
-                    xaxis: {
-                        type: 'datetime',
-                        min: response.data.time,
-                    },
-                });
-                document.getElementById(`average${evt.target.dataset.id}`).innerHTML = response.data.summary.average.toFixed(0) + " ms"
-            });
-            document.querySelector(`.days${evt.target.dataset.id}`).classList.add("active");
-            document.querySelector(`.hours${evt.target.dataset.id}`).classList.remove("active");
-            document.querySelector(`.weeks${evt.target.dataset.id}`).classList.remove("active");
-            document.querySelector(`.months${evt.target.dataset.id}`).classList.remove("active");
-        });
-        $(".hours").on("click", function (evt) {
-            axios({
-                method: 'GET',
-                url: `/hours/${evt.target.dataset.id}`,
-            }).then(function (response) {
-                window["chart"+evt.target.dataset.number].updateOptions({
-                    series: [{
-                        name: 'Ping',
-                        data: response.data.metric.data
-                    }],
-                    xaxis: {
-                        type: 'datetime',
-                        min: response.data.time,
-                    },
-                });
-                document.getElementById(`average${evt.target.dataset.id}`).innerHTML = response.data.summary.average.toFixed(0) + " ms"
-            });
-            document.querySelector(`.hours${evt.target.dataset.id}`).classList.add("active");
-            document.querySelector(`.days${evt.target.dataset.id}`).classList.remove("active");
-            document.querySelector(`.weeks${evt.target.dataset.id}`).classList.remove("active");
-            document.querySelector(`.months${evt.target.dataset.id}`).classList.remove("active");
-        });
-        $(".months").on("click", function (evt) {
-            axios({
-                method: 'GET',
-                url: `/months/${evt.target.dataset.id}`,
-            }).then(function (response) {
-                window["chart"+evt.target.dataset.number].updateOptions({
-                    series: [{
-                        name: 'Ping',
-                        data: response.data.metric.data
-                    }],
-                    xaxis: {
-                        type: 'datetime',
-                        min: response.data.time,
-                    },
-                });
-                document.getElementById(`average${evt.target.dataset.id}`).innerHTML = response.data.summary.average.toFixed(0) + " ms"
-            });
-            document.querySelector(`.months${evt.target.dataset.id}`).classList.add("active");
-            document.querySelector(`.hours${evt.target.dataset.id}`).classList.remove("active");
-            document.querySelector(`.weeks${evt.target.dataset.id}`).classList.remove("active");
-            document.querySelector(`.days${evt.target.dataset.id}`).classList.remove("active");
-        });
-        $(".weeks").on("click", function (evt) {
-            axios({
-                method: 'GET',
-                url: `/weeks/${evt.target.dataset.id}`,
-            }).then(function (response) {
-                window["chart"+evt.target.dataset.number].updateOptions({
-                    series: [{
-                        name: 'Ping',
-                        data: response.data.metric.data
-                    }],
-                    xaxis: {
-                        type: 'datetime',
-                        min: response.data.time,
-                    },
-                });
-                document.getElementById(`average${evt.target.dataset.id}`).innerHTML = response.data.summary.average.toFixed(0) + " ms"
-            });
-            document.querySelector(`.weeks${evt.target.dataset.id}`).classList.add("active");
-            document.querySelector(`.hours${evt.target.dataset.id}`).classList.remove("active");
-            document.querySelector(`.days${evt.target.dataset.id}`).classList.remove("active");
-            document.querySelector(`.months${evt.target.dataset.id}`).classList.remove("active");
-        });
-    });
-
-</script>
 <% if(infoconf.footershow ? infoconf.footershow : false){ %>
     <% include partials/footer.ejs %>
 <% } %>
 </body>
-
-<script src="/js/waves.js"></script>
+<%include partials/link.ejs%>
+<script src="/js/chart.js"></script>
 </html>

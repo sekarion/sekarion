@@ -219,7 +219,7 @@ router.get("/days/:id", async(req, res) =>{
                 if(monit.length > 0) {
                     for (let isn = 0; isn < monit.length; isn++) {
                         infos.push([monit[isn].datecheck, parseFloat(monit[isn].latency)]);
-                        nb += parseInt(monit[isn].latency);
+                        nb += parseInt(monit[isn].latency, 10);
                         last = monit[isn].latency;
                     }
                 }
@@ -257,13 +257,13 @@ router.get("/hours/:id", async(req, res) => {
                 if(monit.length > 0) {
                     for (let isn = 0; isn < monit.length; isn++) {
                         infos.push([monit[isn].datecheck, parseFloat(monit[isn].latency)]);
-                        nb += parseInt(monit[isn].latency);
+                        nb += parseInt(monit[isn].latency, 10);
                         last = monit[isn].latency;
                     }
                 }
             });
             //convert datetime to date (timestamp and UTC )
-            let datetime = parseInt((new Date()).getTime() / 300000) * 300000;
+            let datetime = parseInt((new Date()).getTime() / 300000, 10) * 300000;
             //delete 1 hours without function
             datetime = datetime- 3600000;
             return res.json({
@@ -304,12 +304,12 @@ router.get("/weeks/:id", async (req, res)=> {
                     for (let isn = 0; isn < monit.length; isn++) {
                         if (isn === 0) {
                             infos.push([monit[isn].datecheck, parseFloat(monit[isn].latency)]);
-                            nb += parseInt(monit[isn].latency);
+                            nb += parseInt(monit[isn].latency, 10);
                             last = monit[isn].latency;
                         } else {
                             if (infodate - monit[isn].datecheck < 0) {
                                 infos.push([monit[isn].datecheck, parseFloat(monit[isn].latency)]);
-                                nb += parseInt(monit[isn].latency);
+                                nb += parseInt(monit[isn].latency, 10);
                                 last = monit[isn].latency;
                                 infodate = monit[isn].datecheck + (1800 * 60 * 60);
                             }
@@ -355,12 +355,12 @@ router.get("/months/:id", async(req, res) => {
                     for (let isn=0; isn < monit.length; isn++){
                         if(isn === 0){
                             infos.push([monit[0].datecheck, parseFloat(monit[isn].latency)]);
-                            nb += parseInt(monit[isn].latency);
+                            nb += parseInt(monit[isn].latency, 10);
                             last = monit[isn].latency;
                         }else{
                             if(monit[isn].datecheck - infodate < 0){
                                 infos.push([monit[isn].datecheck, parseFloat(monit[isn].latency)]);
-                                nb += parseInt(monit[isn].latency);
+                                nb += parseInt(monit[isn].latency, 10);
                                 last = monit[isn].latency;
                                 infodate = monit[isn].datecheck+ 7200* 60*60;
                             }
