@@ -3,7 +3,7 @@
  * @author Joris Dugué
  * @link https://sekarion.tk
  * @licence http://www.gnu.org/licenses/gpl.txt GNU GPL v3
- * @copyright Copyright (c) 2019 Joris Dugué
+ * @copyright Copyright (c) 2020 Joris Dugué
  **/
 /**
  * @typedef {Function} sleep
@@ -12,7 +12,7 @@
  * @returns {Promise<void>} Promise that will be resolved once the specified milliseconds are elapsed
  */
 async function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 module.exports = sleep;

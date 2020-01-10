@@ -26,7 +26,8 @@ class Log {
         if (returnString) {
             return log;
         } else {
-            console.log(log);
+            console.log(log); // eslint-disable-next-line no-console
+
         }
     }
     /**
@@ -39,7 +40,7 @@ class Log {
         if (returnString) {
             return log;
         } else {
-            console.log(log);
+            console.log(log); // eslint-disable-next-line no-console
         }
     }
     /**
@@ -52,7 +53,7 @@ class Log {
         if (returnString) {
             return log;
         } else {
-            console.log(log);
+            console.log(log); // eslint-disable-next-line no-console
         }
     }
     /**
@@ -65,7 +66,7 @@ class Log {
         if (returnString) {
             return log;
         } else {
-            console.log(log);
+            console.log(log); // eslint-disable-next-line no-console
         }
     }
     info(info, returnString) {
@@ -73,7 +74,7 @@ class Log {
         if (returnString) {
             return log;
         } else {
-            console.log(log);
+            console.log(log); // eslint-disable-next-line no-console
         }
     }
     /**
@@ -88,7 +89,7 @@ class Log {
         this.drafts.set(name, {
             spinning: true,
             text,
-            draft: console.draft(this.info(`${frames[0]} ${text}`, true))
+            draft: console.draft(this.info(`${frames[0]} ${text}`, true)) // eslint-disable-next-line no-console
         });
         for (let i = 0; this.drafts.get(name).spinning; i++) {
             await sleep(50);
