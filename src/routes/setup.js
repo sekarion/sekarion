@@ -25,7 +25,7 @@ router.get("/install/setup", function(req, res) {
         nameconfig: "Sekarion",
         url: `${http}${req.headers.host}`,
         err: false,
-        infoconf : null
+        infoconf: null
     });
 });
 /*router.post('/install/setup', function (req, res) {

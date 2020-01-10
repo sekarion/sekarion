@@ -148,7 +148,7 @@ router.post("/auth", passport.authenticate("local", {
 /**
  * Main route
  **/
-router.get("/", async (req, res) =>{
+router.get("/", async (req, res) => {
     let infoconf =  JSON.parse(fs.readFileSync(__dirname + "/../config/config.json", "utf8"));
     await Monitor.findPublic(async(err, monit) => {
         if(monit.length === 0){
@@ -157,7 +157,7 @@ router.get("/", async (req, res) =>{
                 message: req.flash(),
                 nameconfig: infoconf.websitename,
                 monitor: monit,
-                infoconf : infoconf
+                infoconf: infoconf
             });
         }else{
             let monit2 = [];
