@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <% include partials/head.ejs %>
-    <script src="/js/apexcharts.js" charset="UTF-8" type="application/javascript" async></script>
+    <script src="/js/apexcharts.js" charset="UTF-8" type="application/javascript" defer></script>
 </head>
 <body>
 <% if(infoconf.headershow ? infoconf.headershow : false){ %>
@@ -264,100 +264,93 @@
                             </div>
                         </div>
                         <script type="application/javascript" defer>
-                            /**
-                             * Convert data
-                             **/
-                            function del_months(dt, n) {
-                                return new Date(dt.setMonth(dt.getMonth() - n));
-                            }
+                            document.addEventListener("DOMContentLoaded", function () {
+                                /**
+                                 * Convert data
+                                 **/
 
-                            function del_hours(dt, n) {
-                                return new Date(dt.setHours(dt.getHours() - n));
-                            }
+                                function del_hours(dt, n) {
+                                    return new Date(dt.setHours(dt.getHours() - n));
+                                }
 
-                            function delDays(date, days) {
-                                let result = new Date(date);
-                                result.setDate(result.getDate() - days);
-                                return result;
-                            }
-
-                            let options<%= is %> = {
-                                chart: {
-                                    type: 'area',
-                                    height: 135,
-                                    zoom: {
+                                let options<%= is %> = {
+                                    chart: {
+                                        type: 'area',
+                                        height: 135,
+                                        zoom: {
+                                            enabled: false
+                                        },
+                                        toolbar: {
+                                            show: false
+                                        }
+                                    },
+                                    legend: {
+                                        show: false
+                                    },
+                                    dataLabels: {
                                         enabled: false
                                     },
-                                    toolbar: {
-                                        show: false
-                                    }
-                                },
-                                legend: {
-                                    show: false
-                                },
-                                dataLabels: {
-                                    enabled: false
-                                },
-                                series: [],
-                                markers: {
-                                    size: 0,
-                                    style: 'hollow',
-                                },
-                                xaxis: {
-                                    type: 'datetime',
-                                    min: del_hours(new Date(), 1).getTime(),
-                                },
-                                tooltip: {
-                                    enabled: true,
-                                    x: {
-                                        format: 'dd MMM yyyy'
-                                    },
-                                    onDatasetHover: {
-                                        highlightDataSeries: false,
-                                    },
-                                    y: {
-                                        show: false
-                                    },
-                                    marker: {
+                                    series: [],
+                                    markers: {
                                         size: 0,
-                                        show: true,
+                                        style: 'hollow',
                                     },
-                                },
-                                fill: {
-                                    type: 'gradient',
-                                    gradient: {
-                                        shadeIntensity: 1,
-                                        opacityFrom: 0.7,
-                                        opacityTo: 0.9,
-                                        stops: [0, 100]
-                                    }
-                                },
-                                noData: {
-                                    text: 'Loading...'
-                                }
-                            }
-
-                            var chart<%= is %> = new ApexCharts(
-                                document.querySelector("#timeline-chart<%= is %>"),
-                                options<%= is %>
-                            );
-
-                            chart<%= is %>.render();
-                            axios({
-                                method: 'GET',
-                                url: "/hours/<%= infosincidentspastday[is].monit.id %>",
-                            }).then(function(response) {
-                                chart<%= is %>.updateOptions({
-                                    series: [{
-                                        name: 'Ping',
-                                        data: response.data.metric.data
-                                    }],
                                     xaxis: {
                                         type: 'datetime',
-                                        min: response.data.time,
+                                        min: del_hours(new Date(), 1).getTime(),
                                     },
+                                    tooltip: {
+                                        enabled: true,
+                                        x: {
+                                            format: 'dd MMM yyyy'
+                                        },
+                                        onDatasetHover: {
+                                            highlightDataSeries: false,
+                                        },
+                                        y: {
+                                            show: false
+                                        },
+                                        marker: {
+                                            size: 0,
+                                            show: true,
+                                        },
+                                    },
+                                    fill: {
+                                        type: 'gradient',
+                                        gradient: {
+                                            shadeIntensity: 1,
+                                            opacityFrom: 0.7,
+                                            opacityTo: 0.9,
+                                            stops: [0, 100]
+                                        }
+                                    },
+                                    noData: {
+                                        text: 'Loading...'
+                                    }
+                                }
+
+                                window.chart<%= is %> = new ApexCharts(
+                                    document.querySelector("#timeline-chart<%= is %>"),
+                                    options<%= is %>
+                                );
+                                console.log("chart<%=is%>")
+                                window.chart<%= is %>.render();
+                                axios({
+                                    method: 'GET',
+                                    url: "/hours/<%= infosincidentspastday[is].monit.id %>",
+                                }).then(function (response) {
+                                    window.chart<%= is %>.updateOptions({
+                                        series: [{
+                                            name: 'Ping',
+                                            data: response.data.metric.data
+                                        }],
+                                        xaxis: {
+                                            type: 'datetime',
+                                            min: response.data.time,
+                                        },
+                                    });
+                                    document.getElementById("average<%= infosincidentspastday[is].monit.id %>").innerHTML = response.data.summary.average.toFixed(0) + " ms"
                                 });
-                                document.getElementById("average<%= infosincidentspastday[is].monit.id %>").innerHTML = response.data.summary.average.toFixed(0) +" ms"
                             });
                         </script>
                         <% } %>
@@ -385,5 +378,5 @@
 <% } %>
 </body>
 <%include partials/link.ejs%>
-<script src="/js/chart.js"></script>
+<script src="/js/chart.js" defer></script>
 </html>

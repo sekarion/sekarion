@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
             method: 'GET',
             url: `/days/${evt.target.dataset.id}`,
         }).then(function (response) {
-            window["chart"+evt.target.dataset.number].updateOptions({
+            window[`chart${evt.target.dataset.number}`].updateOptions({
                 series: [{
                     name: 'Ping',
                     data: response.data.metric.data
