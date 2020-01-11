@@ -1,5 +1,7 @@
 # Sekarion
 
+![][/logo.png]
+
 Sekarion Monitor is a script that checks whether your websites and servers are up and running. It comes with a web based usser interface where you can manage your services and websites.
 
 ## Features
