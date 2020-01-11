@@ -3,12 +3,17 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width">
 
-<link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css" media="all">
-<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" media="all">
-<link rel="stylesheet" type="text/css" href="/css/style.css" media="all">
-<link rel="stylesheet" type="text/css" href="/css/waves.min.css" media="all">
-
 <noscript>Your browser does not support JavaScript!</noscript>
+<link rel="preload" href="/css/font-awesome.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="/css/bootstrap.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="/css/style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="/css/waves.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript>
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/waves.min.css">
+</noscript>
 <script src="/js/axios.js" charset="UTF-8" type="application/javascript" async></script>
 <% if(infoconf != null){ %>
     <% if(infoconf.customstyle ? infoconf.customstyle : false){ %>

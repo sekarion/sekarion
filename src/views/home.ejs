@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <% include partials/head.ejs %>
-    <script src="/js/apexcharts.js" charset="UTF-8" type="application/javascript"></script>
+    <script src="/js/apexcharts.js" charset="UTF-8" type="application/javascript" async></script>
 </head>
 <body>
 <% if(infoconf.headershow ? infoconf.headershow : false){ %>
@@ -263,7 +263,7 @@
                                 </div>
                             </div>
                         </div>
-                        <script>
+                        <script type="application/javascript" defer>
                             /**
                              * Convert data
                              **/
