@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="<%= locale%>">
 <head>
     <% include partials/head.ejs %>
 </head>
@@ -24,12 +24,12 @@
                                         </div>
                                     <%}%>
                                     <div class="form-group">
-                                        <input type="text" id="username" name="username" class="form-control" placeholder="Username" required>
+                                        <input type="text" id="username" name="username" class="form-control" placeholder="<%= __("Username")%>" required>
                                     </div>
                                     <div class="form-group">
-                                        <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+                                        <input type="password" id="password" name="password" class="form-control" placeholder="<%= __("Password")%>" required>
                                     </div>
-                                    <button type="submit" class="btn login-form__btn submit w-100 waves-effect">Login</button>
+                                    <button type="submit" class="btn login-form__btn submit w-100 waves-effect"><%= __("Login")%></button>
                                 </form>
                             </div>
                         </div>

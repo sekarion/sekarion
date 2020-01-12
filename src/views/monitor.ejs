@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="<%= locale%>">
 <head>
     <% include partials/head.ejs %>
 </head>
@@ -17,36 +17,36 @@
                             <h4><a href="http://<%=monitor.ip%>"><%= monitor.label ? monitor.label : "UNKNOWN"%></a></h4>
                         </div>
                         <div class="float-right">
-                            <a href="/monitor/<%= monitor.id%>/edit" class="btn btn-success waves-effect">Edit</a>
-                            <a href="/dashboard" class="btn btn-primary waves-effect">Back</a>
+                            <a href="/monitor/<%= monitor.id%>/edit" class="btn btn-success waves-effect"><%= __("Edit")%></a>
+                            <a href="/dashboard" class="btn btn-primary waves-effect"><%= __("Back")%></a>
                         </div>
                     </div>
                     <div class="card-body">
                         <dl class="row mb-0">
-                            <dt class="col-sm-4">Domain/IP:</dt>
+                            <dt class="col-sm-4"><%= __("DomainIP")%>:</dt>
                             <dd class="col-sm-8"><%= monitor.ip%></dd>
                         </dl>
                         <% if(monitor.port){%>
                             <dl class="row mb-0">
-                                <dt class="col-md-4">Port:</dt>
+                                <dt class="col-md-4"><%= __("Port")%>:</dt>
                                 <dd class="col-md-8"><%= monitor.port%></dd>
                             </dl>
                         <%}%>
                         <dl class="row mb-0">
-                            <dt class="col-md-4">Status:</dt>
-                            <dd class="col-md-8 <%= monitor.laststatus ? monitor.laststatus.status : "online"%>"><%= monitor.laststatus ? monitor.laststatus.status : "Never Check"%></dd>
+                            <dt class="col-md-4"><%= __("Status")%>:</dt>
+                            <dd class="col-md-8 <%= monitor.laststatus ? monitor.laststatus.status : "online"%>"><%= monitor.laststatus ? monitor.laststatus.status : __("NeverCheck")%></dd>
                         </dl>
                         <dl class="row mb-0">
-                            <dt class="col-md-4">Latency:</dt>
-                            <dd class="col-md-8"><%= monitor.laststatus ? monitor.laststatus.latency : "Never Check"%> seconds</dd>
+                            <dt class="col-md-4"><%= __("Latency")%>:</dt>
+                            <dd class="col-md-8"><%= monitor.laststatus ? monitor.laststatus.latency : __("NeverCheck")%> <%=__("seconds")%></dd>
                         </dl>
                         <dl class="row mb-0">
-                            <dt class="col-md-4">Privacy:</dt>
-                            <dd class="col-md-8"><%= monitor.privacy ? "Public": "Private" %></dd>
+                            <dt class="col-md-4"><%= __("Privacy")%>:</dt>
+                            <dd class="col-md-8"><%= monitor.privacy ? __("Public"): __("Private") %></dd>
                         </dl>
                         <dl class="row mb-0">
-                            <dt class="col-md-4">Show Monitor if Public:</dt>
-                            <dd class="col-md-8"><%= monitor.showmonitor ? "Yes": "No" %></dd>
+                            <dt class="col-md-4"><%= __("ShowIfPublic")%>:</dt>
+                            <dd class="col-md-8"><%= monitor.showmonitor ? __("Yes"): __("No") %></dd>
                         </dl>
                     </div>
                 </div>
@@ -54,7 +54,7 @@
             <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="header-title text-center">Uptime</h4>
+                        <h4 class="header-title text-center"><%= __("Uptime")%></h4>
                     </div>
                     <div class="card-body">
                         <div id="chart"></div>
@@ -64,15 +64,15 @@
             <div class="col-sm-12 col-md-6 col-lg-8 col-xl-8">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="header-title">Settings</h4>
+                        <h4 class="header-title"><%= __("Settings")%></h4>
                     </div>
                     <div class="card-body">
                         <dl class="row mb-0">
-                            <dt class="col-sm-4">Type:</dt>
+                            <dt class="col-sm-4"><%= __("Type")%>:</dt>
                             <dd class="col-sm-8"><%= monitor.type%></dd>
                         </dl>
                         <dl class="row mb-0">
-                            <dt class="col-md-4">Warning threshold:</dt>
+                            <dt class="col-md-4"><%= __("WarningThreshold")%>:</dt>
                             <dd class="col-md-8"><%= monitor.warning_threshold%></dd>
                         </dl>
                     </div>
@@ -82,9 +82,9 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="button-items">
-                            <a href="/monitor/<%= monitor.id%>/edit" class="btn btn-md btn-success waves-effect" role="button">Edit Monitor</a>
-                            <a href="/monitor/<%= monitor.id%>/addincident" class="btn btn-md btn-orange waves-effect" role="button">Create Incident</a>
-                            <a href="#open-modal" data-toggle="modal" data-target="#deletemonitor" data="<%=monitor.id%>" class="btn btn-md btn-danger waves-effect" role="button">Delete Monitor</a>
+                            <a href="/monitor/<%= monitor.id%>/edit" class="btn btn-md btn-success waves-effect" role="button"><%=__("EditMonitorNone")%></a>
+                            <a href="/monitor/<%= monitor.id%>/addincident" class="btn btn-md btn-orange waves-effect" role="button"><%= __("CreateIncident")%></a>
+                            <a href="#open-modal" data-toggle="modal" data-target="#deletemonitor" data="<%=monitor.id%>" class="btn btn-md btn-danger waves-effect" role="button"><%= __("DeleteMonitor")%></a>
                         </div>
                     </div>
                 </div>
@@ -93,10 +93,10 @@
                 <div class="metrics-container">
                     <div class="timestamp-container">
                         <a class="title-metrics no-link" id="<%=monitor.id%>metrics" href="#<%=monitor.id%>metrics">System Metrics</a>
-                        <button class="timestamp months">Months</button>
-                        <button class="timestamp weeks">Weeks</button>
-                        <button class="timestamp days">Day</button>
-                        <button class="timestamp hour active">Hour</button>
+                        <button class="timestamp months"><%= __("Months")%></button>
+                        <button class="timestamp weeks"><%= __("Weeks")%></button>
+                        <button class="timestamp days"><%= __("Day")%></button>
+                        <button class="timestamp hour active"><%= __("Hour")%></button>
                     </div>
                     <div class="metric border-metric">
                         <div class="metric-info">
@@ -110,14 +110,14 @@
                 </div>
             </div>
             <div class="col-xl-12">
-                <h2>Past Incidents</h2>
+                <h2><%= __("PastIncidents")%></h2>
                 <div class="status-days">
                     <% for(var is=0; is < incedent.length ; is++) { %>
                         <div class="status-day <%= incedent[is].inc.length === 0 ? "no-incidents" : ""%>">
                             <h5 class="date border-color"><%= incedent[is].date.toDateString()%></h5>
                             <% if(incedent[is].inc.length === 0){%>
                                 <p class="color-secondary">
-                                    No incidents reported.
+                                    <%= __("NoIncidents")%>
                                 </p>
                             <%}else{%>
                                 <% for(var isn=0; isn < incedent[is].inc.length; isn++){%>
@@ -133,7 +133,7 @@
                                                 <% for(var io=0; io < varincedent.length; io++){%>
                                                     <li class="timeline-item bg-white rounded ml-3 p-4 shadow <%= varincedent[io].status%>">
                                                         <div class="timeline-arrow"></div>
-                                                        <h2 class="h5 mb-0"><%= varincedent[io].status%></h2><span class="small text-gray"><i class="fa fa-clock-o mr-1"></i><%= new Date(varincedent[io].createAt).toLocaleString()%></span>
+                                                        <h2 class="h5 mb-0"><%= __(varincedent[io].status)%></h2><span class="small text-gray"><i class="fa fa-clock-o mr-1"></i><%= new Date(varincedent[io].createAt).toLocaleString()%></span>
                                                         <p class="text-small mt-2 font-weight-light"><%= varincedent[io].description%></p>
                                                     </li>
                                                 <%}%>
@@ -155,15 +155,15 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Are you sure to delete this monitor ?</h5>
+                <h5 class="modal-title" id="exampleModalLabel"><%= __("DeleteMonitorConfirm")%></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal"><%= __("No")%></button>
                 <form method="post" action="/monitor/<%=monitor.id%>/delete">
-                    <button type="button" class="btn btn-primary">Yes</button>
+                    <button type="button" class="btn btn-primary"><%= __("Yes")%></button>
                     <input type="hidden" name="delete" value="yes">
                 </form>
             </div>

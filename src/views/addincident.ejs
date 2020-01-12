@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="<%= locale%>">
 <head>
     <% include partials/head.ejs %>
 </head>
@@ -11,7 +11,7 @@
             <div class="col-xl-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4><a href="#">Add Incident</a></h4>
+                        <h4><a href="#"><%= __("AddIncident")%></a></h4>
                     </div>
                     <div class="card-body">
                         <form method="POST" class="login-input" onsubmit="return checkMessage(this);">
@@ -25,41 +25,41 @@
                             <%}%>
                             <div class="form-group">
                                 <label for="nameincident">
-                                    Incident Name
+                                    <%= __("IncidentNameNone")%>
                                 </label>
-                                <input type="text" id="nameincident" name="nameincident" class="form-control" placeholder="Incident Name" required>
+                                <input type="text" id="nameincident" name="nameincident" class="form-control" placeholder="<%= __("IncidentNameNone")%>" required>
                             </div>
                             <div class="pb_select-wrap">
                                 <label for="status">
-                                    Incident status
+                                    <%= __("Incidentstatus")%>
                                 </label>
                                 <select id="status" name="status" class="form-control" onchange="showHideEle(this)" required>
-                                    <option value="" selected="" disabled>Select Status</option>
-                                    <option value="investigating">Investigating</option>
-                                    <option value="identified">Identified</option>
-                                    <option value="monitoring">Monitoring</option>
-                                    <option value="resolved">Resolved</option>
+                                    <option value="" selected="" disabled><%= __("SelectStatus")%></option>
+                                    <option value="investigating"><%= __("investigating")%></option>
+                                    <option value="identified"><%= __("identified")%></option>
+                                    <option value="monitoring"><%= __("Monitoring")%></option>
+                                    <option value="resolved"><%= __("Resolved")%></option>
                                 </select>
                             </div>
                             <div class="pb_select-wrap">
                                 <label for="message">
-                                    Message
+                                    <%= __("Message")%>
                                 </label>
                                 <textarea id="message" name="message" class="form-control"></textarea>
                             </div>
                             <div class="pb_select-wrap">
                                 <label for="affected">
-                                    Component affected ( <%= monitor.label ? monitor.label: monitor.ip%>)
+                                    <%= __("ComponentAffected")%> ( <%= monitor.label ? monitor.label: monitor.ip%>)
                                 </label>
-                                <select id="affected" name="affected" class="form-control pb_height-50 reverse" required>
-                                    <option value="operational">Operational</option>
-                                    <option value="degraded">Degraded performance</option>
-                                    <option value="partialoutage">Partial outage</option>
-                                    <option value="majoroutage">Major outage</option>
-                                    <option value="maintenance">Under maintenance</option>
+                                <select id="affected" name="affected" class="form-control" required>
+                                    <option value="operational"><%= __("Operational")%></option>
+                                    <option value="degraded"><%= __("DegradedPerformance")%></option>
+                                    <option value="partialoutage"><%= __("PartialOutage")%></option>
+                                    <option value="majoroutage"><%=__("MajorOutage")%></option>
+                                    <option value="maintenance"><%= __("UnderMaintenance")%></option>
                                 </select>
                             </div>
-                            <button class="btn text-center btn-primary w-100" type="submit">Create Incident</button>
+                            <button class="btn text-center btn-primary w-100" type="submit"><%= __("CreateIncident")%></button>
                         </form>
                     </div>
                 </div>

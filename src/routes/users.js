@@ -22,7 +22,7 @@ function ensureAuthenticated(req, res, next){
     if(req.isAuthenticated()){
         return next();
     } else {
-        req.flash("error_msg","You are not logged in");
+        req.flash("error_msg", res.__("NotLogin"));
         res.redirect("/auth");
     }
 }
@@ -37,11 +37,11 @@ function isadmin(req, res, next){
         if(req.user.rank.toLowerCase() === "admin"){
             return next();
         }else{
-            req.flash("error_msg","You don't have here because this a restriced area");
+            req.flash("error_msg", res.__("RestrictArea"));
             return res.redirect("/profile");
         }
     } else {
-        req.flash("error_msg","You are not logged in");
+        req.flash("error_msg", res.__("NotLogin"));
         return res.redirect("/auth");
     }
 }
@@ -49,7 +49,8 @@ function isadmin(req, res, next){
 router.get("/profile", ensureAuthenticated, function (req, res) {
     let info = JSON.parse(fs.readFileSync(__dirname + "/../config/config.json", "utf8"));
     res.render("profil", {
-        titlepage: `Profil of ${req.user.username}`,
+        locale: req.locale,
+        titlepage: res.__("ProfilOf", {name: `${req.user.username}`}),
         message: req.flash(),
         nameconfig: info.websitename,
         infoconf: info
@@ -65,14 +66,14 @@ router.post("/profile", ensureAuthenticated, function (req, res) {
 
             User.getUserByUsername(req.body.username, (err, usr) => {
                 if(err){
-                    req.flash("error", "Error db");
+                    req.flash("error", res.__("ErrorDB"));
                     return res.redirect("/profile");
                 }
                 if(!usr || usr.username === user.username) {
                     //check if email already exists
                     User.getUserByEmail(req.body.email, (err, useremail) => {
                         if (err) {
-                            req.flash("error", "Error db");
+                            req.flash("error", res.__("ErrorDB"));
                             return res.redirect("/profile");
                         }
                         if(!useremail || useremail.email === user.email){
@@ -80,28 +81,28 @@ router.post("/profile", ensureAuthenticated, function (req, res) {
                             useremail.email = req.body.email;
                             User.UpdateUser(useremail, req.body, function (err, user) {
                                 if(err){
-                                    req.flash("error", "An error has occurred");
+                                    req.flash("error", res.__("Error"));
                                     return res.redirect("/profile");
                                 }else if(!user){
-                                    req.flash("error", "The user doesn't exists");
+                                    req.flash("error", res.__("UserNotExist"));
                                     return res.redirect("/profile");
                                 }else{
-                                    req.flash("success_msg", "Your profile have been updated");
+                                    req.flash("success_msg", res.__("ProfilUpdated"));
                                     return res.redirect("/profile");
                                 }
                             });
                         }else{
-                            req.flash("error", "Email already exists");
+                            req.flash("error", res.__("EmailExist"));
                             return res.redirect("/profile");
                         }
                     });
                 }else{
-                    req.flash("error", "Username already exists");
+                    req.flash("error", res.__("UserExist"));
                     return res.redirect("/profile");
                 }
             });
         }else{
-            req.flash("error_msg","User not found");
+            req.flash("error_msg",res.__("UserNotfound"));
             return res.redirect("/auth");
         }
     });
@@ -112,11 +113,12 @@ router.get("/users", isadmin, function (req, res) {
     User.findAll((err, users) => {
         if(err){
             //redirect admin in
-            req.flash("error", "No User found");
+            req.flash("error", res.__("UserNotfound"));
             return res.redirect("/dashboard");
         }else{
             return res.render("users",{
-                titlepage: "User Management",
+                locale: req.locale,
+                titlepage: res.__("UserManagement"),
                 message: req.flash(),
                 nameconfig: info.websitename,
                 users: users,
@@ -131,7 +133,8 @@ router.get("/users", isadmin, function (req, res) {
 router.get("/adduser", isadmin, function (req, res) {
     let info = JSON.parse(fs.readFileSync(__dirname + "/../config/config.json", "utf8"));
     return res.render("adduser",{
-        titlepage: "User Add",
+        locale: req.locale,
+        titlepage: res.__("UserAdd"),
         message: req.flash(),
         nameconfig: info.websitename,
         userinfo: null,
@@ -145,15 +148,16 @@ router.get("/edit/:id", isadmin, function (req, res) {
     let info = JSON.parse(fs.readFileSync(__dirname + "/../config/config.json", "utf8"));
     User.getUserById(req.params.id, function (err, user) {
         if(err){
-            req.flash("error", "Error DB");
+            req.flash("error", res.__("ErrorDB"));
             return res.redirect("/dashboard");
         }
         if(!user){
-            req.flash("error", "User not found");
+            req.flash("error", res.__("UserNotfound"));
             return res.redirect("/dashboard");
         }else{
             return res.render("adduser", {
-                titlepage: `Edit Profil of ${user.username}`,
+                locale: req.locale,
+                titlepage: res.__("EditProfil", {name: `${user.username}`}),
                 message: req.flash(),
                 nameconfig: info.websitename,
                 userinfo : user,
@@ -169,24 +173,24 @@ router.post("/edit/:id", isadmin, function (req, res) {
     //check if user exist
     User.getUserById(req.params.id, function (err, user) {
         if(err){
-            req.flash("error", "Error DB");
+            req.flash("error", res.__("ErrorDB"));
             return res.redirect("/dashboard");
         }
         if(!user){
-            req.flash("error", "User not found");
+            req.flash("error", res.__("UserNotfound"));
             return res.redirect("/dashboard");
         }else{
             //check if email and username already exists
             User.getUserByUsername(req.body.username, (err, usr) => {
                 if(err){
-                    req.flash("error", "Error db");
+                    req.flash("error", res.__("ErrorDB"));
                     return res.redirect("/dashboard");
                 }
                 if(!usr || usr.username === user.username) {
                     //check if email already exists
                     User.getUserByEmail(req.body.email, (err, useremail) => {
                         if (err) {
-                            req.flash("error", "Error db");
+                            req.flash("error", res.__("ErrorDB"));
                             return res.redirect("/adduser");
                         }
                         if(!useremail || useremail.email === user.email){
@@ -195,23 +199,23 @@ router.post("/edit/:id", isadmin, function (req, res) {
                             useremail.rank = req.body.level;
                             User.UpdateUser(useremail, req.body, function (err, user) {
                                 if(err){
-                                    req.flash("error", "An error has occurred");
+                                    req.flash("error", res.__("Error"));
                                     return res.redirect("/users");
                                 }else if(!user){
-                                    req.flash("error", "An error has occurred");
+                                    req.flash("error", res.__("Error"));
                                     return res.redirect("/users");
                                 }else{
-                                    req.flash("success_msg", "The account have been updated");
+                                    req.flash("success_msg", res.__("AccountUpdated"));
                                     return res.redirect("/users");
                                 }
                             });
                         }else{
-                            req.flash("error", "Email already exists");
+                            req.flash("error", res.__("EmailExist"));
                             return res.redirect("/users");
                         }
                     });
                 }else{
-                    req.flash("error", "Username already exists");
+                    req.flash("error", res.__("UserExist"));
                     return res.redirect("/users");
                 }
             });
@@ -224,14 +228,14 @@ router.post("/adduser", isadmin, function (req, res) {
         //check if email and username already exists
         User.getUserByUsername(req.body.username, (err, user) =>{
             if(err){
-                req.flash("error", "Error db");
+                req.flash("error", res.__("ErrorDB"));
                 return res.redirect("/adduser");
             }
             if(!user){
                 //check if email already exists
                 User.getUserByEmail(req.body.email, (err, user) => {
                     if(err){
-                        req.flash("error", "Error db");
+                        req.flash("error", res.__("ErrorDB"));
                         return res.redirect("/adduser");
                     }
                     if(!user){
@@ -246,25 +250,25 @@ router.post("/adduser", isadmin, function (req, res) {
                         User.createUser(newUser, function (err, user) {
                             /* eslint-enable*/
                             if(err){
-                                req.flash("error", "An error has occurred");
+                                req.flash("error", res.__("Error"));
                                 return res.redirect("/adduser");
                             }else{
-                                req.flash("success_msg", "The account have been created");
+                                req.flash("success_msg", res.__("AccountCreated"));
                                 return res.redirect("/adduser");
                             }
                         });
                     }else{
-                        req.flash("error", "Email already exists");
+                        req.flash("error", res.__("EmailExist"));
                         return res.redirect("/adduser");
                     }
                 });
             }else{
-                req.flash("error", "Username already exists");
+                req.flash("error", res.__("UserExist"));
                 return res.redirect("/adduser");
             }
         });
     }else{
-        req.flash("error", "Missing params");
+        req.flash("error", res.__("MissingParams"));
         return res.redirect("/adduser");
     }
 });

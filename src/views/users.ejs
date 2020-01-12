@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="<%= locale%>">
 <head>
     <% include partials/head.ejs %>
 </head>
@@ -12,10 +12,10 @@
                 <div class="card m-b-30">
                     <div class="card-header">
                         <div class="float-left">
-                            <a href="#"><h4>Users Account</h4></a>
+                            <a href="#"><h4><%= __("UsersAccount")%></h4></a>
                         </div>
                         <div class="float-right">
-                            <a class="btn btn-success" href="/adduser">Add User</a>
+                            <a class="btn btn-success" href="/adduser"><%= __("UserAdd")%></a>
                         </div>
                     </div>
                     <div class="card-body">
@@ -24,11 +24,11 @@
                                 <thead>
                                 <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col">Name</th>
+                                    <th scope="col"><%= __("Username")%></th>
                                     <th scope="col">Email</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Level</th>
-                                    <th scope="col">Actions</th>
+                                    <th scope="col"><%= __("Status")%></th>
+                                    <th scope="col"><%= __("Level")%></th>
+                                    <th scope="col"><%= __("Actions")%></th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -49,13 +49,13 @@
                                             <%= users[i].email%>
                                         </td>
                                         <td>
-                                            <div class="badge badge-<%if(users[i].rank === false){%>danger<%}else{%>success<%}%>"><%if (users[i].enable){%>Enable<%}else{%>Disable<%}%></div>
+                                            <div class="badge badge-<%if(users[i].rank === false){%>danger<%}else{%>success<%}%>"><%if (users[i].enable){%><%= __("Enable")%><%}else{%><%= __("Disable")%><%}%></div>
                                         </td>
                                         <td>
                                             <div class="badge badge-<%if(users[i].rank === "Admin"){%>danger<%}else{%>success<%}%>"><%= users[i].rank%></div>
                                         </td>
                                         <td>
-                                            <a href="<% if(user.id == users[i]._id){ %>/profile<%}else{%>/edit/<%=users[i]._id%><%}%>" class="btn btn-primary btn-sm">Details</a>
+                                            <a href="<% if(user.id == users[i]._id){ %>/profile<%}else{%>/edit/<%=users[i]._id%><%}%>" class="btn btn-primary btn-sm"><%= __("Details")%></a>
                                         </td>
                                     </tr>
                                 <% }%>

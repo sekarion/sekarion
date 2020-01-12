@@ -18,9 +18,15 @@ let http = "http://";
 if(config.httpsenable){
     http = "https://";
 }
+router.get('/lang/:lang', function (req, res) {
+    res.cookie('langcookie', req.params.lang);
+    res.setLocale(req, locale);
+    res.redirect('back');
+});
 router.get("/install/setup", function(req, res) {
     res.render("install/setup", {
-        titlepage: "Installation de Sekarion",
+        locale: req.locale,
+        titlepage: res.__("InstallSekarion"),
         message: req.flash(),
         nameconfig: "Sekarion",
         url: `${http}${req.headers.host}`,
@@ -43,7 +49,8 @@ if(req.body.db_type === "rethink"){
 //create the user
 router.get("/setupuser", function(req, res){
   res.render("install/createuser",{
-      titlepage: "Create User of Sekarion",
+      locale: req.locale,
+      titlepage: res.__("CreateUserInstall"),
       message: req.flash(),
       err: false,
       messagecode: null,
@@ -84,7 +91,8 @@ router.post("/setupuser", function(req, res){
         User.createUser(newUser, function (err, user) { // eslint-disable-line no-unused-vars
             if(err){
                 res.render("install/createuser",{
-                    titlepage: "Create User of Sekarion",
+                    locale: req.locale,
+                    titlepage: res.__("CreateUserInstall"),
                     message: req.flash(),
                     err: false,
                     messagecode: err,
@@ -93,10 +101,11 @@ router.post("/setupuser", function(req, res){
                 });
             }else{
                 res.render("install/createuser",{
-                    titlepage: "Create User of Sekarion",
+                    locale: req.locale,
+                    titlepage: res.__("CreateUserInstall"),
                     message: req.flash(),
                     err: false,
-                    messagecode: "The user has been created please restart the site to login",
+                    messagecode: res.__("UserCreatedInstall"),
                     infoconf: null,
                     nameconfig: "Sekarion"
                 });
@@ -105,7 +114,7 @@ router.post("/setupuser", function(req, res){
     }else{
         return res.status(400).json({
             err: true,
-            data: "No method for this use mongo for moment"
+            data: res.__("NoMethodInstallDefault")
         });
     }
 });
@@ -127,11 +136,6 @@ router.post("/testdb", function (req, res) {
                         data: req.body,
                         err: false
                     });
-                    /*return res.render('install/success',{
-                        data: req.body,
-                        message: req.flash(),
-                        err: false
-                    });*/
                 }
             });
         } else if (req.body.db_user) {
@@ -185,6 +189,7 @@ router.post("/installlib", function (req, res) {
             }
             const ls =  spawn(cmd, ["i", "mongoose", "-s"]);
             //send the response
+            //don"t trad here for moment
             ls.on("close", (code) => {
                 if (code === 0) {
                     return res.json({

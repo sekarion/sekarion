@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="<%= locale%>">
 <head>
     <% include partials/head.ejs %>
 </head>
@@ -13,10 +13,10 @@
                     <div class="card login-form mb-0">
                         <div class="card-header">
                             <div class="float-left">
-                                <a href="#"><h4>Settings</h4></a>
+                                <a href="#"><h4><%= __("Settings")%></h4></a>
                             </div>
                             <div class="float-right">
-                                <a class="btn btn-primary" href="/dashboard">Back</a>
+                                <a class="btn btn-primary" href="/dashboard"><%=__("Back")%></a>
                             </div>
                         </div>
                         <div class="card-body pt-5">
@@ -30,46 +30,46 @@
                                 </div>
                                 <%}%>
                                 <div class="form-group">
-                                    <label for="websitename">Website Name</label>
+                                    <label for="websitename"><%= __("WebSiteName")%></label>
                                     <input type="text" class="form-control" id="websitename" value="<%= config.websitename%>" name="websitename" placeholder="Name of Website" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="websiteport">Website Port</label>
+                                    <label for="websiteport"><%= __("WebSitePort")%></label>
                                     <input type="text" class="form-control" id="websiteport" value="<%= config.websiteport%>" name="websiteport" placeholder="Port" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="baseurl">Base Url</label>
-                                    <input type="text" class="form-control" id="baseurl" value="<%= config.baseurl%>" name="baseurl" placeholder="base URL" required>
+                                    <label for="baseurl"><%= __("BaseUrl")%></label>
+                                    <input type="text" class="form-control" id="baseurl" value="<%= config.baseurl%>" name="baseurl" placeholder="<%= __("BaseUrl")%>" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="secretsession">Secret Session </label>
-                                    <input type="text" class="form-control" id="secretsession" value="<%= config.secretsession%>" name="secretsession" placeholder="Secret Session" required>
+                                    <label for="secretsession"><%= __("SecretSession")%></label>
+                                    <input type="text" class="form-control" id="secretsession" value="<%= config.secretsession%>" name="secretsession" placeholder="<%= __("SecretSession")%>" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="cb1">Show Header in public page</label>
+                                    <label for="cb1"><%= __("ShowHeader")%></label>
                                     <input class="tgl tgl-light" id="cb1" type="checkbox" name="publicheader" <%= config.headershow ? "checked": ""%>>
                                     <label class="tgl-btn" for="cb1"></label>
                                 </div>
                                 <div class="form-group">
-                                    <label for="cb2">Show Footer in public page</label>
+                                    <label for="cb2"><%= __("ShowFooter")%></label>
                                     <input class="tgl tgl-light" id="cb2" type="checkbox" name="publicfooter" <%= config.footershow ? "checked": ""%> >
                                     <label class="tgl-btn" for="cb2"></label>
                                 </div>
                                 <div class="form-group">
-                                    <label for="cb3">Custom css</label>
+                                    <label for="cb3"><%= __("CustomCSS")%></label>
                                     <input class="tgl tgl-light" id="cb3" type="checkbox" name="customstyle" <%= config.customstyle ? "checked": ""%> >
                                     <label class="tgl-btn" for="cb3"></label>
                                 </div>
                                 <div class="form-group">
                                     <label for="customcss">CSS</label>
-                                    <textarea id="message" name="customcss" id="customcss" class="form-control" style="border: 1px solid;" placeholder="please add css here for custom"><%= config.customcss%></textarea>
+                                    <textarea id="message" name="customcss" id="customcss" class="form-control" style="border: 1px solid;" placeholder="<%= __("CustomCSSDesc")%>"><%= config.customcss%></textarea>
                                 </div>
                                 <div class="form-group">
-                                    <label for="cb4">Show Login Link</label>
+                                    <label for="cb4"><%=__("ShowLogin")%></label>
                                     <input class="tgl tgl-light" id="cb4" type="checkbox" name="showlogin" <%= config.showlogin ? "checked": ""%> >
                                     <label class="tgl-btn" for="cb4"></label>
                                 </div>
-                                <button type="submit" class="btn login-form__btn submit w-100 waves-effect">Update Config</button>
+                                <button type="submit" class="btn login-form__btn submit w-100 waves-effect"><%= __("UpdateConfig")%></button>
                             </form>
                         </div>
                     </div>

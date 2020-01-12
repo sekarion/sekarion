@@ -13,11 +13,40 @@
                     <ul class="navbar-right ml-auto list-inline float-right mb-0">
                         <li class="dropdown navinfo list-inline-item d-none d-md-inline-block">
                             <a class="nav-link dropdown-toggle waves-effect" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                                <img src="/img/flags/us_flag.jpg" class="mr-2" height="12" alt=""><span>English</span>
+                                <% if(locale == "en"){ %>
+                                    <img src="/img/flags/us_flag.jpg" class="mr-2" height="12" alt="">
+                                    <span> English</span>
+                                <% }else if(locale == "fr"){ %>
+                                    <img src="/img/flags/french_flag.jpg" class="mr-2" height="12" alt="">
+                                    <span> French</span>
+                                <% }else if(locale == "es"){ %>
+                                    <img src="/img/flags/spain_flag.jpg" class="mr-2" height="12" alt="">
+                                    <span> Spanish</span>
+                                <% } %>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-animated language-switch">
-                                <a class="dropdown-item" href="#"><img src="/img/flags/french_flag.jpg" alt="" height="16"><span> French </span></a>
-                                <a class="dropdown-item" href="#"><img src="/img/flags/spain_flag.jpg" alt="" height="16"><span> Spanish </span></a>
+                                <% if(locale == "en"){ %>
+                                    <a class="dropdown-item" href="/lang/fr">
+                                        <img src="/img/flags/french_flag.jpg" alt="" height="16"><span> French </span>
+                                    </a>
+                                    <a class="dropdown-item" href="/lang/es">
+                                        <img src="/img/flags/spain_flag.jpg" alt="" height="16"><span> Spanish </span>
+                                    </a>
+                                <% }else if(locale == "fr"){ %>
+                                    <a class="dropdown-item" href="/lang/en">
+                                        <img src="/img/flags/us_flag.jpg" alt="" height="16"><span> English </span>
+                                    </a>
+                                    <a class="dropdown-item" href="/lang/es">
+                                        <img src="/img/flags/spain_flag.jpg" alt="" height="16"><span> Spanish </span>
+                                    </a>
+                                <% }else if(locale == "es"){ %>
+                                    <a class="dropdown-item" href="/lang/en">
+                                        <img src="/img/flags/us_flag.jpg" alt="" height="16"><span> English </span>
+                                    </a>
+                                    <a class="dropdown-item" href="/lang/fr">
+                                        <img src="/img/flags/french_flag.jpg" alt="" height="16"><span> French </span>
+                                    </a>
+                                <% } %>
                             </div>
                         </li>
                         <li class="menu-item dropdown navinfo list-inline-item">

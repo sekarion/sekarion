@@ -18,9 +18,28 @@ try{
     let path = require("path");
     let IndexRouter = require("./routes/index");
     let passport = require("passport");
-//let LocalStrategy = require('passport-local').Strategy;
+    let i18n = require('i18n');
     let port = config.websiteport || 3000;
-//lance express
+    i18n.configure({
+        // setup some locales - other locales default to en silently
+        locales: ['en', 'fr','es'],
+        // sets a custom cookie name to parse locale settings from
+        cookie: 'langcookie',
+        // where to store json files - defaults to './src/locales'
+        directory: __dirname + '/locales',
+        //defaultLocale: config.locale,
+        // control mode on directory creation - defaults to NULL which defaults to umask of process user. Setting has no effect on win.
+        directoryPermissions: '755',
+        // watch for changes in json files to reload locale on updates - defaults to false
+        autoReload: true,
+        // whether to write new locale information to disk - defaults to true
+        updateFiles: false,
+        // sync locale information across all files - defaults to false
+        syncFiles: false,
+        register: global
+    });
+
+    //launch express
     let app = express();
 
     let servicelaunch = 0;
@@ -33,11 +52,10 @@ try{
         //sinon utilise la compression pour charger le site en plus rapide
         return compression.filter(req, res);
     }
-//secu contre les failles
+    //secu contre les failles
     app.use(helmet());
-//bloque les attaques XSS
-
-//fix la rapidité avec la compression
+    //bloque les attaques XSS
+    //fix la rapidité avec la compression
     app.use(compression({
         filter: shouldCompress
     }));
@@ -48,6 +66,8 @@ try{
     app.set("views", path.join(__dirname, "views"));
     app.set("view engine", "ejs");
     app.use(cookieParser());
+    //init i18n now
+    app.use(i18n.init);
 //charge le dossier entier de public pour l'avoir n'importe où
     app.use(express.static(path.join(__dirname, "public")));
 //renvoie du json

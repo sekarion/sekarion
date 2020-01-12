@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="<%= locale%>">
 <head>
     <% include partials/head.ejs %>
     <script src="/js/apexcharts.js" charset="UTF-8" type="application/javascript" defer></script>
@@ -29,7 +29,7 @@
                                                 <% for(let incid = 0;incid < todaystatus[i].incident.length; incid++){ %>
                                                     <% if(todaystatus[i].incident[incid].inc.length === 0){ %>
                                                         <!-- No incident -->
-                                                        <small class="green">Online</small>
+                                                        <small class="green"><%= __("Online")%></small>
                                                     <% }else{ %>
                                                         <% let impacttoday = todaystatus[i].incident[incid].inc[0].impact ? todaystatus[i].incident[incid].inc[0].impact : 0 %>
                                                         <% for(let incidp = 1;incidp < todaystatus[i].incident[incid].inc.length; incidp++){ %>
@@ -38,15 +38,15 @@
                                                         <% } %>
                                                         <% } %>
                                                         <% if(impacttoday === 0){ %>
-                                                            <small class="green">Online</small>
+                                                            <small class="green"><%= __("Online")%></small>
                                                         <% }else if(impacttoday == 1){ %>
-                                                            <small class="yellow">Partial Outage</small>
+                                                            <small class="yellow"><%= __("PartialOutage")%></small>
                                                         <% }else if(impacttoday == 2){ %>
-                                                            <small class="Major">Major Outage</small>
+                                                            <small class="Major"><%= __("MajorOutage")%></small>
                                                         <% }else if(impacttoday == 3){ %>
-                                                            <small class="Critical">Outage</small>
+                                                            <small class="Critical"><%= __("Outage")%></small>
                                                         <% }else { %>
-                                                            <small class="online">Online</small>
+                                                            <small class="online"><%= __("Online")%></small>
                                                         <% } %>
                                                     <% } %>
                                                 <% } %>
@@ -63,7 +63,7 @@
                                                 <% if(incidents[i].inc[0].impact === 0){ %>
                                                     <rect height="34" width="3" data-toggle="popover" data-placement="bottom"
                                                           data-content="<% if(monitor[isn].incident[i].inc.length == 0){ %>
-                                                                No downtime recorded on this day.
+                                                                <%= __("NoDowntimeRecorded")%>
                                                             <% }else{ %>
                                                                 <% for(let inc = 0; inc < monitor[isn].incident[i].inc.length; inc++){ %>
                                                                     <a href='/incident/<%= monitor[isn].incident[i].inc[inc].id %>'>
@@ -78,7 +78,7 @@
                                                     <rect height="34" width="3"
                                                           data-toggle="popover" data-placement="bottom"
                                                           data-content="<% if(monitor[isn].incident[i].inc.length == 0){ %>
-                                                                No downtime recorded on this day.
+                                                                <%= __("NoDowntimeRecorded")%>
                                                             <% }else{ %>
                                                                 <% for(let inc = 0; inc < monitor[isn].incident[i].inc.length; inc++){ %>
                                                                     <a href='/incident/<%= monitor[isn].incident[i].inc[inc].id %>'>
@@ -92,7 +92,7 @@
                                                 <% }else if(incidents[i].inc[0].impact === 2){ %>
                                                     <rect height="34" width="3" data-toggle="popover"
                                                           data-content="<% if(monitor[isn].incident[i].inc.length == 0){ %>
-                                                                No downtime recorded on this day.
+                                                                <%= __("NoDowntimeRecorded")%>
                                                             <% }else{ %>
                                                                 <% for(let inc = 0; inc < monitor[isn].incident[i].inc.length; inc++){ %>
                                                                     <a href='/incident/<%= monitor[isn].incident[i].inc[inc].id %>'>
@@ -106,7 +106,7 @@
                                                 <% }else if(incidents[i].inc[0].impact === 3){ %>
                                                     <rect height="34" width="3" data-toggle="popover"
                                                           data-content="<% if(monitor[isn].incident[i].inc.length == 0){ %>
-                                                                No downtime recorded on this day.
+                                                                <%= __("NoDowntimeRecorded")%>
                                                             <% }else{ %>
                                                                 <% for(let inc = 0; inc < monitor[isn].incident[i].inc.length; inc++){ %>
                                                                     <a href='/incident/<%= monitor[isn].incident[i].inc[inc].id %>'>
@@ -120,7 +120,7 @@
                                                 <% }else { %>
                                                     <rect height="34" width="3" data-toggle="popover"
                                                           data-content="<% if(monitor[isn].incident[i].inc.length == 0){ %>
-                                                                No downtime recorded on this day.
+                                                                <%= __("NoDowntimeRecorded")%>
                                                             <% }else{ %>
                                                                 <% for(let inc = 0; inc < monitor[isn].incident[i].inc.length; inc++){ %>
                                                                     <a href='/incident/<%= monitor[isn].incident[i].inc[inc].id %>'>
@@ -144,7 +144,7 @@
                                                         <rect height="34" width="3" x="<%= 5 * [i] %>"
                                                               data-toggle="popover"
                                                           data-content="<% if(monitor[isn].incident[i].inc.length == 0){ %>
-                                                                No downtime recorded on this day.
+                                                                <%= __("NoDowntimeRecorded")%>
                                                             <% }else{ %>
                                                                 <% for(let inc = 0; inc < monitor[isn].incident[i].inc.length; inc++){ %>
                                                                     <a href='/incident/<%= monitor[isn].incident[i].inc[inc].id %>'>
@@ -159,7 +159,7 @@
                                                         <rect height="34" width="3" x="<%= 5 * [i] %>"
                                                               data-toggle="popover"
                                                           data-content="<% if(monitor[isn].incident[i].inc.length == 0){ %>
-                                                                No downtime recorded on this day.
+                                                                <%= __("NoDowntimeRecorded")%>
                                                             <% }else{ %>
                                                                 <% for(let inc = 0; inc < monitor[isn].incident[i].inc.length; inc++){ %>
                                                                     <a href='/incident/<%= monitor[isn].incident[i].inc[inc].id %>'>
@@ -174,7 +174,7 @@
                                                         <rect height="34" width="3" x="<%= 5 * [i] %>"
                                                               data-toggle="popover"
                                                           data-content="<% if(monitor[isn].incident[i].inc.length == 0){ %>
-                                                                No downtime recorded on this day.
+                                                                <%= __("NoDowntimeRecorded")%>
                                                             <% }else{ %>
                                                                 <% for(let inc = 0; inc < monitor[isn].incident[i].inc.length; inc++){ %>
                                                                     <a href='/incident/<%= monitor[isn].incident[i].inc[inc].id %>'>
@@ -189,7 +189,7 @@
                                                         <rect height="34" width="3" x="<%= 5 * [i] %>"
                                                               data-toggle="popover"
                                                           data-content="<% if(monitor[isn].incident[i].inc.length == 0){ %>
-                                                                No downtime recorded on this day.
+                                                                <%= __("NoDowntimeRecorded")%>
                                                             <% }else{ %>
                                                                 <% for(let inc = 0; inc < monitor[isn].incident[i].inc.length; inc++){ %>
                                                                     <a href='/incident/<%= monitor[isn].incident[i].inc[inc].id %>'>
@@ -204,7 +204,7 @@
                                                         <rect height="34" width="3" x="<%= 5 * [i] %>"
                                                               data-toggle="popover"
                                                           data-content="<% if(monitor[isn].incident[i].inc.length == 0){ %>
-                                                                No downtime recorded on this day.
+                                                                <%= __("NoDowntimeRecorded")%>
                                                             <% }else{ %>
                                                                 <% for(let inc = 0; inc < monitor[isn].incident[i].inc.length; inc++){ %>
                                                                     <a href='/incident/<%= monitor[isn].incident[i].inc[inc].id %>'>
@@ -220,7 +220,7 @@
                                                     <rect height="34" width="3" x="<%= 5 * [i] %>" y="0"
                                                           data-toggle="popover"
                                                           data-content="<% if(monitor[isn].incident[i].inc.length == 0){ %>
-                                                                No downtime recorded on this day.
+                                                                <%= __("NoDowntimeRecorded")%>
                                                             <% }else{ %>
                                                                 <% for(let inc = 0; inc < monitor[isn].incident[i].inc.length; inc++){ %>
                                                                     <a href='/incident/<%= monitor[isn].incident[i].inc[inc].id %>'>
@@ -246,10 +246,10 @@
                             <div class="timestamp-container">
                                 <a class="title-metrics no-link" id="<%= infosincidentspastday[is].monit.id %>metrics"
                                    href="#<%= infosincidentspastday[is].monit.id %>metrics">System Metrics</a>
-                                <button class="timestamp months months<%= infosincidentspastday[is].monit.id %>" data-number="<%=is%>" data-id="<%= infosincidentspastday[is].monit.id %>">Months</button>
-                                <button class="timestamp weeks weeks<%= infosincidentspastday[is].monit.id %>" data-number="<%=is%>" data-id="<%= infosincidentspastday[is].monit.id %>">Weeks</button>
-                                <button class="timestamp days days<%= infosincidentspastday[is].monit.id %>" data-number="<%=is%>" data-id="<%= infosincidentspastday[is].monit.id %>">Day</button>
-                                <button class="timestamp active hours hours<%= infosincidentspastday[is].monit.id %>" data-number="<%=is%>" data-id="<%= infosincidentspastday[is].monit.id %>">Hour</button>
+                                <button class="timestamp months months<%= infosincidentspastday[is].monit.id %>" data-number="<%=is%>" data-id="<%= infosincidentspastday[is].monit.id %>"><%=__("Months")%></button>
+                                <button class="timestamp weeks weeks<%= infosincidentspastday[is].monit.id %>" data-number="<%=is%>" data-id="<%= infosincidentspastday[is].monit.id %>"><%=__("Weeks")%></button>
+                                <button class="timestamp days days<%= infosincidentspastday[is].monit.id %>" data-number="<%=is%>" data-id="<%= infosincidentspastday[is].monit.id %>"><%=__("Day")%></button>
+                                <button class="timestamp active hours hours<%= infosincidentspastday[is].monit.id %>" data-number="<%=is%>" data-id="<%= infosincidentspastday[is].monit.id %>"><%=__("Hour")%></button>
                             </div>
                             <div class="metric border-metric">
                                 <div class="metric-info">
@@ -333,7 +333,6 @@
                                     document.querySelector("#timeline-chart<%= is %>"),
                                     options<%= is %>
                                 );
-                                console.log("chart<%=is%>")
                                 window.chart<%= is %>.render();
                                 axios({
                                     method: 'GET',
@@ -361,13 +360,13 @@
         <% }else{ %>
         <div class="text-center">
             <p>
-                No monitors are currently public. <br>
-                Please log in to make an audience or to view the status of one of the monitors that you have set up
+                <%= __("NoMonitorPublicFirst")%> <br>
+                <%= __("NoMonitorPublicLast")%>
             </p>
             <% if(user){ %>
-                <a href="/dashboard" class="btn btn-primary btn-shadow-blue btn-sm">Dashboard</a>
+                <a href="/dashboard" class="btn btn-primary btn-shadow-blue btn-sm"><%=__("Dashboard")%></a>
             <% }else{ %>
-                <a href="/auth" class="btn btn-primary btn-shadow-blue btn-sm">Login</a>
+                <a href="/auth" class="btn btn-primary btn-shadow-blue btn-sm"><%=__("Login")%></a>
             <% } %>
         </div>
         <% } %>

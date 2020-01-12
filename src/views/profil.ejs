@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="<%= locale%>">
 <head>
     <% include partials/head.ejs %>
 </head>
@@ -11,7 +11,7 @@
             <div class="form-input-content">
                 <div class="card login-form mb-0">
                     <div class="card-body pt-5">
-                        <a class="text-center" href="#"><h4>Profile of <%= user.username%></h4></a>
+                        <a class="text-center" href="#"><h4><%= __("ProfilOf", {name: user.username})%></h4></a>
                         <form class="mt-5 mb-5 login-input" method="POST">
                             <%if(error.length > 0){%>
                             <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -23,13 +23,13 @@
                             <%}%>
                             <div class="form-group">
                                 <label for="username">
-                                    Username
+                                    <%= __("Username")%>
                                 </label>
-                                <input type="text" id="username" name="username" class="form-control" placeholder="Username" value="<%= user.username%>" required>
+                                <input type="text" id="username" name="username" class="form-control" placeholder="<%= __("Username")%>" value="<%= user.username%>" required>
                             </div>
                             <div class="form-group">
                                 <label for="email">
-                                    Email
+                                    <%= __("Email")%>
                                 </label>
                                 <input type="email" id="email" name="email" class="form-control" value="<%= user.email%>" required>
                             </div>
@@ -38,17 +38,17 @@
                                     Level
                                 </label>
                                 <select id="level" name="level" class="form-control" required disabled >
-                                    <option value="admin" <%if(user.rank === "admin"){required}%>>Administrator</option>
-                                    <option value="user" <%if(user.rank === "user"){required}%>>User</option>
+                                    <option value="admin" <%if(user.rank === "admin"){required}%>><%= __("Administrator")%></option>
+                                    <option value="user" <%if(user.rank === "user"){required}%>><%= __("User")%></option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="password">
-                                    Password
+                                    <%= __("Password")%>
                                 </label>
-                                <input type="password" id="password" name="password" class="form-control" placeholder="Password">
+                                <input type="password" id="password" name="password" class="form-control" placeholder="<%= __("Password")%>">
                             </div>
-                            <button type="submit" class="btn login-form__btn submit w-100 waves-effect">Update Profile</button>
+                            <button type="submit" class="btn login-form__btn submit w-100 waves-effect"><%= __("UpdateProfile")%></button>
                             </form>
                         </div>
                     </div>

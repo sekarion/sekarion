@@ -64,7 +64,7 @@ function ensureAuthenticated(req, res, next){
     if(req.isAuthenticated()){
         return next();
     } else {
-        req.flash("error_msg","You are not logged in");
+        req.flash("error_msg", res.__("NotLogin"));
         res.redirect("/auth");
     }
 }
@@ -80,11 +80,11 @@ function isadmin(req, res, next){
         if(req.user.rank.toLowerCase() === "admin"){
             return next();
         }else{
-            req.flash("error_msg","You don't have here because this a restriced area");
+            req.flash("error_msg", res.__("RestrictArea"));
             return res.redirect("/profile");
         }
     } else {
-        req.flash("error_msg","You are not logged in");
+        req.flash("error_msg", res.__("NotLogin"));
         return res.redirect("/auth");
     }
 }
@@ -132,7 +132,8 @@ if(config.mongo != null){
 router.get("/auth", function(req, res) {
     let info = JSON.parse(fs.readFileSync(__dirname + "/../config/config.json", "utf8"));
     res.render("auth", {
-        titlepage: "Authentification",
+        locale: req.locale,
+        titlepage: res.__("Authentication"),
         message: req.flash(),
         nameconfig: info.websitename,
         infoconf: info
@@ -144,7 +145,11 @@ router.post("/auth", passport.authenticate("local", {
         failureFlash: true,
     })
 );
-
+router.get('/lang/:lang', function (req, res) {
+    res.cookie('langcookie', req.params.lang, { maxAge: 900000, httpOnly: true });
+    res.setLocale(req, req.params.lang);
+    res.redirect('/');
+});
 /**
  * Main route
  **/
@@ -153,7 +158,8 @@ router.get("/", async (req, res) => {
     await Monitor.findPublic(async(err, monit) => {
         if(monit.length === 0){
             res.render("home", {
-                titlepage: "Accueil",
+                locale: req.locale,
+                titlepage: res.__('Welcome'),
                 message: req.flash(),
                 nameconfig: infoconf.websitename,
                 monitor: monit,
@@ -168,7 +174,7 @@ router.get("/", async (req, res) => {
                 let sts = [];
                 await Status.getByMonitorID(monit[i].id, async (er, status) => {
                     if (er) {
-                        req.flash("error_msg", "The monitor does not exist");
+                        req.flash("error_msg", res.__('MonitorNotExist'));
                         return res.redirect("/dashboard");
                     }
                     for (let i = 0; i < status.length; i++) {
@@ -181,7 +187,8 @@ router.get("/", async (req, res) => {
                     await infosincidentspastday.push({monit: monit[i], incident: await getIncident(monit[i].id, 15), statusmonitor: sts});
             }
             return res.render("home", {
-                titlepage: "Accueil",
+                locale: req.locale,
+                titlepage: res.__('Welcome'),
                 message: req.flash(),
                 nameconfig: infoconf.websitename,
                 monitor: monit2,
@@ -195,7 +202,8 @@ router.get("/", async (req, res) => {
 router.get("/settings", isadmin, async (req, res)=>{
     let info = JSON.parse(fs.readFileSync(__dirname + "/../config/config.json", "utf8"));
     res.render("settings", {
-       titlepage: "Settings",
+        locale: req.locale,
+        titlepage: res.__("Settings"),
        message: req.flash(),
        nameconfig: info.websitename,
        config : info,
@@ -208,7 +216,7 @@ router.get("/days/:id", async(req, res) =>{
         if(er || !status){
             return res.json({
                "err": true,
-               "message" : "No found",
+               "message" : res.__("NoFound"),
                "metric": []
             });
         }else{
@@ -245,7 +253,7 @@ router.get("/hours/:id", async(req, res) => {
         if(er || !status){
             return res.json({
                 "err": true,
-                "message" : "No found",
+                "message" : res.__("NoFound"),
                 "metric": []
             });
         }else{
@@ -287,7 +295,7 @@ router.get("/weeks/:id", async (req, res)=> {
         if(er || !status){
             return res.json({
                 "err": true,
-                "message" : "No found",
+                "message" : res.__("NoFound"),
                 "metric": []
             });
         }else{
@@ -339,7 +347,7 @@ router.get("/months/:id", async(req, res) => {
         if(er || !status){
             return res.json({
                 "err": true,
-                "message" : "No found",
+                "message" : res.__("NoFound"),
                 "metric": []
             });
         }else{
@@ -403,7 +411,7 @@ router.post("/settings", isadmin, async(req, res) =>{
         console.error(err);
         req.flash("error_msg", err);
     }
-    req.flash("success", "Settings have been updated");
+    req.flash("success", res.__("SettingsUpdated"));
     return res.redirect("/settings");
 });
 /*Dashboard route*/
@@ -412,11 +420,12 @@ router.get("/dashboard", ensureAuthenticated, async(req, res)=>{
     await Monitor.findAll((err, monit) =>{
         //console.log(monit);
         if(err){
-            req.flash("error_msg", "Error BDD");
+            req.flash("error_msg", res.__("ErrorDB"));
             return res.redirect("/");
         }
         res.render("dashboard", {
-            titlepage: "Status",
+            locale: req.locale,
+            titlepage: res.__("Status"),
             message: req.flash(),
             nameconfig: info.websitename,
             monitor: monit,
@@ -501,16 +510,16 @@ router.get("/monitor/:id", ensureAuthenticated, async(req, res)=>{
     let info = JSON.parse(fs.readFileSync(__dirname + "/../config/config.json", "utf8"));
     await Monitor.getMonitorById(req.params.id, (err, monit) =>{
       if(err){
-          req.flash("error_msg", "The monitor does not exist");
+          req.flash("error_msg", res.__('MonitorNotExist'));
           return res.redirect("/dashboard");
       }
       if(!monit){
-          req.flash("error_msg", "The monitor doesn't exist . ");
+          req.flash("error_msg", res.__('MonitorNotExist'));
           return res.redirect("dashboard");
       }
       Status.getByMonitorID(req.params.id, async (er, status) =>{
           if(er){
-              req.flash("error_msg", "The monitor does not exist");
+              req.flash("error_msg", res.__('MonitorNotExist'));
               return res.redirect("/dashboard");
           }
           let totalinfo;
@@ -533,7 +542,9 @@ router.get("/monitor/:id", ensureAuthenticated, async(req, res)=>{
           }
           incidents = await getIncident(req.params.id, 15);
           res.render("monitor",{
-              titlepage: `Monitor ${monit.label ? monit.label : monit.ip}`,
+              locale: req.locale,
+              titlepage: res.__("Monitor", {name:`${monit.label ? monit.label : monit.ip}`}),
+              locale: req.locale,
               message: req.flash(),
               nameconfig: info.websitename,
               monitor: monit,
@@ -553,11 +564,12 @@ router.get("/monitor/:id/edit", ensureAuthenticated, async(req, res)=> {
     let info = JSON.parse(fs.readFileSync(__dirname + "/../config/config.json", "utf8"));
     await Monitor.getMonitorById(req.params.id, (err, monit) => {
         if(err){
-            req.flash("error_msg", "The monitor does not exist");
+            req.flash("error_msg", res.__('MonitorNotExist'));
             return res.redirect("/dashboard");
         }
         return res.render("editmonitor", {
-            titlepage: `Edit Monitor ${monit.label ? monit.label : monit.ip}`,
+            locale: req.locale,
+            titlepage: res.__("EditMonitor", {name: `${monit.label ? monit.label : monit.ip}`}),
             message: req.flash(),
             nameconfig: info.websitename,
             monitor: monit,
@@ -571,7 +583,7 @@ router.get("/monitor/:id/edit", ensureAuthenticated, async(req, res)=> {
 router.post("/monitor/:id/edit", ensureAuthenticated, async (req, res) =>{
     await Monitor.getMonitorById(req.params.id, (err, monit) => {
         if(err){
-            req.flash("error_msg", "The monitor doesn't exist");
+            req.flash("error_msg", res.__("MonitorNotExist"));
             return res.redirect("/dashboard");
         }
         if(req.body.label != null && req.body.domain != null && req.body.warning_threshold != null && req.body.privacymonitor != null && req.body.showmonitor != null){
@@ -591,7 +603,7 @@ router.post("/monitor/:id/edit", ensureAuthenticated, async (req, res) =>{
                         Monitor.updateMonitor(monit, (err, monitor) =>{
                             if(err){
                                 console.log(err);
-                                req.flash("error", "An error has occurred");
+                                req.flash("error", res.__("Error"));
                                 return res.redirect("/addmonitor");
                             }else{
                                 return res.redirect(`/monitor/${monitor._id}`);
@@ -609,7 +621,7 @@ router.post("/monitor/:id/edit", ensureAuthenticated, async (req, res) =>{
                         Monitor.updateMonitor(monit,(error, monitor) => {
                             if(error){
                                 console.log(error);
-                                req.flash("error", "An error has occurred");
+                                req.flash("error", res.__("Error"));
                                 return res.redirect("/addmonitor");
                             }else{
                                 return res.redirect(`/monitor/${monitor._id}`);
@@ -632,7 +644,7 @@ router.post("/monitor/:id/edit", ensureAuthenticated, async (req, res) =>{
                 Monitor.updateMonitor(monit, (error, monitor) => {
                     if(error){
                         console.log(error);
-                        req.flash("error", "An error has occurred");
+                        req.flash("error", res.__("Error"));
                         return res.redirect("/addmonitor");
                     }else{
                         return res.redirect(`/monitor/${monitor._id}`);
@@ -650,10 +662,11 @@ router.get("/monitor/:id/addincident", ensureAuthenticated, async (req,res) =>{
     let info = JSON.parse(fs.readFileSync(__dirname + "/../config/config.json", "utf8"));
     await Monitor.getMonitorById(req.params.id, (err, monit) =>{
        if(err){
-           req.flash("error_msg", "The monitor doesn't exist");
+           req.flash("error_msg", res.__("MonitorNotExist"));
            return res.redirect("/dashboard");
        }
        return res.render("addincident", {
+           locale: req.locale,
            titlepage: `Add Incident for ${monit.label ? monit.label : monit.ip}`,
            message: req.flash(),
            nameconfig: info.websitename,
@@ -668,7 +681,7 @@ router.post("/monitor/:id/delete", ensureAuthenticated, async(req, res)=>{
         let number =0;
         await Monitor.getMonitorById(req.params.id, (err, monit)=>{
             if(err){
-                req.flash("error_msg", "The monitor doesn't exist");
+                req.flash("error_msg", res.__("MonitorNotExist"));
                 return res.redirect("/dashboard");
             }
             //delete all incident with id current and delete current monitor
@@ -704,7 +717,7 @@ router.post("/monitor/:id/delete", ensureAuthenticated, async(req, res)=>{
 router.post("/monitor/:id/addincident", ensureAuthenticated, async (req, res) =>{
    await Monitor.getMonitorById(req.params.id, (err, monit) => {
        if(err){
-           req.flash("error_msg", "The monitor doesn't exist");
+           req.flash("error_msg", res.__("MonitorNotExist"));
            return res.redirect("/dashboard");
        }
        if(req.body.message != null && req.body.nameincident != null && req.body.status != null && req.body.affected != null) {
@@ -739,9 +752,12 @@ router.post("/monitor/:id/addincident", ensureAuthenticated, async (req, res) =>
  **/
 router.post("/monitor/:id/incident/:idincident/impact", ensureAuthenticated, async(req, res) =>{
     //check if id exist
-    await Monitor.getMonitorById(req.params.id, async (err, monit) =>{ // eslint-disable-line no-unused-vars
+    await Monitor.getMonitorById(req.params.id, async (err, monit) =>{
         if (err) {
-            return res.json({"error": "monitor not found"});
+            return res.json({"error": res.__("MonitorNotExist")});
+        }
+        if(!monit){
+            return res.json({"error": res.__("MonitorNotExist")});
         }
         //check if the incident exist if true define the impact
         await Incident.getStatusById(req.params.idincident, (error, status) => {
@@ -769,22 +785,22 @@ router.post("/monitor/:id/incident/:idincident/impact", ensureAuthenticated, asy
                    switch (incident.impact) {
                        case 0:
                            css= {
-                               "css": "BgNone", "Message":"The impact have been updated"
+                               "css": "BgNone", "Message": res.__("ImpactUpdated")
                            };
                            break;
                        case 1:
                            css= {
-                               "css": "BgMinor", "Message":"The impact have been updated"
+                               "css": "BgMinor", "Message": res.__("ImpactUpdated")
                            };
                            break;
                        case 2:
                            css= {
-                               "css": "BgMajor", "Message":"The impact have been updated"
+                               "css": "BgMajor", "Message": res.__("ImpactUpdated")
                            };
                            break;
                        case 3:
                            css= {
-                               "css": "BgCritical", "Message":"The impact have been updated"
+                               "css": "BgCritical", "Message": res.__("ImpactUpdated")
                            };
                            break;
 
@@ -802,16 +818,17 @@ router.get("/monitor/:id/incident/:idincident", ensureAuthenticated, async(req, 
     let info = JSON.parse(fs.readFileSync(__dirname + "/../config/config.json", "utf8"));
     await Monitor.getMonitorById(req.params.id, async(err, monit) => {
         if (err) {
-            req.flash("error_msg", "The monitor doesn't exist");
+            req.flash("error_msg", res.__("MonitorNotExist"));
             return res.redirect("/dashboard");
         }
         await Incident.getStatusById(req.params.idincident, (error, status) =>{
             if (error) {
-                req.flash("error_msg", "The Status doesn't exist");
+                req.flash("error_msg", res.__("StatusNotExist"));
                 return res.redirect("/dashboard");
             }
             return res.render("incidentpage", {
-                titlepage: `Incident for ${monit.label ? monit.label : monit.ip}`,
+                locale: req.locale,
+                titlepage: res.__("IncidentName", {name: `${monit.label ? monit.label : monit.ip}`}),
                 message: req.flash(),
                 nameconfig: info.websitename,
                 monitor: monit,
@@ -829,12 +846,12 @@ router.post("/monitor/:id/incident/:idincident", ensureAuthenticated, async(req,
     if(req.body.message != null && req.body.status != null && req.body.affected != null){
         await Monitor.getMonitorById(req.params.id, async(err, monit) => { // eslint-disable-line no-unused-vars
             if (err) {
-                req.flash("error_msg", "The monitor doesn't exist");
+                req.flash("error_msg", res.__("MonitorNotExist"));
                 return res.redirect("/dashboard");
             }
             await Incident.getStatusById(req.params.idincident, (error, status) => {
                 if (error) {
-                    req.flash("error_msg", "The Status doesn't exist");
+                    req.flash("error_msg", res.__("StatusNotExist"));
                     return res.redirect("/dashboard");
                 }
                 //reconfigure the status
@@ -857,8 +874,8 @@ router.post("/monitor/:id/incident/:idincident", ensureAuthenticated, async(req,
             });
         });
     }else{
-        //if  missing params return error
-        req.flash("error_msg", "Missing params");
+        //if missing params return error
+        req.flash("error_msg", res.__("MissingParams"));
         return res.redirect("/dashboard");
     }
 
@@ -869,7 +886,8 @@ router.post("/monitor/:id/incident/:idincident", ensureAuthenticated, async(req,
 router.get("/addmonitor", isadmin, function (req, res) {
     let info = JSON.parse(fs.readFileSync(__dirname + "/../config/config.json", "utf8"));
     res.render("addmonitor", {
-       titlepage: "Monitor Add",
+        locale: req.locale,
+        titlepage: res.__("MonitorAdd"),
        message: req.flash(),
        nameconfig: info.websitename,
        infoconf: info
@@ -900,7 +918,7 @@ router.post("/addmonitor", isadmin, function (req, res) {
                     Monitor.createMonitor(newMonitor, (error, monitor) => {
                         if(error){
                             console.log(error);
-                            req.flash("error", "An error has occurred");
+                            req.flash("error", res.__("Error"));
                             return res.redirect("/addmonitor");
                         }else{
                             return res.redirect(`/monitor/${monitor._id}`);
@@ -922,7 +940,7 @@ router.post("/addmonitor", isadmin, function (req, res) {
                     Monitor.createMonitor(newMonitor,(error, monitor) => {
                         if(error){
                             console.log(error);
-                            req.flash("error", "An error has occurred");
+                            req.flash("error", res.__("Error"));
                             return res.redirect("/addmonitor");
                         }else{
                             return res.redirect(`/monitor/${monitor._id}`);
@@ -930,7 +948,7 @@ router.post("/addmonitor", isadmin, function (req, res) {
                     });
                 }
             }else{
-                req.flash("error", "Missing Port");
+                req.flash("error", res.__("MissingPort"));
                 return res.redirect("/addmonitor");
             }
 
@@ -947,7 +965,7 @@ router.post("/addmonitor", isadmin, function (req, res) {
             Monitor.createMonitor(newMonitor, (error, monitor) => {
                 if(error){
                     console.log(error);
-                    req.flash("error", "An error has occurred");
+                    req.flash("error", res.__("Error"));
                     return res.redirect("/addmonitor");
                 }else{
                     return res.redirect(`/monitor/${monitor._id}`);
@@ -962,7 +980,7 @@ router.post("/addmonitor", isadmin, function (req, res) {
  **/
 router.get("/logout", function(req, res){
     req.logout();
-    req.flash("success_msg", "You are logged out");
+    req.flash("success_msg", res.__("LoggedOut"));
     res.redirect("/auth");
 });
 module.exports = router;

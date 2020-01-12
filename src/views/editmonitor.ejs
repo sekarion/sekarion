@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="<%= locale%>">
 <head>
     <% include partials/head.ejs %>
 </head>
@@ -11,7 +11,7 @@
             <div class="col-xl-12">
                 <div class="card login-form mb-0">
                     <div class="card-body pt-5">
-                        <a class="text-center" href="/"><h2>Edit Monitor</h2></a>
+                        <a class="text-center" href="/"><h2><%= __("EditMonitor", {name: monitor.label ? monitor.label : monitor.ip})%></h2></a>
                         <% if(error.length > 0){ %>
                             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                 <%= error %>
@@ -23,46 +23,45 @@
                         <form method="post" class="mt-5 mb-5 login-input">
                             <div class="form-group">
                                 <label for="label">
-                                    label
+                                    <%= __("label")%>
                                 </label>
-                                <input type="text" id="label" name="label" class="form-control" placeholder="label"
+                                <input type="text" id="label" name="label" class="form-control" placeholder="<%= __("label")%>"
                                        value="<%= monitor.label %>" required>
                             </div>
                             <div class="form-group">
                                 <label for="domain">
-                                    Domain/IP (do not use suffixes such as http(s)://example.com or ftp://example.com
-                                    just put the domain name) Example: example.com
+                                    <%= __("DomainIPDesc")%>
                                 </label>
                                 <input type="text" maxlength="255" id="domain" name="domain" class="form-control"
-                                       placeholder="Domain/IP" value="<%= monitor.ip %>" required>
+                                       placeholder="<%= __("DomainIP")%>" value="<%= monitor.ip %>" required>
                             </div>
                             <div class="pb_select-wrap">
                                 <label for="type">
-                                    Type
+                                    <%= __("Type")%>
                                 </label>
                                 <select id="type" name="type" class="form-control" onchange="showHideEle(this)"
                                         required>
-                                    <option value="" disabled>Select Type</option>
+                                    <option value="" disabled><%= __("SelectType")%></option>
                                     <option value="ping" <%= monitor.type === "ping" ? "selected" : "" %>>Ping
                                     </option>
                                     <option value="service" <%= monitor.type === "service" ? "selected" : "" %>>
                                         Service
                                     </option>
                                     <option value="website" <%= monitor.type === "website" ? "selected" : "" %>>
-                                        Website
+                                        <%= __("Website")%>
                                     </option>
                                 </select>
                             </div>
                             <div class="pb_select-wrap <%= monitor.type === "service" ? "" : "none" %>"
                                  id="portwebsite">
                                 <label for="port">
-                                    Port
+                                    <%= __("Port")%>
                                 </label>
                                 <select id="port" name="port" class="form-control" required
                                         onchange="showHideEleport(this)">
-                                    <option disabled="">Please select a Port</option>
-                                    <option value="custom">Custom Port</option>
-                                    <optgroup label="Popular Ports">
+                                    <option disabled=""><%= __("SelectPort")%></option>
+                                    <option value="custom"><%= __("CustomPort")%></option>
+                                    <optgroup label="<%= __("PopularPorts") %>">
                                         <option value="80" <%= monitor.port === 80 ? "selected" : "" %>>HTTP (80)
                                         </option>
                                         <option value="443" <%= monitor.port === 443 ? "selected" : "" %>>HTTPS (443)
@@ -104,14 +103,14 @@
                             </div>
                             <div class="form-group none" id="portcustom">
                                 <label for="customport">
-                                    Custom Port
+                                    <%= __("CustomPort")%>
                                 </label>
                                 <input type="number" class="form-control" id="customport" name="customport"
                                        maxlength="5" value="443">
                             </div>
                             <div class="form-group">
                                 <label for="warning_threshold">
-                                    warning threshold
+                                    <%= __("WarningThreshold")%>
                                 </label>
                                 <input type="number" max="50" min="1" class="form-control" id="warning_threshold"
                                        name="warning_threshold" placeholder="1" value="<%= monitor.warning_threshold %>"
@@ -119,38 +118,38 @@
                             </div>
                             <div class="pb_select-wrap">
                                 <label for="privacymonitor">
-                                    Privacy
+                                    <%= __("Privacy")%>
                                 </label>
                                 <select id="privacymonitor" name="privacymonitor" class="form-control" required>
                                     <option value="" selected="" disabled>Select Privacy</option>
                                     <option value="public" <%= monitor.privacy === true ? "selected" : "" %>>
-                                        Public
+                                        <%= __("Public")%>
                                     </option>
                                     <option value="private" <%= monitor.privacy === false ? "selected" : "" %>>
-                                        Private
+                                        <%= __("Private")%>
                                     </option>
                                 </select>
                             </div>
                             <div class="pb_select-wrap">
                                 <label for="showmonitor">
-                                    If Public show monitor ?
+                                    <%= __("ShowIfPublic")%> ?
                                 </label>
                                 <select id="showmonitor" name="showmonitor" class="form-control" required>
-                                    <option value="" selected="" disabled>Select Options</option>
-                                    <option value="yes" <%= monitor.showmonitor === true ? "selected" : "" %>>Yes
+                                    <option value="" selected="" disabled><%= __("SelectOptions")%></option>
+                                    <option value="yes" <%= monitor.showmonitor === true ? "selected" : "" %>><%= __("Yes")%>
                                     </option>
-                                    <option value="no" <%= monitor.showmonitor === false ? "selected" : "" %>>No
+                                    <option value="no" <%= monitor.showmonitor === false ? "selected" : "" %>><%= __("No")%>
                                     </option>
                                 </select>
                             </div>
                             <div class="pb_select-wrap">
                                 <label for="description">
-                                    Short Description components
+                                    <%= __("ShortDescComponents")%>
                                 </label>
                                 <textarea id="description" name="description"
                                           class="form-control"><%= monitor.description %></textarea>
                             </div>
-                            <button type="submit" class="btn pb_btn-pill login-form__btn submit w-100 waves-effect">Update Monitor</button>
+                            <button type="submit" class="btn pb_btn-pill login-form__btn submit w-100 waves-effect"><%= __("UpdateMonitor")%></button>
                         </form>
                     </div>
                 </div>
