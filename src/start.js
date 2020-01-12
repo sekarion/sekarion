@@ -18,18 +18,18 @@ try{
     let path = require("path");
     let IndexRouter = require("./routes/index");
     let passport = require("passport");
-    let i18n = require('i18n');
+    let i18n = require("i18n");
     let port = config.websiteport || 3000;
     i18n.configure({
         // setup some locales - other locales default to en silently
-        locales: ['en', 'fr','es'],
+        locales: ["en", "fr","es"],
         // sets a custom cookie name to parse locale settings from
-        cookie: 'langcookie',
+        cookie: "langcookie",
         // where to store json files - defaults to './src/locales'
-        directory: __dirname + '/locales',
+        directory: __dirname + "/locales",
         //defaultLocale: config.locale,
         // control mode on directory creation - defaults to NULL which defaults to umask of process user. Setting has no effect on win.
-        directoryPermissions: '755',
+        directoryPermissions: "755",
         // watch for changes in json files to reload locale on updates - defaults to false
         autoReload: true,
         // whether to write new locale information to disk - defaults to true

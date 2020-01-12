@@ -18,10 +18,10 @@ let http = "http://";
 if(config.httpsenable){
     http = "https://";
 }
-router.get('/lang/:lang', function (req, res) {
-    res.cookie('langcookie', req.params.lang);
-    res.setLocale(req, locale);
-    res.redirect('back');
+router.get("/lang/:lang", function (req, res) {
+    res.cookie("langcookie", req.params.lang);
+    res.setLocale(req, req.params.lang);
+    res.redirect("back");
 });
 router.get("/install/setup", function(req, res) {
     res.render("install/setup", {
