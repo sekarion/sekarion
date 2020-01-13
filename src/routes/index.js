@@ -199,7 +199,7 @@ router.get("/", async (req, res) => {
         }
     });
 });
-router.get("/settings", isadmin, async (req, res)=>{
+router.get("/settings", isadmin, async (req, res) => {
     let info = JSON.parse(fs.readFileSync(__dirname + "/../config/config.json", "utf8"));
     res.render("settings", {
         locale: req.locale,
@@ -211,7 +211,7 @@ router.get("/settings", isadmin, async (req, res)=>{
     });
 });
 //get stats by days
-router.get("/days/:id", async(req, res) =>{
+router.get("/days/:id", async(req, res) => {
     Monitor.getMonitorById(req.params.id, async (er, status) => {
         if(er || !status){
             return res.json({
@@ -223,7 +223,7 @@ router.get("/days/:id", async(req, res) =>{
             let infos= [];
             let nb =0,last =0;
             //get by days
-            await Status.getByMonitorIDByDays(req.params.id, (err, monit) =>{
+            await Status.getByMonitorIDByDays(req.params.id, (err, monit) => {
                 if(monit.length > 0) {
                     for (let isn = 0; isn < monit.length; isn++) {
                         infos.push([monit[isn].datecheck, parseFloat(monit[isn].latency)]);
@@ -278,7 +278,7 @@ router.get("/hours/:id", async(req, res) => {
             //delete 1 hours without function
             datetime = datetime- 3600000;
             //get by days
-            await Status.getByMonitorIDByHours(req.params.id, (err, monit) =>{
+            await Status.getByMonitorIDByHours(req.params.id, (err, monit) => {
                 //get date now
                 if(monit.length > 0) {
                     for (let isn = 0; isn < monit.length; isn++) {
@@ -318,7 +318,7 @@ router.get("/hours/:id", async(req, res) => {
         }
     });
 });
-router.get("/weeks/:id", async (req, res)=> {
+router.get("/weeks/:id", async (req, res) => {
     Monitor.getMonitorById(req.params.id, async (er, status) => {
         if(er || !status){
             return res.json({
@@ -330,7 +330,7 @@ router.get("/weeks/:id", async (req, res)=> {
             let infos= [];
             let nb =0,last =0;
             //get by days
-            await Status.getByMonitorIDByWeeks(req.params.id, (err, monit) =>{
+            await Status.getByMonitorIDByWeeks(req.params.id, (err, monit) => {
                 let infodate = null;
                 //get date now
                 if(monit.length > 0) {
@@ -398,7 +398,7 @@ router.get("/months/:id", async(req, res) => {
             let infos= [];
             let nb =0,last =0;
             //get by month
-            await Status.getByMonitorIDByMonths(req.params.id, (err, monit) =>{
+            await Status.getByMonitorIDByMonths(req.params.id, (err, monit) => {
                 let infodate = null;
                 if(monit.length > 0){
                     if(monit[0].datecheck){
@@ -451,7 +451,7 @@ router.get("/months/:id", async(req, res) => {
         }
     });
 });
-router.post("/settings", isadmin, async(req, res) =>{
+router.post("/settings", isadmin, async(req, res) => {
     let info = JSON.parse(fs.readFileSync(__dirname + "/../config/config.json", "utf8"));
     info.websitename = req.body.websitename;
     info.baseurl = req.body.baseurl;
@@ -474,9 +474,9 @@ router.post("/settings", isadmin, async(req, res) =>{
     return res.redirect("/settings");
 });
 /*Dashboard route*/
-router.get("/dashboard", ensureAuthenticated, async(req, res)=>{
+router.get("/dashboard", ensureAuthenticated, async(req, res) => {
     let info = JSON.parse(fs.readFileSync(__dirname + "/../config/config.json", "utf8"));
-    await Monitor.findAll((err, monit) =>{
+    await Monitor.findAll((err, monit) => {
         if(err){
             req.flash("error_msg", res.__("ErrorDB"));
             return res.redirect("/");
@@ -540,7 +540,7 @@ async function getIncident(id, days){
     });
 }
 /*async function getDaysPing(id, days){
-    return new Promise(async (resolve, reject) =>{
+    return new Promise(async (resolve, reject) => {
         let dt = new Date(new Date().setHours(0, 0, 0, 0));
         let del;
         let ino = [];
@@ -564,9 +564,9 @@ async function getIncident(id, days){
     });
 }*/
 
-router.get("/monitor/:id", ensureAuthenticated, async(req, res)=>{
+router.get("/monitor/:id", ensureAuthenticated, async(req, res) => {
     let info = JSON.parse(fs.readFileSync(__dirname + "/../config/config.json", "utf8"));
-    await Monitor.getMonitorById(req.params.id, (err, monit) =>{
+    await Monitor.getMonitorById(req.params.id, (err, monit) => {
       if(err){
           req.flash("error_msg", res.__("MonitorNotExist"));
           return res.redirect("/dashboard");
@@ -575,7 +575,7 @@ router.get("/monitor/:id", ensureAuthenticated, async(req, res)=>{
           req.flash("error_msg", res.__("MonitorNotExist"));
           return res.redirect("dashboard");
       }
-      Status.getByMonitorID(req.params.id, async (er, status) =>{
+      Status.getByMonitorID(req.params.id, async (er, status) => {
           if(er){
               req.flash("error_msg", res.__("MonitorNotExist"));
               return res.redirect("/dashboard");
@@ -637,7 +637,7 @@ router.get("/monitor/:id/edit", ensureAuthenticated, async(req, res)=> {
 /***
  * Save date for edit monitor
  **/
-router.post("/monitor/:id/edit", ensureAuthenticated, async (req, res) =>{
+router.post("/monitor/:id/edit", ensureAuthenticated, async (req, res) => {
     await Monitor.getMonitorById(req.params.id, (err, monit) => {
         if(err){
             req.flash("error_msg", res.__("MonitorNotExist"));
@@ -657,7 +657,7 @@ router.post("/monitor/:id/edit", ensureAuthenticated, async (req, res) =>{
                         monit.privacy = req.body.privacymonitor === "public";
                         monit.showmonitor = req.body.showmonitor === "yes";
                         monit.description = req.body.description;
-                        Monitor.updateMonitor(monit, (err, monitor) =>{
+                        Monitor.updateMonitor(monit, (err, monitor) => {
                             if(err){
                                 console.log(err);// eslint-disable-line no-console
                                 req.flash("error", res.__("Error"));
@@ -715,9 +715,9 @@ router.post("/monitor/:id/edit", ensureAuthenticated, async (req, res) =>{
 /**
  * Create Incident with monitor
  **/
-router.get("/monitor/:id/addincident", ensureAuthenticated, async (req,res) =>{
+router.get("/monitor/:id/addincident", ensureAuthenticated, async (req,res) => {
     let info = JSON.parse(fs.readFileSync(__dirname + "/../config/config.json", "utf8"));
-    await Monitor.getMonitorById(req.params.id, (err, monit) =>{
+    await Monitor.getMonitorById(req.params.id, (err, monit) => {
        if(err){
            req.flash("error_msg", res.__("MonitorNotExist"));
            return res.redirect("/dashboard");
@@ -733,10 +733,10 @@ router.get("/monitor/:id/addincident", ensureAuthenticated, async (req,res) =>{
    });
 });
 
-router.post("/monitor/:id/delete", ensureAuthenticated, async(req, res)=>{
+router.post("/monitor/:id/delete", ensureAuthenticated, async(req, res) => {
     if(req.body.delete === "yes"){
         let number =0;
-        await Monitor.getMonitorById(req.params.id, (err, monit)=>{
+        await Monitor.getMonitorById(req.params.id, (err, monit) => {
             if(err){
                 req.flash("error_msg", res.__("MonitorNotExist"));
                 return res.redirect("/dashboard");
@@ -754,7 +754,7 @@ router.post("/monitor/:id/delete", ensureAuthenticated, async(req, res)=>{
                     req.flash("error_msg", err);
                 }
             });
-            Monitor.getMonitorById(monit.id, (err, message)=>{
+            Monitor.getMonitorById(monit.id, (err, message) => {
                 //for to delete monitor
                 message.remove();
             });
@@ -771,7 +771,7 @@ router.post("/monitor/:id/delete", ensureAuthenticated, async(req, res)=>{
 /**
  * Save params in db
  **/
-router.post("/monitor/:id/addincident", ensureAuthenticated, async (req, res) =>{
+router.post("/monitor/:id/addincident", ensureAuthenticated, async (req, res) => {
    await Monitor.getMonitorById(req.params.id, (err, monit) => {
        if(err){
            req.flash("error_msg", res.__("MonitorNotExist"));
@@ -807,9 +807,9 @@ router.post("/monitor/:id/addincident", ensureAuthenticated, async (req, res) =>
 /**
  * Update Status Impact
  **/
-router.post("/monitor/:id/incident/:idincident/impact", ensureAuthenticated, async(req, res) =>{
+router.post("/monitor/:id/incident/:idincident/impact", ensureAuthenticated, async(req, res) => {
     //check if id exist
-    await Monitor.getMonitorById(req.params.id, async (err, monit) =>{
+    await Monitor.getMonitorById(req.params.id, async (err, monit) => {
         if (err) {
             return res.json({"error": res.__("MonitorNotExist")});
         }
@@ -871,14 +871,14 @@ router.post("/monitor/:id/incident/:idincident/impact", ensureAuthenticated, asy
 /**
  * Show incident by monitor
  **/
-router.get("/monitor/:id/incident/:idincident", ensureAuthenticated, async(req, res)=>{
+router.get("/monitor/:id/incident/:idincident", ensureAuthenticated, async(req, res) => {
     let info = JSON.parse(fs.readFileSync(__dirname + "/../config/config.json", "utf8"));
     await Monitor.getMonitorById(req.params.id, async(err, monit) => {
         if (err) {
             req.flash("error_msg", res.__("MonitorNotExist"));
             return res.redirect("/dashboard");
         }
-        await Incident.getStatusById(req.params.idincident, (error, status) =>{
+        await Incident.getStatusById(req.params.idincident, (error, status) => {
             if (error) {
                 req.flash("error_msg", res.__("StatusNotExist"));
                 return res.redirect("/dashboard");
