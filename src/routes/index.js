@@ -46,7 +46,7 @@ async function UpdateInfo() {
             });
             Status.createStatus(newStatus, function (err, stats) {
                 if(err){
-                    console.log(err);
+                    console.log(err);// eslint-disable-line no-console
                 }else{
                     monit[i].laststatus = stats;
                     monit[i].save();
@@ -230,20 +230,34 @@ router.get("/days/:id", async(req, res) =>{
                         nb += parseInt(monit[isn].latency, 10);
                         last = monit[isn].latency;
                     }
+                    return res.json({
+                        "err" : false,
+                        "metric": {
+                            "data": infos
+                        },
+                        "count": infos.length,
+                        "summary":{
+                            "average": nb > 0 ? nb/infos.length: 0,
+                            "sum": nb,
+                            "last": last
+                        },
+                        "time": new Date(new Date().setDate(new Date().getDate()-1)).getTime()
+                    });
+                }else{
+                    return res.json({
+                        "err" : false,
+                        "metric": {
+                            "data": infos
+                        },
+                        "count": infos.length,
+                        "summary":{
+                            "average": nb > 0 ? nb/infos.length: 0,
+                            "sum": nb,
+                            "last": last
+                        },
+                        "time": new Date(new Date().setDate(new Date().getDate()-1)).getTime()
+                    });
                 }
-            });
-            return res.json({
-                "err" : false,
-                "metric": {
-                    "data": infos
-                },
-                "count": infos.length,
-                "summary":{
-                    "average": nb > 0 ? nb/infos.length: 0,
-                    "sum": nb,
-                    "last": last
-                },
-                "time": new Date(new Date().setDate(new Date().getDate()-1)).getTime()
             });
         }
     });
@@ -259,6 +273,10 @@ router.get("/hours/:id", async(req, res) => {
         }else{
             let infos= [];
             let nb =0,last =0;
+            //convert datetime to date (timestamp and UTC )
+            let datetime = parseInt((new Date()).getTime() / 300000, 10) * 300000;
+            //delete 1 hours without function
+            datetime = datetime- 3600000;
             //get by days
             await Status.getByMonitorIDByHours(req.params.id, (err, monit) =>{
                 //get date now
@@ -268,24 +286,34 @@ router.get("/hours/:id", async(req, res) => {
                         nb += parseInt(monit[isn].latency, 10);
                         last = monit[isn].latency;
                     }
+                    return res.json({
+                        "err" : false,
+                        "metric": {
+                            "data": infos
+                        },
+                        "count": infos.length,
+                        "summary":{
+                            "average": nb > 0 ? nb/infos.length: 0,
+                            "sum": nb,
+                            "last": last
+                        },
+                        "time" : datetime
+                    });
+                }else{
+                    return res.json({
+                        "err" : false,
+                        "metric": {
+                            "data": infos
+                        },
+                        "count": infos.length,
+                        "summary":{
+                            "average": nb > 0 ? nb/infos.length: 0,
+                            "sum": nb,
+                            "last": last
+                        },
+                        "time" : datetime
+                    });
                 }
-            });
-            //convert datetime to date (timestamp and UTC )
-            let datetime = parseInt((new Date()).getTime() / 300000, 10) * 300000;
-            //delete 1 hours without function
-            datetime = datetime- 3600000;
-            return res.json({
-                "err" : false,
-                "metric": {
-                    "data": infos
-                },
-                "count": infos.length,
-                "summary":{
-                    "average": nb > 0 ? nb/infos.length: 0,
-                    "sum": nb,
-                    "last": last
-                },
-                "time" : datetime
             });
         }
     });
@@ -323,27 +351,43 @@ router.get("/weeks/:id", async (req, res)=> {
                             }
                         }
                     }
+                    //need here for send sure data because if not here (1/3 script return null unknow)
+                    return res.json({
+                        "err" : false,
+                        "metric": {
+                            "data": infos
+                        },
+                        "count": infos.length,
+                        "summary":{
+                            "average": nb > 0 ? nb/infos.length: 0,
+                            "sum": nb,
+                            "last": last
+                        },
+                        "time": new Date(new Date().setDate(new Date().getDate()-7)).getTime()
+                    });
+                }else{
+                    return res.json({
+                        "err" : false,
+                        "metric": {
+                            "data": infos
+                        },
+                        "count": infos.length,
+                        "summary":{
+                            "average": nb > 0 ? nb/infos.length: 0,
+                            "sum": nb,
+                            "last": last
+                        },
+                        "time": new Date(new Date().setDate(new Date().getDate()-7)).getTime()
+                    });
                 }
             });
-            return res.json({
-                "err" : false,
-                "metric": {
-                    "data": infos
-                },
-                "count": infos.length,
-                "summary":{
-                    "average": nb > 0 ? nb/infos.length: 0,
-                    "sum": nb,
-                    "last": last
-                },
-                "time": new Date(new Date().setDate(new Date().getDate()-7)).getTime()
-            });
+
         }
     });
 });
 //get information for metric
 router.get("/months/:id", async(req, res) => {
-    Monitor.getMonitorById(req.params.id, async (er, status) => {
+    await Monitor.getMonitorById(req.params.id, async (er, status) => {
         if(er || !status){
             return res.json({
                 "err": true,
@@ -353,7 +397,7 @@ router.get("/months/:id", async(req, res) => {
         }else{
             let infos= [];
             let nb =0,last =0;
-            //get by days
+            //get by month
             await Status.getByMonitorIDByMonths(req.params.id, (err, monit) =>{
                 let infodate = null;
                 if(monit.length > 0){
@@ -374,20 +418,35 @@ router.get("/months/:id", async(req, res) => {
                             }
                         }
                     }
+                    //return response after for each and query if no monitor return null
+                    return res.json({
+                        "err" : false,
+                        "metric": {
+                            "data": infos
+                        },
+                        "count": infos.length,
+                        "summary":{
+                            "average": nb > 0 ? nb/infos.length: 0,
+                            "sum": nb,
+                            "last": last
+                        },
+                        "time" : new Date(new Date().setMonth(new Date().getMonth() - 1)).getTime()
+                    });
+                }else{
+                    return res.json({
+                        "err" : false,
+                        "metric": {
+                            "data": infos
+                        },
+                        "count": infos.length,
+                        "summary":{
+                            "average": nb > 0 ? nb/infos.length: 0,
+                            "sum": nb,
+                            "last": last
+                        },
+                        "time" : new Date(new Date().setMonth(new Date().getMonth() - 1)).getTime()
+                    });
                 }
-            });
-            return res.json({
-                "err" : false,
-                "metric": {
-                    "data": infos
-                },
-                "count": infos.length,
-                "summary":{
-                    "average": nb > 0 ? nb/infos.length: 0,
-                    "sum": nb,
-                    "last": last
-                },
-                "time" : new Date(new Date().setMonth(new Date().getMonth() - 1)).getTime()
             });
         }
     });
@@ -418,7 +477,6 @@ router.post("/settings", isadmin, async(req, res) =>{
 router.get("/dashboard", ensureAuthenticated, async(req, res)=>{
     let info = JSON.parse(fs.readFileSync(__dirname + "/../config/config.json", "utf8"));
     await Monitor.findAll((err, monit) =>{
-        //console.log(monit);
         if(err){
             req.flash("error_msg", res.__("ErrorDB"));
             return res.redirect("/");
@@ -601,7 +659,7 @@ router.post("/monitor/:id/edit", ensureAuthenticated, async (req, res) =>{
                         monit.description = req.body.description;
                         Monitor.updateMonitor(monit, (err, monitor) =>{
                             if(err){
-                                console.log(err);
+                                console.log(err);// eslint-disable-line no-console
                                 req.flash("error", res.__("Error"));
                                 return res.redirect("/addmonitor");
                             }else{
@@ -619,7 +677,7 @@ router.post("/monitor/:id/edit", ensureAuthenticated, async (req, res) =>{
                         monit.description = req.body.description;
                         Monitor.updateMonitor(monit,(error, monitor) => {
                             if(error){
-                                console.log(error);
+                                console.log(error);// eslint-disable-line no-console
                                 req.flash("error", res.__("Error"));
                                 return res.redirect("/addmonitor");
                             }else{
@@ -642,7 +700,7 @@ router.post("/monitor/:id/edit", ensureAuthenticated, async (req, res) =>{
                 monit.description = req.body.description;
                 Monitor.updateMonitor(monit, (error, monitor) => {
                     if(error){
-                        console.log(error);
+                        console.log(error);// eslint-disable-line no-console
                         req.flash("error", res.__("Error"));
                         return res.redirect("/addmonitor");
                     }else{
@@ -916,7 +974,7 @@ router.post("/addmonitor", isadmin, function (req, res) {
                 });
                     Monitor.createMonitor(newMonitor, (error, monitor) => {
                         if(error){
-                            console.log(error);
+                            console.log(error);// eslint-disable-line no-console
                             req.flash("error", res.__("Error"));
                             return res.redirect("/addmonitor");
                         }else{
@@ -938,7 +996,7 @@ router.post("/addmonitor", isadmin, function (req, res) {
                     //save the monitor and create
                     Monitor.createMonitor(newMonitor,(error, monitor) => {
                         if(error){
-                            console.log(error);
+                            console.log(error);// eslint-disable-line no-console
                             req.flash("error", res.__("Error"));
                             return res.redirect("/addmonitor");
                         }else{
@@ -963,7 +1021,7 @@ router.post("/addmonitor", isadmin, function (req, res) {
             });
             Monitor.createMonitor(newMonitor, (error, monitor) => {
                 if(error){
-                    console.log(error);
+                    console.log(error);// eslint-disable-line no-console
                     req.flash("error", res.__("Error"));
                     return res.redirect("/addmonitor");
                 }else{

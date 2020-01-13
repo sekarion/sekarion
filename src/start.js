@@ -171,7 +171,7 @@ try{
         });
     }
 }catch (e) {
-    console.log(e);
+    console.log(e);// eslint-disable-line no-console
    log.draft("errconfig", "[Sekarion] wait");
    log.endDraft("errconfig", "[Sekarion] Missing config.json", false);
 }
