@@ -10,5 +10,6 @@
   "customcss": "",
   "showlogin": false,
   "checkinterval": 300000,
-  "locale": "en"
+  "locale": "en",
+  "googleanlytics": ""
 }

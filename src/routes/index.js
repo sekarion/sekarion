@@ -459,6 +459,7 @@ router.post("/settings", isadmin, async(req, res) => {
     info.footershow = req.body.publicfooter === "on";
     info.secretsession = req.body.secretsession;
     info.websiteport = req.body.websiteport;
+    info.googleanlytics = req.body.googleanlytics;
     info.customstyle = req.body.customstyle === "on";
     info.customcss = req.body.customcss;
     info.showlogin = req.body.showlogin === "on";

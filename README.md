@@ -79,4 +79,9 @@ Sekarion Monitor is free software: you can redistribute it and/or modify it unde
     - Add Bootstrap with effect (waves) 
     - Add Jquery and codeflask for (waves and setup)
     - Add Adorable api avatar (remove later maybe)
-  
+ - V0.0.4 :
+    - Add Language support (English and french for moment)
+    - Fix bug with chart request (not render with empty data and table working)
+    - Finish rework UI/UX
+    - Cleanup all file (delete useless code)
+    - Add Google Analytics 
