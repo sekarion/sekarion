@@ -43,6 +43,11 @@ after you need to start the website with :
 node main.js
 ```
 
+## Demo
+
+You can test the sekarion demo available https://demo.sekarion.tk with ``login: demo``
+and ``password: demo``
+
 ## Licence 
 Sekarion Monitor is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
@@ -84,4 +89,6 @@ Sekarion Monitor is free software: you can redistribute it and/or modify it unde
     - Fix bug with chart request (not render with empty data and table working)
     - Finish rework UI/UX
     - Cleanup all file (delete useless code)
+ - V0.0.4-RC
     - Add Google Analytics 
+ 
