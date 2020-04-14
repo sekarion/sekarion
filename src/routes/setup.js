@@ -75,7 +75,7 @@ router.post("/setupuser", function(req, res){
         }
 
         //init mongoose and connect
-        mongoose.connect(mongourl, { useUnifiedTopology: true });
+        mongoose.connect(mongourl, { useNewUrlParser: true, useUnifiedTopology: true });
         let db = mongoose.connection;
         db.on("error", console.error.bind(console, "connection error:"));// eslint-disable-line no-console
         db.once("open", function callback () {
